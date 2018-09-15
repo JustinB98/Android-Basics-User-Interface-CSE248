@@ -1,5 +1,7 @@
 package com.example.android.justjava;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,6 +25,13 @@ public class MainActivity extends AppCompatActivity {
     public void submitOrder(View view) {
         String priceMessage = "Total: $" + (quantity * 5) + "\nThank you!";
         displayMessage(priceMessage);
+        Intent intent = new Intent(Intent.ACTION_SENDTO); // gets mail apps
+        intent.setData(Uri.parse("mailto:")); // ??
+        intent.putExtra(Intent.EXTRA_SUBJECT, "VALUE"); // sets the subject
+        intent.putExtra(Intent.EXTRA_TEXT, "MESSAGE"); // sets the body of email
+        if (intent.resolveActivity(getPackageManager()) != null)  { // is everything good to go?
+            startActivity(intent); // open up default mailing app
+        }
     }
 
     /**
