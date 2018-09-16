@@ -3,6 +3,8 @@ package com.example.android.justjava;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,8 +21,17 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
-        int price = calculatePrice();
-        String priceMessage = createOrderSummary(price);
+        CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
+        boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
+
+        CheckBox chocolateCheckBox = (CheckBox) findViewById(R.id.chocolate_checkbox);
+        boolean hasChocolate = chocolateCheckBox.isChecked();
+
+        EditText nameEditText = (EditText) findViewById(R.id.name_edit_text);
+        String name = nameEditText.getText().toString();
+
+        int price = calculatePrice(hasWhippedCream, hasChocolate);
+        String priceMessage = createOrderSummary(price, name, hasWhippedCream, hasChocolate);
         displayMessage(priceMessage);
     }
 
@@ -45,22 +56,25 @@ public class MainActivity extends AppCompatActivity {
         orderSummaryTextView.setText(message);
     }
 
-    public int calculatePrice(int quantity) {
-        return calculatePrice(quantity, 5);
+    public int calculatePrice(boolean addWhippedCream, boolean addChocolate) {
+        int basePrice = 5;
+
+        if (addWhippedCream) {
+            ++basePrice;
+        }
+
+        if (addChocolate) {
+            basePrice += 2;
+        }
+        return quantity * basePrice;
     }
 
-    public int calculatePrice(int quantity, int pricePerCup) {
-        return quantity * pricePerCup;
-    }
-
-    public int calculatePrice() {
-        return calculatePrice(quantity);
-    }
-
-    private String createOrderSummary(int price) {
-        String priceMessage = "Name: NAME";
+    private String createOrderSummary(int price, String name, boolean addWhippedCream, boolean addChocolate) {
+        String priceMessage = "Name: " + name;
+        priceMessage += "\nAdd whipped cream? " + addWhippedCream;
+        priceMessage += "\nAdd chocolate? " + addChocolate;
         priceMessage += "\nQuantity: " + quantity;
-        priceMessage += "\nTotal $" + price;
+        priceMessage += "\nTotal: $" + price;
         priceMessage += "\nThank you!";
         return priceMessage;
     }
