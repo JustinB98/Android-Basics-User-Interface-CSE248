@@ -1,7 +1,11 @@
 package com.example.android.miwok;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class NumbersActivity extends AppCompatActivity {
 
@@ -10,18 +14,26 @@ public class NumbersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
 
-        // Create an array of words
-        String[] words = new String[10];
-        words[0] = "one";
-        words[1] = "two";
-        words[2] = "three";
-        words[3] = "four";
-        words[4] = "five";
-        words[5] = "six";
-        words[6] = "seven";
-        words[7] = "eight";
-        words[8] = "nine";
-        words[9] = "ten";
+        ArrayList<String> words = new ArrayList<>();
+        words.add("one");
+        words.add("two");
+        words.add("three");
+        words.add("four");
+        words.add("five");
+        words.add("six");
+        words.add("seven");
+        words.add("eight");
+        words.add("nine");
+        words.add("ten");
 
+        LinearLayout rootView = (LinearLayout) findViewById(R.id.activity_numbers);
+
+        for (int i = 0; i < words.size(); ++i) {
+            // every view needs context. one of the reasons is to know the styling of the view
+            TextView wordView = new TextView(this);
+            wordView.setText(words.get(i));
+            rootView.addView(wordView);
+        }
     }
+
 }
