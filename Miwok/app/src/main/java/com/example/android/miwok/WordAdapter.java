@@ -16,9 +16,12 @@ import java.util.ArrayList;
 
 public class WordAdapter extends ArrayAdapter<Word> {
 
+    private Activity context;
+
     public WordAdapter(Activity context, ArrayList<Word> words) {
-        // we don't need a resource since we'll be creating it by ourselfs
+        // we don't need a resource since we'll be creating it by ourselves
         super(context, 0, words);
+        this.context = context;
     }
 
     /**
@@ -35,13 +38,15 @@ public class WordAdapter extends ArrayAdapter<Word> {
         // if scrap view is null, then create a view that is based on the list view xml file
         if (convertView == null) {
             // LayoutInflater creates a view from an xml file
-            convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+            // might be better to use the activity's layout inflater
+            // convertView = context.getLayoutInflater().inflate(R.layout.list_item, parent, false);
         }
+
+        Word currentWord = getItem(position);
 
         // grab all the fields from the view and set their values
         TextView miwokView = (TextView) convertView.findViewById(R.id.miwok_text_view);
-        Word currentWord = getItem(position);
         miwokView.setText(currentWord.getMiwokTranslation());
         TextView defaultView = (TextView) convertView.findViewById(R.id.default_text_view);
         defaultView.setText(currentWord.getDefaultTranslation());
