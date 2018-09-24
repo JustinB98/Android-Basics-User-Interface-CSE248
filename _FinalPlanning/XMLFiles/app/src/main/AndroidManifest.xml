@@ -17,8 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Calendar" />
-        <activity android:name=".Query"></activity>
+        <activity
+            android:name=".Calendar"
+            android:label="Calendar" />
+        <activity
+            android:name=".Query"
+            android:label="Query" />
+        <activity android:name=".MonthyDetails"></activity>
     </application>
 
 </manifest>

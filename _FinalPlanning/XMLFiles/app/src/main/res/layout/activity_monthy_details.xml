@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_query"
+    android:id="@+id/activity_monthy_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.android.xmlfiles.Query">
+    tools:context="com.example.android.xmlfiles.MonthyDetails">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:text="What card?" />
+            android:text="Which card?" />
 
         <Spinner
             android:layout_width="wrap_content"
@@ -31,55 +31,33 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Amount spent" />
+            android:text="Select Month" />
 
-        <EditText
+        <!-- MONTH -->
+        <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="How much?"
-            android:inputType="numberDecimal"
-            android:padding="10dp" />
+            android:layout_margin="30dp"></Spinner>
 
-        <TextView
+        <!-- YEAR -->
+        <Spinner
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="±"
-            android:textSize="20sp" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Enter offset "
-            android:padding="10dp" />
+            android:layout_height="wrap_content"></Spinner>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="What did you buy?" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter keywords that can help" />
-    </LinearLayout>
-
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Search" />
-
+        android:text="You spent: "/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Balance: "/>
 
 </LinearLayout>
