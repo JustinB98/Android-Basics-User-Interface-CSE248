@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
      *
      * @param position  position requested
      * @param convertView   scrap view that can be null if not enough scrap views were made
-     * @param parent
+     * @param parent    parent for all the list items, which is just the list view itself
      * @return
      */
     @NonNull
@@ -50,6 +51,8 @@ public class WordAdapter extends ArrayAdapter<Word> {
         miwokView.setText(currentWord.getMiwokTranslation());
         TextView defaultView = (TextView) convertView.findViewById(R.id.default_text_view);
         defaultView.setText(currentWord.getDefaultTranslation());
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.image);
+        imageView.setImageResource(currentWord.getImageResourceId());
         return convertView;
     }
 
