@@ -14,8 +14,10 @@ public class Word {
 
     private int mImageResourceId;
 
+    private final static int NO_IMAGE_PROVIDED = -1;
+
     public Word(String defaultTranslation, String miwokTranslation) {
-        this(defaultTranslation, miwokTranslation, 0);
+        this(defaultTranslation, miwokTranslation, NO_IMAGE_PROVIDED);
     }
     /**
 
@@ -48,5 +50,8 @@ public class Word {
         return mImageResourceId;
     }
 
+    public boolean hasImage() {
+        return mImageResourceId != NO_IMAGE_PROVIDED;
+    }
 
 }

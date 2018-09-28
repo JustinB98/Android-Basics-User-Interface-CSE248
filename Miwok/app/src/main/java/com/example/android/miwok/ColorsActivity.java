@@ -1,7 +1,7 @@
 package com.example.android.miwok;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -24,10 +24,9 @@ public class ColorsActivity extends AppCompatActivity {
         words.add(new Word("dusty yellow", "ṭopiisә", R.drawable.color_dusty_yellow));
         words.add(new Word("mustard yellow", "chiwiiṭә", R.drawable.color_mustard_yellow));
 
-        WordAdapter adapter = new WordAdapter(this, words);
+        WordAdapter adapter = new WordAdapter(this, words, R.color.category_colors);
 
         ListView listView = (ListView) findViewById(R.id.list);
-
         listView.setAdapter(adapter);
     }
 }
