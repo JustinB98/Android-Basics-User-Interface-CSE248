@@ -1,6 +1,7 @@
 package com.example.android.miwok;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ public class WordAdapter extends ArrayAdapter<Word> {
     private Activity context;
 
     private int mColorResourceId;
+
+    private static MediaPlayer mediaPlayer;
 
     public WordAdapter(Activity context, ArrayList<Word> words, int colorResourceId) {
         // we don't need a resource since we'll be creating it by ourselves
