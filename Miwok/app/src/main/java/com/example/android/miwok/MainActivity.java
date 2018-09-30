@@ -15,11 +15,9 @@
  */
 package com.example.android.miwok;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,25 +27,10 @@ public class MainActivity extends AppCompatActivity {
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
 
-        setTextViewListener(R.id.numbers, NumbersActivity.class);
-        setTextViewListener(R.id.family, FamilyActivity.class);
-        setTextViewListener(R.id.colors, ColorsActivity.class);
-        setTextViewListener(R.id.phrases, PhrasesActivity.class);
-    }
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(categoryAdapter);
 
-    private void setTextViewListener(int id, Class<?> classToOpen) {
-        TextView tv = (TextView) findViewById(id);
-        tv.setOnClickListener(getOnClickListener(classToOpen));
-    }
-
-    private View.OnClickListener getOnClickListener(final Class<?> classToOpen) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, classToOpen);
-                startActivity(intent);
-            }
-        };
     }
 
 }

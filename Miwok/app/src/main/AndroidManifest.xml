@@ -29,44 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".NumbersActivity"
-            android:label="@string/category_numbers"
-            android:parentActivityName=".MainActivity">
-            <!-- Specifying that this is the parent app -->
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.miwok.MainActivity" />
-        </activity>
-        <activity
-            android:name=".PhrasesActivity"
-            android:label="@string/category_phrases"
-            android:parentActivityName=".MainActivity">
-
-            <!-- Specifying that this is the parent app -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.miwok.MainActivity" />
-        </activity>
-        <activity
-            android:name=".FamilyActivity"
-            android:label="@string/category_family"
-            android:parentActivityName=".MainActivity">
-            <!-- Specifying that this is the parent app -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.miwok.MainActivity" />
-        </activity>
-        <activity
-            android:name=".ColorsActivity"
-            android:label="@string/category_colors"
-            android:parentActivityName=".MainActivity">
-            <!-- Specifying that this is the parent app -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.miwok.MainActivity" />
-        </activity>
     </application>
 
 </manifest>
