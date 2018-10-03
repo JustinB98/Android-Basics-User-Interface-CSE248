@@ -18,6 +18,7 @@ package com.example.android.soonami;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -45,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     /** URL to query the USGS dataset for earthquake information */
     private static final String USGS_REQUEST_URL =
-            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2012-01-01&endtime=2012-12-01&minmagnitude=6";
-
+            // "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2012-01-01&endtime=2012-12-01&minmagnitude=6";
+               "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2018-01-01&endtime=2018-01-09&limit=10";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 jsonResponse = makeHttpRequest(url);
             } catch (IOException e) {
-                // TODO Handle the IOException
+                Log.e(LOG_TAG, "Problem making the HTTP request", e);
             }
 
             // Extract relevant fields from the JSON response and create an {@link Event} object
@@ -128,11 +129,9 @@ public class MainActivity extends AppCompatActivity {
          */
         @Override
         protected void onPostExecute(Event earthquake) {
-            if (earthquake == null) {
-                return;
+            if (earthquake != null) {
+                updateUi(earthquake);
             }
-
-            updateUi(earthquake);
         }
 
         /**
@@ -156,16 +155,27 @@ public class MainActivity extends AppCompatActivity {
             String jsonResponse = "";
             HttpURLConnection urlConnection = null;
             InputStream inputStream = null;
+
+            if (url == null) {
+                return jsonResponse;
+            }
+
             try {
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setReadTimeout(10000 /* milliseconds */);
                 urlConnection.setConnectTimeout(15000 /* milliseconds */);
                 urlConnection.connect();
-                inputStream = urlConnection.getInputStream();
-                jsonResponse = readFromStream(inputStream);
+
+                // get the response code. if it starts with 2 then it's successful
+                if (urlConnection.getResponseCode() == 200) {
+                    inputStream = urlConnection.getInputStream();
+                    jsonResponse = readFromStream(inputStream);
+                } else {
+                    Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
+                }
             } catch (IOException e) {
-                // TODO: Handle the exception
+                Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
             } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
@@ -201,6 +211,11 @@ public class MainActivity extends AppCompatActivity {
          * about the first earthquake from the input earthquakeJSON string.
          */
         private Event extractFeatureFromJson(String earthquakeJSON) {
+
+            if (TextUtils.isEmpty(earthquakeJSON)) {
+                return null;
+            }
+
             try {
                 JSONObject baseJsonResponse = new JSONObject(earthquakeJSON);
                 JSONArray featureArray = baseJsonResponse.getJSONArray("features");
