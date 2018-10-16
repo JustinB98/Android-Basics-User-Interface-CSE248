@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "332303028088",
+    "firebase_url": "https://financial-app-c6c94.firebaseio.com",
+    "project_id": "financial-app-c6c94",
+    "storage_bucket": "financial-app-c6c94.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332303028088:android:e535d09533d580d8",
+        "android_client_info": {
+          "package_name": "behrman.justin.financialmanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332303028088-o5f6k6el3qfh3oaohihj6cigb1r0d4si.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "behrman.justin.financialmanager",
+            "certificate_hash": "706d78774a1e98930732f59aaf052b6b34dda1e7"
+          }
+        },
+        {
+          "client_id": "332303028088-gs1odkf2cnvr88bcjfa3b1gqhsh1p16d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLGaW-GJmp5IhiC0A_0VbEyCzPa9qfKDk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332303028088-gs1odkf2cnvr88bcjfa3b1gqhsh1p16d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

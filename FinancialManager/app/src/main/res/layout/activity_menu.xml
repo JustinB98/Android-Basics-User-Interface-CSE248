@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MenuActivity"
+    android:columnCount="2"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_row="0"
+        android:layout_column="0"
+        android:id="@+id/add_card_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add a card"/>
+
+    <Button
+        android:layout_row="0"
+        android:layout_column="1"
+        android:id="@+id/edit_card_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit a Card" />
+
+    <Button
+        android:layout_row="1"
+        android:layout_column="0"
+        android:id="@+id/card_history_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Check Card History" />
+
+</GridLayout>

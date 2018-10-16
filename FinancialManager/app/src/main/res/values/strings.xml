@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Financial Manager</string>
+
+    <!-- START Login Screen -->
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="username_hint">Enter email</string>
+    <string name="password_hint">Enter password</string>
+    <string name="login_btn_text">Login</string>
+    <string name="create_account_text">Create an account</string>
+    <string name="powered_by_plaid">Powered By Plaid</string>
+    <string name="login_failed">Invalid Credentials</string>
+    <!-- END Login Screen -->
+
+    <!-- START Create Account Screen -->
+    <string name="create_account_title">Create An Account</string>
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="create_account_btn_text">Create Account</string>
+    <string name="username_empty">Please enter email</string>
+    <string name="password_empty">Please enter password</string>
+    <string name="invalid_credentials">Username or password is invalid!</string>
+    <string name="invalid_email">Email isn\'t valid</string>
+    <string name="invalid_password">Password isn\'t valid</string>
+    <string name="auth_failed">Authentication failed...</string>
+    <!-- END Create Account Screen -->
+
+</resources>

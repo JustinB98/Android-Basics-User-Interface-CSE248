@@ -1,0 +1,81 @@
+The following are commits that were made for the final project on another repository, didn't know that everything would be on one repository.
+Removed any commits that only focused on the spring server. Going to use parse server now.
+
+Got the login screen in activity_main just about completed. Going to work on styling at the very end. Structure looks good for now
+
+Added the Create Account Layout
+Also added the logic for the login screen. Everything is working fine.
+Plan to change the layout of the create account xml at a later point since
+the layout isn't square. Try for an hour or two to implement a contrain
+layout instead of a linear layout but the drag and drop functionality
+wasn't working with me nor was the text part. Going to try to learn more
+at a later point but for now, I'm running behind since I should've started
+2-3 weeks ago. Going to put the logic for the create account activity next
+
+Started an Attempt to Organize Files and Tranactions 
+Added the Logic for creating an account. Didn't finish because I still
+need to send that off to a server. Added a transaction class which stores
+the place, amount, currency, and date of the transaction. The Card
+Transactions class holds the full history of a card. It will take in a
+json reponse and parse it for the transaction details. It stores it in a
+hashmap with a key of the date, and a linked list of transactions for the
+object it will hold. This is because some people might use their card more
+than once a day. Going to have to find out a way to use sqlite to maybe
+store this. The thing is, is that it's only on the client-side so it
+shouldn't be that much processing power. Also added a ProjectUtils class
+that will hold all common utility methods that will be needed throughout
+the project. Will probably need some sort of Global Manager class to store
+the current account signed in and such. Was debating whether or not to use
+accounts and just have passwords, but then it would become almost
+impossible of what person is for this account. If I stored it on their
+phone, it would probably be too much because this will be a lot of data
+over the years. It's better to use a server to store the information, yet
+it causes some security issues. I guess I'll just have to deal with it for
+now and just keep going with the project and figure it out later. Just
+going to try to have the manual card section done as soon as possible.
+
+Added the AddManualCardActivity and the Card class
+Added the card class which just has a simple name, and the card type. This
+so it's easy to send to the server, to get the card history. Also, added a
+CardType enum which will tell the server where to get the card history
+from (the server or the database). Added the xml for adding the card.
+Looks very simplistic but didn't know another way to do it. Just going to
+keep working on xml and java until I can't do anymore without needing a
+server
+
+Wrote the Code for Networking and Tried to Test It 
+Wrote pretty much all the code for networking, just need to put it on an
+async task and test it. The get method works with the usgs earthquake
+database, but it doesn't work with localhost. I think this is just an
+issue with how to reference it via android studio's virtual playground.
+Posted a link that might help. Don't have time today to finish it but I'll
+probably finish it tomorrow. Also need to test POST requests. Worked on
+the server to help test with post requests. This will be helpful if I can
+find a way to reference localhost...
+
+Tested GET and POST requests 
+Also made it easier to get a callback from network calls that were in the
+background by just passing the inputstream that was receieved. See the
+InputStreamCallBack interface. The GET request works which was said in the
+last commit but the POST request also works. Just a quick note, if the
+POST request json body doesn't have a valid request, a response code of
+400 will be sent back. So the json has to be valid when sending it to the
+site. Also, make sure the CardTransaction class works. Had to mess with
+the date a little but it works perfectly. Going to work on which is
+better, parse server or firebase to authenticate the user
+
+Added Firebase Authentication 
+Firebase now handles the sign in and sign up of the program. Changed the
+username to email which would help in the long run so maybe if I need to
+send the user an email, I can. Have to figure how to have them verify it.
+Added all the logic for signing in users and creating accounts. Have to
+add a signout button on the menu/when the program stop (which is just the
+method onStop()). Also, in NetworkUtils, I forgot to disconnect so I added
+that so this way when I use a server, I won't be charged extra/slow down
+the connection to the server. Going to be working on the parse server and
+heroku web service.
+
+Added Function to Sign in and Sign Out
+Tested with two accounts and they all work perfectly. Just need an actual
+button for signing out. Just need to configure a server on heroku with
+node.js and this app will be on the homestrech to being finished!
