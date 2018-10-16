@@ -1,4 +1,6 @@
-# Android-Basics-User-Interface-CSE248
+# Repository For all Things Concerning CSE248
+
+### Links for Nanodegree on udacity
 HW Problem Set 1 #2. 
 User Interface: https://www.udacity.com/course/android-basics-user-interface--ud834
 User Input: https://www.udacity.com/course/android-basics-user-input--ud836
