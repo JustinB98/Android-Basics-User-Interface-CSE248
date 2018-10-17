@@ -2,7 +2,6 @@ package behrman.justin.financialmanager.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -10,11 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 import behrman.justin.financialmanager.R;
 
@@ -24,14 +21,11 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private EditText usernameField, passwordField, confirmPasswordField;
     private Button createAccountBtn;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-        mAuth = FirebaseAuth.getInstance();
-
         extractViews();
         initBtn();
     }
@@ -59,21 +53,36 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void signUp0(String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        ParseUser user = new ParseUser();
+        user.setUsername(email);
+        user.setPassword(password);
+        user.signUpInBackground(new SignUpCallback() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
+            public void done(ParseException e) {
+                if (e == null) {
                     Log.i(LOG_TAG, "createUserWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
                     switchToMenuActivity();
                 } else {
-                    // If sign in fails, display a message to the user.
-                    Log.i(LOG_TAG, "createUserWithEmail:failure", task.getException());
-                    Toast.makeText(CreateAccountActivity.this, R.string.auth_failed,
-                            Toast.LENGTH_SHORT).show();
+                    Log.i(LOG_TAG, "createUserWithEmail:failure", e);
+                    showErrorMsg(e.getCode());
                 }
             }
         });
+    }
+
+    private void showErrorMsg(int errorCode) {
+        int msgId;
+        switch(errorCode) {
+            case ParseException.EMAIL_TAKEN:
+            case ParseException.USERNAME_TAKEN: {
+                msgId = R.string.username_taken;
+                break;
+            }
+            default: {
+                msgId = R.string.login_failed;
+            }
+        }
+        Toast.makeText(this, msgId, Toast.LENGTH_LONG).show();
     }
 
     private boolean fieldsAreValid(String username, String password) {

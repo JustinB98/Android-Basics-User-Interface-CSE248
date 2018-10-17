@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.parse.ParseUser;
 
 import behrman.justin.financialmanager.R;
 
@@ -43,13 +43,13 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        FirebaseAuth.getInstance().signOut();
+        ParseUser.logOutInBackground();
     }
 
 
     @Override
     public void onBackPressed() {
-        FirebaseAuth.getInstance().signOut();
+        ParseUser.logOutInBackground();
         super.onBackPressed();
     }
 }

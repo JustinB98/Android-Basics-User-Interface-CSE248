@@ -3,8 +3,8 @@ package behrman.justin.financialmanager.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,31 +13,59 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.parse.LogInCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import behrman.justin.financialmanager.R;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 // https://stackoverflow.com/questions/4905315/error-connection-refused
 public class MainActivity extends AppCompatActivity {
+
+    private final static String LOG_TAG = MainActivity.class.getSimpleName() + "logs";
 
     private EditText usernameField, passwordField;
     private Button loginBtn;
     private TextView createAccountView;
     private ProgressBar progressBar;
 
-    private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
+        initParse(); // only for main activity;
         initViews();
         initClickables();
+    }
+
+    // https://guides.codepath.com/android/Building-Data-driven-Apps-with-Parse
+    private void initParse() {
+        OkHttpClient.Builder builder = initParseDebugging();
+        // set applicationId, and server server based on the values in the Heroku settings.
+        // clientKey is not needed unless explicitly configured
+        // any network interceptors must be added with the Configuration Builder given this syntax
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                .applicationId("myAppID") // should correspond to APP_ID env variable
+                .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
+                .clientBuilder(builder)
+                .server("https://parse-server-example-test.herokuapp.com/parse").build());
+    }
+
+    private OkHttpClient.Builder initParseDebugging() {
+        // Use for troubleshooting -- remove this line for production
+        Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
+
+        // Use for monitoring Parse OkHttp traffic
+        // Can be Level.BASIC, Level.HEADERS, or Level.BODY
+        // See http://square.github.io/okhttp/3.x/logging-interceptor/ to see the options.
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        builder.networkInterceptors().add(httpLoggingInterceptor);
+        return builder;
     }
 
     private void initClickables() {
@@ -88,17 +116,29 @@ public class MainActivity extends AppCompatActivity {
     private void sendCredentials(String username, String password) {
         progressBar.setVisibility(View.VISIBLE);
         hideKeyboard();
-        mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        ParseUser user = new ParseUser();
+        user.setUsername(username);
+        user.setEmail(username);
+        user.setPassword(password);
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+            public void done(ParseUser user, ParseException e) {
                 progressBar.setVisibility(View.GONE);
-                if (task.isSuccessful()) {
+                if (e == null) {
                     goToMainMenu();
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
+                    showErrorMsg(e.getCode());
                 }
             }
         });
+
+    }
+
+    // TODO: 10/17/2018 work on what could cause the login to fail besides poor connection and invalid credentials
+    private void showErrorMsg(int errorCode) {
+        String msg = null;
+        Toast.makeText(this, "sign in failed!!!!", Toast.LENGTH_LONG).show();
+        Log.e(LOG_TAG, "sign in failed!");
     }
 
     private void initViews() {
@@ -116,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        ParseUser currentUser = ParseUser.getCurrentUser();
         updateUIIfNeeded(currentUser);
         passwordField.setText("");
     }
@@ -135,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    private void updateUIIfNeeded(FirebaseUser currentUser) {
+    private void updateUIIfNeeded(ParseUser currentUser) {
         if (currentUser != null) {
             goToMainMenu();
         }

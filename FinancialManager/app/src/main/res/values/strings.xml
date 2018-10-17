@@ -10,6 +10,7 @@
     <string name="create_account_text">Create an account</string>
     <string name="powered_by_plaid">Powered By Plaid</string>
     <string name="login_failed">Invalid Credentials</string>
+    <string name="username_taken">Email already exists!</string>
     <!-- END Login Screen -->
 
     <!-- START Create Account Screen -->
