@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -14,6 +15,7 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -21,6 +23,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private EditText usernameField, passwordField, confirmPasswordField;
     private Button createAccountBtn;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +59,12 @@ public class CreateAccountActivity extends AppCompatActivity {
         ParseUser user = new ParseUser();
         user.setUsername(email);
         user.setPassword(password);
+        ProjectUtils.hideKeyboard(this);
+        progressBar.setVisibility(View.VISIBLE);
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
+                progressBar.setVisibility(View.GONE);
                 if (e == null) {
                     Log.i(LOG_TAG, "createUserWithEmail:success");
                     switchToMenuActivity();
@@ -92,8 +98,16 @@ public class CreateAccountActivity extends AppCompatActivity {
         } else if (!isValidPassword(password)) {
             Toast.makeText(this, R.string.invalid_password, Toast.LENGTH_SHORT).show();
             return false;
+        } else if (passwordsNotEqual(password)) {
+            Toast.makeText(this, R.string.passwords_not_equal, Toast.LENGTH_SHORT).show();
+            return false;
         }
         return true;
+     }
+
+     private boolean passwordsNotEqual(String password) {
+        String confirmPasswordText = confirmPasswordField.getText().toString();
+        return confirmPasswordText.equals(password);
      }
 
     private boolean isValidEmail(String email) {
@@ -111,6 +125,15 @@ public class CreateAccountActivity extends AppCompatActivity {
         passwordField = (EditText) findViewById(R.id.password_input);
         confirmPasswordField = (EditText) findViewById(R.id.confirm_password_input);
         createAccountBtn = (Button) findViewById(R.id.create_account_btn);
+        progressBar = (ProgressBar) findViewById(R.id.signup_progress_bar);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        usernameField.setText("");
+        passwordField.setText("");
+        confirmPasswordField.setText("");
     }
 
 }

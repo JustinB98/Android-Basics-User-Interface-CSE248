@@ -19,7 +19,6 @@ public class CardTransactions {
     private HashMap<Date, LinkedList<Transaction>> cardTransactionsMap;
 
     public CardTransactions(String jsonResponse) {
-        cardTransactionsMap = new HashMap<>();
         try {
             parseJsonResponse(jsonResponse);
         } catch (JSONException e) {
@@ -30,6 +29,8 @@ public class CardTransactions {
     // ---------------------------- START PARSE JSON ----------------------------
     private void parseJsonResponse(String json) throws JSONException {
         JSONObject root = new JSONObject(json);
+        int length = root.getInt("length");
+        cardTransactionsMap = new HashMap<>(length);
         JSONArray transactions = root.getJSONArray("transactions");
         parseTransactionResponse(transactions);
     }
@@ -64,6 +65,7 @@ public class CardTransactions {
 
     // ---------------------------- END PARSE JSON ----------------------------
 
+    // for debugging
     public void listTransactions() {
         StringBuilder sb = new StringBuilder();
         for (Date date: cardTransactionsMap.keySet()) {

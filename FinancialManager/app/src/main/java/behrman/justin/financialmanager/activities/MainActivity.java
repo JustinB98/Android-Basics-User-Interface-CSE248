@@ -1,12 +1,10 @@
 package behrman.justin.financialmanager.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -19,6 +17,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendCredentials(String username, String password) {
         progressBar.setVisibility(View.VISIBLE);
-        hideKeyboard();
+        ProjectUtils.hideKeyboard(this);
         ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setEmail(username);
@@ -163,16 +162,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToMainMenu() {
         startActivity(new Intent(MainActivity.this, MenuActivity.class));
-    }
-
-    // https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard
-    private void hideKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view = getCurrentFocus();
-        if (view == null) {
-            view = new View(this);
-        }
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     private void updateUIIfNeeded(ParseUser currentUser) {
