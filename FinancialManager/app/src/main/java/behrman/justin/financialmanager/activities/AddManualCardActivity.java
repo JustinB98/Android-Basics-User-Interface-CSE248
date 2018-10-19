@@ -26,6 +26,8 @@ public class AddManualCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: 10/7/2018 connect with server to ensure it's a unique id then add it to the server list
+
+                finish();
             }
         });
     }

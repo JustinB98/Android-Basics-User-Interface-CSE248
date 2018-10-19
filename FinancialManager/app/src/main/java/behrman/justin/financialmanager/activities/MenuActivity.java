@@ -12,7 +12,7 @@ import behrman.justin.financialmanager.R;
 
 public class MenuActivity extends AppCompatActivity {
 
-    private Button addCardBtn, editCardBtn, checkHistoryBtn;
+    private Button addManualCardBtn, addAutoCardBtn, editCardBtn, checkHistoryBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +23,11 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void initClickListeners() {
-
+        initSingleClickListener(addManualCardBtn, AddManualCardActivity.class);
+        initSingleClickListener(addAutoCardBtn, PlaidActivity.class);
     }
 
-    private void initSingleClickListener(Button btn, final Class<AppCompatActivity> classToOpen) {
+    private void initSingleClickListener(Button btn, final Class<?> classToOpen) {
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MenuActivity.this, classToOpen));
@@ -35,7 +36,8 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private void extractViews() {
-        addCardBtn = (Button) findViewById(R.id.add_card_btn);
+        addManualCardBtn = (Button) findViewById(R.id.add_manual_card_btn);
+        addAutoCardBtn = (Button) findViewById(R.id.add_auto_card_btn);
         editCardBtn = (Button) findViewById(R.id.edit_card_btn);
         checkHistoryBtn = (Button) findViewById(R.id.card_history_btn);
     }

@@ -85,7 +85,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 break;
             }
             default: {
-                msgId = R.string.login_failed;
+                msgId = R.string.server_issue;
             }
         }
         Toast.makeText(this, msgId, Toast.LENGTH_LONG).show();
@@ -98,14 +98,14 @@ public class CreateAccountActivity extends AppCompatActivity {
         } else if (!isValidPassword(password)) {
             Toast.makeText(this, R.string.invalid_password, Toast.LENGTH_SHORT).show();
             return false;
-        } else if (passwordsNotEqual(password)) {
+        } else if (!passwordsEqual(password)) {
             Toast.makeText(this, R.string.passwords_not_equal, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
      }
 
-     private boolean passwordsNotEqual(String password) {
+     private boolean passwordsEqual(String password) {
         String confirmPasswordText = confirmPasswordField.getText().toString();
         return confirmPasswordText.equals(password);
      }
