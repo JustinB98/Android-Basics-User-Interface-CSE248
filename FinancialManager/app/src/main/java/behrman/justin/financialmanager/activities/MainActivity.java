@@ -11,10 +11,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -38,6 +43,49 @@ public class MainActivity extends AppCompatActivity {
         initParse(); // only for main activity;
         initViews();
         initClickables();
+        initThreadLog();
+        Log.i("currentuser", ParseUser.getCurrentUser().toString());
+        // initTest();
+    }
+
+    private void initThreadLog() {
+        Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                Log.i("errorlog", e.toString());
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void initTest() {
+        final String tag = "parseobjecttesting";
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ManualCards");
+        query.whereEqualTo("name", "justin");
+        query.whereEqualTo("owner", "");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    Log.i(tag, "trying to get the user");
+                    Log.i(tag, "objects len: " + objects.size());
+                    for (ParseObject obj : objects) {
+                        Log.i(tag, "object: " + obj.getObjectId());
+                        // Log.i(tag, "owner: " + obj.get("owner").toString());
+                        // Log.i(tag, "owner 1: " + obj.getParseObject("owner"));
+                        // Log.i(tag, "owner 2: " + obj.getJSONObject("owner").toString());
+                        // ParseUser user = obj.getParseUser("owner");
+                        // Log.i(tag, "got the user " + (user == null ? "null" : user.toString()));
+                        // String email = user.getEmail();
+                        // String username = user.getUsername();
+                        // Log.i(tag, "user info: " + user.getEmail() + " " + user.getUsername());
+                    }
+                } else {
+                    Log.i(tag, "Error Code: " + e.getCode());
+                }
+            }
+        });
     }
 
     // https://guides.codepath.com/android/Building-Data-driven-Apps-with-Parse
@@ -50,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 .applicationId("myAppID") // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
-                .server("https://parse-server-example-test.herokuapp.com/parse").build());
+                .server("https://parse-server-example-test.herokuapp.com/parse/").build());
     }
 
     private OkHttpClient.Builder initParseDebugging() {

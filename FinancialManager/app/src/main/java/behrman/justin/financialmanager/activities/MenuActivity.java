@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.parse.ParseUser;
-
 import behrman.justin.financialmanager.R;
 
 public class MenuActivity extends AppCompatActivity {
@@ -45,13 +43,15 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        ParseUser.logOutInBackground();
+        // Log.i("userloggedout", "user was logged out onStop");
+        // ParseUser.logOutInBackground();
     }
 
 
     @Override
     public void onBackPressed() {
-        ParseUser.logOutInBackground();
+        // TODO: 10/19/2018 find out when to log out user, if logged out here, then they will be logged out for the rest of the application, also sign them out
+        // ParseUser.logOutInBackground();
         super.onBackPressed();
     }
 }

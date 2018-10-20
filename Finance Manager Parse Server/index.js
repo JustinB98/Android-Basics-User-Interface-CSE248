@@ -15,9 +15,9 @@ if (!databaseUri) {
 var api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
+  appId: process.env.APP_ID || 'dYphmVT5CsMdSAo6Kpfr',
+  masterKey: process.env.MASTER_KEY || 'zWR9fNmBFUzzk8UK54f5', //Add your master key here. Keep it secret!
+  serverURL: process.env.SERVER_URL || 'https://financial-manager-app.herokuapp.com/parse',  // Don't forget to change to https if needed
   liveQuery: {
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
   }
@@ -45,6 +45,10 @@ app.get('/', function(req, res) {
 app.get('/test', function(req, res) {
   res.sendFile(path.join(__dirname, '/public/test.html'));
 });
+
+app.get('testpath', function(req, res)) {
+  res.status(200).send('test path is working correctly!');
+}
 
 var port = process.env.PORT || 1337;
 var httpServer = require('http').createServer(app);
