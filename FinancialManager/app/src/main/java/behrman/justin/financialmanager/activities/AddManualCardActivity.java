@@ -49,6 +49,7 @@ public class AddManualCardActivity extends AppCompatActivity {
     private void sendData() {
         ParseQuery<ParseObject> cardInformation = ParseQuery.getQuery("ManualCards");
         cardInformation.whereEqualTo("name", cardNameField.getText().toString());
+        cardInformation.whereEqualTo("owner", ParseUser.getCurrentUser());
         cardInformation.countInBackground(new CountCallback() {
             @Override
             public void done(int count, ParseException e) {

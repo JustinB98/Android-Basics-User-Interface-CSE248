@@ -19,9 +19,13 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.InputStreamCallBack;
+import behrman.justin.financialmanager.utils.NetworkUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -214,6 +218,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUIIfNeeded(ParseUser currentUser) {
         if (currentUser != null) {
+            Log.i("jsonresponse", "starting");
+            NetworkUtils.makePostRequest("https://parse-server-example-test.herokuapp.com/usertest", "{\"email\": " + "\"" +  currentUser.getUsername() +"\",\"sessionToken\":\"" + currentUser.getSessionToken() + "\"}", new InputStreamCallBack() {
+                @Override
+                public void callback(InputStream is) {
+                    Log.i("jsonresponse", "got in callback");
+                    try {
+                        String s = NetworkUtils.readFromStream(is);
+                        Log.i("jsonresponse", "the response was " + s);
+                    } catch (IOException e) {
+                        Log.i("jsonresponse", "error", e);
+                    }
+                }
+            });
+
             goToMainMenu();
         }
     }

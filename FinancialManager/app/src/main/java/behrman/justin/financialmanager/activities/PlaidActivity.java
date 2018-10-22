@@ -9,9 +9,19 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.InputStreamCallBack;
+import behrman.justin.financialmanager.utils.NetworkUtils;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 
 /**
  * Most of the code DID NOT come from me. They are from Plaid. </br>
@@ -21,7 +31,7 @@ import behrman.justin.financialmanager.R;
  */
 public class PlaidActivity extends AppCompatActivity {
 
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String LOG_TAG = PlaidActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +99,28 @@ public class PlaidActivity extends AppCompatActivity {
                         // Reload Link in the Webview
                         // You will likely want to transition the view at this point.
                         plaidLinkWebview.loadUrl(linkInitializationUrl.toString());
-
-                        Intent intent = new Intent(PlaidActivity.this, MenuActivity.class);
-                        intent.putExtra("public_token", linkData.get("public_token"));
-                        startActivity(intent);
+                        final String publicToken = linkData.get("public_token");
+                        ParseObject autoCard = new ParseObject("AutoCards");
+                        autoCard.put("owner", ParseUser.getCurrentUser());
+                        autoCard.put("publicToken", publicToken);
+                        autoCard.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                String jsonResponse = "{" + ProjectUtils.convertToJSON("publicToken", publicToken) + "}";
+                                NetworkUtils.makePostRequest("https://parse-server-example-test.herokuapp.com/converttoaccess", jsonResponse, new InputStreamCallBack() {
+                                    @Override
+                                    public void callback(InputStream is) {
+                                        try {
+                                            String s = NetworkUtils.readFromStream(is);
+                                            Log.i(LOG_TAG, "the result string is " + s);
+                                        } catch (IOException e) {
+                                            Log.i(LOG_TAG, "ERROR", e);
+                                        }
+                                    }
+                                });
+                                finish();
+                            }
+                        });
                     } else if (action.equals("exit")) {
                         // User exited
                         // linkData may contain information about the user's status in the Link flow,

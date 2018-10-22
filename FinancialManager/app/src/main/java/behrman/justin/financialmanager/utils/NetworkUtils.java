@@ -60,7 +60,9 @@ public class NetworkUtils {
 
             @Override
             protected void onPostExecute(InputStream inputStream) {
-                callback.callback(inputStream);
+                if (callback != null) {
+                    callback.callback(inputStream);
+                }
             }
         }.execute();
     }
@@ -119,7 +121,9 @@ public class NetworkUtils {
 
             @Override
             protected void onPostExecute(InputStream inputStream) {
-                callback.callback(inputStream);
+                if (callback != null) {
+                    callback.callback(inputStream);
+                }
             }
         }.execute();
     }

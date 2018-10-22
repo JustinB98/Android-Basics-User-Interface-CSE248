@@ -40,4 +40,8 @@ public class ProjectUtils {
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public static String convertToJSON(String name, Object obj) {
+        return "\"" + name + "\":" + "\"" + obj + "\"";
+    }
+
 }
