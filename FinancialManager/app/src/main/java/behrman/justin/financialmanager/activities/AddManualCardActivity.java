@@ -18,6 +18,7 @@ import com.parse.SaveCallback;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.StringConstants;
 
 public class AddManualCardActivity extends AppCompatActivity {
 
@@ -40,6 +41,7 @@ public class AddManualCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ProjectUtils.hideKeyboard(AddManualCardActivity.this);
+                addCardBtn.setEnabled(false);
                 progressBar.setVisibility(View.VISIBLE);
                 sendData();
             }
@@ -47,15 +49,16 @@ public class AddManualCardActivity extends AppCompatActivity {
     }
 
     private void sendData() {
-        ParseQuery<ParseObject> cardInformation = ParseQuery.getQuery("ManualCards");
-        cardInformation.whereEqualTo("name", cardNameField.getText().toString());
-        cardInformation.whereEqualTo("owner", ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> cardInformation = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS);
+        cardInformation.whereEqualTo(StringConstants.MANUAL_CARD_NAME, cardNameField.getText().toString());
+        cardInformation.whereEqualTo(StringConstants.MANUAL_CARD_OWNER, ParseUser.getCurrentUser());
         cardInformation.countInBackground(new CountCallback() {
             @Override
             public void done(int count, ParseException e) {
                 Log.i(LOG_TAG, e == null ? "null" : e.toString());
                 afterFind(count);
                 progressBar.setVisibility(View.GONE);
+                addCardBtn.setEnabled(true);
             }
         });
     }
@@ -85,9 +88,9 @@ public class AddManualCardActivity extends AppCompatActivity {
     }
 
     private ParseObject createCardObject() {
-        ParseObject card = new ParseObject("ManualCards");
-        card.put("name", cardNameField.getText().toString());
-        card.put("owner", ParseUser.getCurrentUser());
+        ParseObject card = new ParseObject(StringConstants.MANUAL_CARD_CLASS);
+        card.put(StringConstants.MANUAL_CARD_NAME, cardNameField.getText().toString());
+        card.put(StringConstants.MANUAL_CARD_OWNER, ParseUser.getCurrentUser());
         return card;
     }
 

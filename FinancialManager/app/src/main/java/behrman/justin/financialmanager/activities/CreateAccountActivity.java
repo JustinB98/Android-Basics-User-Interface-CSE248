@@ -61,10 +61,12 @@ public class CreateAccountActivity extends AppCompatActivity {
         user.setPassword(password);
         ProjectUtils.hideKeyboard(this);
         progressBar.setVisibility(View.VISIBLE);
+        createAccountBtn.setEnabled(false);
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
                 progressBar.setVisibility(View.GONE);
+                createAccountBtn.setEnabled(true);
                 if (e == null) {
                     Log.i(LOG_TAG, "createUserWithEmail:success");
                     switchToMenuActivity();

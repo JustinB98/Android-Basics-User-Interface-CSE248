@@ -22,6 +22,7 @@ import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.InputStreamCallBack;
 import behrman.justin.financialmanager.utils.NetworkUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.StringConstants;
 
 /**
  * Most of the code DID NOT come from me. They are from Plaid. </br>
@@ -47,7 +48,7 @@ public class PlaidActivity extends AppCompatActivity {
         linkInitializeOptions.put("product", "auth");
         linkInitializeOptions.put("apiVersion", "v2"); // set this to "v1" if using the legacy Plaid API
         linkInitializeOptions.put("env", "sandbox");
-        // linkInitializeOptions.put("clientName", "Test App");
+        linkInitializeOptions.put("clientName", "Financial App");
         linkInitializeOptions.put("selectAccount", "true");
         linkInitializeOptions.put("webhook", "http://requestb.in");
         linkInitializeOptions.put("baseUrl", "https://cdn.plaid.com/link/v2/stable/link.html");
@@ -89,38 +90,7 @@ public class PlaidActivity extends AppCompatActivity {
                     HashMap<String, String> linkData = parseLinkUriData(parsedUri);
 
                     if (action.equals("connected")) {
-                        // User successfully linked
-                        Log.d("Public token: ", msgOrDefault(linkData.get("public_token")));
-                        Log.d("Account ID: ", msgOrDefault(linkData.get("account_id")));
-                        Log.d("Account name: ", msgOrDefault(linkData.get("account_name")));
-                        Log.d("Institution type: ", msgOrDefault(linkData.get("institution_type")));
-                        Log.d("Institution name: ", msgOrDefault(linkData.get("institution_name")));
-
-                        // Reload Link in the Webview
-                        // You will likely want to transition the view at this point.
-                        plaidLinkWebview.loadUrl(linkInitializationUrl.toString());
-                        final String publicToken = linkData.get("public_token");
-                        ParseObject autoCard = new ParseObject("AutoCards");
-                        autoCard.put("owner", ParseUser.getCurrentUser());
-                        autoCard.put("publicToken", publicToken);
-                        autoCard.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                String jsonResponse = "{" + ProjectUtils.convertToJSON("publicToken", publicToken) + "}";
-                                NetworkUtils.makePostRequest("https://parse-server-example-test.herokuapp.com/converttoaccess", jsonResponse, new InputStreamCallBack() {
-                                    @Override
-                                    public void callback(InputStream is) {
-                                        try {
-                                            String s = NetworkUtils.readFromStream(is);
-                                            Log.i(LOG_TAG, "the result string is " + s);
-                                        } catch (IOException e) {
-                                            Log.i(LOG_TAG, "ERROR", e);
-                                        }
-                                    }
-                                });
-                                finish();
-                            }
-                        });
+                       onConnected(linkData);
                     } else if (action.equals("exit")) {
                         // User exited
                         // linkData may contain information about the user's status in the Link flow,
@@ -135,9 +105,9 @@ public class PlaidActivity extends AppCompatActivity {
                         // Reload Link in the Webview
                         // You will likely want to transition the view at this point.
                         plaidLinkWebview.loadUrl(linkInitializationUrl.toString());
-                        Intent intent = new Intent(PlaidActivity.this, MenuActivity.class);
-                        intent.putExtra("public_token", "");
-                        startActivity(intent);
+                        // Intent intent = new Intent(PlaidActivity.this, MenuActivity.class);
+                        // intent.putExtra("public_token", "");
+                        // startActivity(intent);
                     } else {
                         Log.d("Link action detected: ", action);
                     }
@@ -160,6 +130,51 @@ public class PlaidActivity extends AppCompatActivity {
 
         });
     }
+
+    private void onConnected(HashMap<String, String> linkData) {
+        // User successfully linked
+        // Log.d("Public token: ", msgOrDefault(linkData.get("public_token")));
+        // Log.d("Account ID: ", msgOrDefault(linkData.get("account_id")));
+        // Log.d("Account name: ", msgOrDefault(linkData.get("account_name")));
+        // Log.d("Institution type: ", msgOrDefault(linkData.get("institution_type")));
+        // Log.d("Institution name: ", msgOrDefault(linkData.get("institution_name")));
+
+        // Reload Link in the Webview
+        // You will likely want to transition the view at this point.
+        // plaidLinkWebview.loadUrl(linkInitializationUrl.toString());
+        String publicToken = linkData.get("public_token");
+        String name = linkData.get("account_name");
+        ParseObject autoCard = new ParseObject(StringConstants.AUTO_CARD_CLASS);
+        autoCard.put(StringConstants.AUTO_CARD_OWNER, ParseUser.getCurrentUser());
+        autoCard.put(StringConstants.AUTO_CARD_PUBLIC_TOKEN, publicToken);
+        autoCard.put(StringConstants.AUTO_CARD_NAME, name);
+        String publicTokenJson = "{" + ProjectUtils.convertToJSON(StringConstants.AUTO_CARD_PUBLIC_TOKEN, publicToken) + "}";
+        publicToken = null; // get rid of public token reference asap
+        linkData.put("public_token", null);
+        saveCardToDataBase(autoCard, publicTokenJson);
+    }
+
+    private void saveCardToDataBase(ParseObject autoCard, final String jsonRequest) {
+        // need to save card to data base, then tell server to convert that public token to an access token and item id
+        autoCard.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                NetworkUtils.makePostRequest(StringConstants.CONVERT_ACCESS_URL, jsonRequest, new InputStreamCallBack() {
+                    @Override
+                    public void callback(InputStream is) {
+                        try {
+                            String s = NetworkUtils.readFromStream(is);
+                            Log.i(LOG_TAG, "the result string is " + s);
+                        } catch (IOException e) {
+                            Log.i(LOG_TAG, "ERROR", e);
+                        }
+                    }
+                });
+                finish();
+            }
+        });
+    }
+
 
     // Generate a Link initialization URL based on a set of configuration options
     public Uri generateLinkInitializationUrl(HashMap<String,String> linkOptions) {

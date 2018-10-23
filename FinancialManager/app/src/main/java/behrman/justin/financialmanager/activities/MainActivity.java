@@ -27,6 +27,7 @@ import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.InputStreamCallBack;
 import behrman.justin.financialmanager.utils.NetworkUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.StringConstants;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 .applicationId("myAppID") // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
-                .server("https://parse-server-example-test.herokuapp.com/parse/").build());
+                .server(StringConstants.PARSE_URL).build());
     }
 
     private OkHttpClient.Builder initParseDebugging() {
@@ -166,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendCredentials(String username, String password) {
         progressBar.setVisibility(View.VISIBLE);
+        loginBtn.setEnabled(false);
         ProjectUtils.hideKeyboard(this);
         ParseUser user = new ParseUser();
         user.setUsername(username);
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 progressBar.setVisibility(View.GONE);
+                loginBtn.setEnabled(true);
                 if (e == null) {
                     goToMainMenu();
                 } else {
