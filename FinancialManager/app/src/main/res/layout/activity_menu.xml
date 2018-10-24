@@ -1,56 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MenuActivity"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".activities.MenuActivity">
 
-<GridLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:columnCount="2">
-
-    <Button
-        android:layout_row="0"
-        android:layout_column="0"
-        android:id="@+id/add_manual_card_btn"
-        android:layout_width="wrap_content"
-        android:padding="32dp"
-        android:layout_height="wrap_content"
-        android:text="Add manual card"
-        />
-
-    <Button
-        android:id="@+id/add_auto_card_btn"
-        android:layout_row="0"
-        android:layout_column="1"
-        android:padding="32dp"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add auto card"
-        />
+        android:orientation="vertical">
 
-    <Button
-        android:layout_row="1"
-        android:layout_column="1"
-        android:padding="32dp"
-        android:id="@+id/edit_card_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit a Card" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:padding="32dp"
-        android:layout_row="1"
-        android:layout_column="0"
-        android:id="@+id/card_history_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Check Card History" />
+            <Button
+                android:id="@+id/add_manual_card_btn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:padding="32dp"
+                android:text="Add manual card" />
 
-</GridLayout>
+            <Button
+                android:id="@+id/add_auto_card_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_weight="1"
+                android:layout_column="1"
+                android:padding="32dp"
+                android:text="Add auto card" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/edit_card_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:padding="32dp"
+                android:text="Edit a Card" />
+
+            <Button
+                android:id="@+id/card_history_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:padding="32dp"
+                android:text="Check Card History" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

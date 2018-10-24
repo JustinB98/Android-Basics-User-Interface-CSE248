@@ -24,7 +24,8 @@
             android:label="@string/create_account_title" />
         <activity android:name=".activities.MenuActivity" />
         <activity android:name=".activities.AddManualCardActivity" />
-        <activity android:name=".activities.PlaidActivity"></activity>
+        <activity android:name=".activities.PlaidActivity" />
+        <activity android:name=".SelectCardActivity"></activity>
     </application>
 
 </manifest>
