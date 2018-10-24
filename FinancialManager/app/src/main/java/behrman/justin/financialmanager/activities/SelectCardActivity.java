@@ -1,18 +1,17 @@
-package behrman.justin.financialmanager;
+package behrman.justin.financialmanager.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
 
+import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -46,7 +45,7 @@ public class SelectCardActivity extends AppCompatActivity {
 
     private List<Card> getCards() {
         ParseQuery autoCards = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS);
-        autoCards.whereEqualTo("owner", ParseUser.getCurrentUser());
+        autoCards.whereEqualTo(StringConstants.MANUAL_CARD_OWNER, ParseUser.getCurrentUser());
         // autoCards.find()
         return null;
     }

@@ -6,7 +6,7 @@ public final class StringConstants {
     private StringConstants() {}
 
     /* URLS */
-    public final static String SERVER_URL = "https://parse-server-example-test.herokuapp.com/";
+    public final static String SERVER_URL = "https://financial-manager-app.herokuapp.com/";
     public final static String PARSE_URL = SERVER_URL + "parse/";
     public final static String CONVERT_ACCESS_URL = SERVER_URL + "converttoaccess";
 

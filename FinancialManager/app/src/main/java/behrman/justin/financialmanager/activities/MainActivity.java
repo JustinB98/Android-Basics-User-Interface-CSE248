@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         initClickables();
         initThreadLog();
-        Log.i("currentuser", ParseUser.getCurrentUser().toString());
+        // Log.i("currentuser", ParseUser.getCurrentUser().toString());
         // initTest();
     }
 
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         // clientKey is not needed unless explicitly configured
         // any network interceptors must be added with the Configuration Builder given this syntax
         Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("myAppID") // should correspond to APP_ID env variable
+                .applicationId("dYphmVT5CsMdSAo6Kpfr") // should correspond to APP_ID env variable
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
                 .server(StringConstants.PARSE_URL).build());
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateUIIfNeeded(ParseUser currentUser) {
         if (currentUser != null) {
             Log.i("jsonresponse", "starting");
-            NetworkUtils.makePostRequest("https://parse-server-example-test.herokuapp.com/usertest", "{\"email\": " + "\"" +  currentUser.getUsername() +"\",\"sessionToken\":\"" + currentUser.getSessionToken() + "\"}", new InputStreamCallBack() {
+            NetworkUtils.makePostRequest(StringConstants.SERVER_URL + "usertest", "{\"email\": " + "\"" +  currentUser.getUsername() +"\",\"sessionToken\":\"" + currentUser.getSessionToken() + "\"}", new InputStreamCallBack() {
                 @Override
                 public void callback(InputStream is) {
                     Log.i("jsonresponse", "got in callback");
