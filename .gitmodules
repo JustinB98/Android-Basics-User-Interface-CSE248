@@ -1,0 +1,3 @@
+[submodule "Financial-Manager-Parse-Server"]
+	path = Financial-Manager-Parse-Server
+	url = https://github.com/JustinB98/Financial-Manager-Parse-Server.git
