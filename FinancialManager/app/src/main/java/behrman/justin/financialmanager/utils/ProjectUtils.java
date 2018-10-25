@@ -9,6 +9,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import behrman.justin.financialmanager.model.CardType;
+
 public class ProjectUtils {
 
     public final static String LOG_TAG = ProjectUtils.class.getSimpleName();
@@ -42,6 +44,16 @@ public class ProjectUtils {
 
     public static String convertToJSON(String name, Object obj) {
         return "\"" + name + "\":" + "\"" + obj + "\"";
+    }
+
+    public static CardType convertToCardType(String cardType) {
+        if (cardType.equals(StringConstants.AUTO_CARD_CLASS)) {
+            return CardType.AUTO;
+        } else if (cardType.equals(StringConstants.MANUAL_CARD_CLASS)) {
+            return CardType.MANUAL;
+        } else {
+            return null;
+        }
     }
 
 }

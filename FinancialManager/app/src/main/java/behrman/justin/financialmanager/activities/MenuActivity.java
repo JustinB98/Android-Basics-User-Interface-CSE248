@@ -23,6 +23,7 @@ public class MenuActivity extends AppCompatActivity {
     private void initClickListeners() {
         initSingleClickListener(addManualCardBtn, AddManualCardActivity.class);
         initSingleClickListener(addAutoCardBtn, PlaidActivity.class);
+        initSingleClickListener(checkHistoryBtn, SelectCardActivity.class);
     }
 
     private void initSingleClickListener(Button btn, final Class<?> classToOpen) {
