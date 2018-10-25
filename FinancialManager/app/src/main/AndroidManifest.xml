@@ -25,7 +25,8 @@
         <activity android:name=".activities.MenuActivity" />
         <activity android:name=".activities.AddManualCardActivity" />
         <activity android:name=".activities.PlaidActivity" />
-        <activity android:name=".activities.SelectCardActivity"></activity>
+        <activity android:name=".activities.SelectCardActivity" />
+        <activity android:name=".activities.ViewHistoryActivity"></activity>
     </application>
 
 </manifest>

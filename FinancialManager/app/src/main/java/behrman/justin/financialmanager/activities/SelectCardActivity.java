@@ -1,9 +1,11 @@
 package behrman.justin.financialmanager.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -37,7 +39,24 @@ public class SelectCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_card);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         listView = (ListView) findViewById(R.id.list_view);
+        setListViewItemListener();
         update();
+    }
+
+    private void setListViewItemListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Card itemSelected = (Card) listView.getAdapter().getItem(position);
+                switchLayout(itemSelected);
+            }
+        });
+    }
+
+    private void switchLayout(Card item) {
+        Intent intent = new Intent(this, ViewHistoryActivity.class);
+        intent.putExtra(StringConstants.CARD_NAME, item.getCardName());
+        startActivity(intent);
     }
 
     // just in case i decide implement a refresh feature in this activity

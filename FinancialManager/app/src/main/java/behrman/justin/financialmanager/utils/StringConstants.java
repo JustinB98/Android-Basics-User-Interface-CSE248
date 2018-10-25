@@ -19,4 +19,8 @@ public final class StringConstants {
     public final static String MANUAL_CARD_CLASS = "ManualCards";
     public final static String AUTO_CARD_CLASS = "AutoCards";
 
+    /* OTHER */
+    // for passing card names across intents
+    public final static String CARD_NAME = "cardName";
+
 }
