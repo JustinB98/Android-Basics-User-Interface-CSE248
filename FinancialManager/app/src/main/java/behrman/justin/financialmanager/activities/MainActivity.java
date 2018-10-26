@@ -104,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
                 .clientKey(null)  // set explicitly unless clientKey is explicitly configured on Parse server
                 .clientBuilder(builder)
                 .server(StringConstants.PARSE_URL).build());
+        // initSubRegisters();
+    }
+
+    private void initSubRegisters() {
+        // ParseObject.registerSubclass(Transaction.class);
     }
 
     private OkHttpClient.Builder initParseDebugging() {

@@ -2,7 +2,8 @@ package behrman.justin.financialmanager.model;
 
 import java.util.Date;
 
-public class Transaction {
+// @ParseClassName(StringConstants.TRANSACTION_CLASS)
+public class Transaction /* extends ParseObject */ {
 
     private String mPlace;
     private double mAmount;

@@ -92,22 +92,8 @@ public class PlaidActivity extends AppCompatActivity {
                     if (action.equals("connected")) {
                        onConnected(linkData);
                     } else if (action.equals("exit")) {
-                        // User exited
-                        // linkData may contain information about the user's status in the Link flow,
-                        // the institution selected, information about any error encountered,
-                        // and relevant API request IDs.
-                        Log.d("User status in flow: ", linkData.get("status"));
-                        // The requet ID keys may or may not exist depending on when the user exited
-                        // the Link flow.
-                        Log.d("Link request ID: ", linkData.get("link_request_id"));
-                        Log.d("API request ID: ", linkData.get("plaid_api_request_id"));
-
-                        // Reload Link in the Webview
-                        // You will likely want to transition the view at this point.
+                        onExit(linkData);
                         plaidLinkWebview.loadUrl(linkInitializationUrl.toString());
-                        // Intent intent = new Intent(PlaidActivity.this, MenuActivity.class);
-                        // intent.putExtra("public_token", "");
-                        // startActivity(intent);
                     } else {
                         Log.d("Link action detected: ", action);
                     }
@@ -129,6 +115,25 @@ public class PlaidActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    private void onExit(HashMap<String, String> linkData) {
+        // User exited
+        // linkData may contain information about the user's status in the Link flow,
+        // the institution selected, information about any error encountered,
+        // and relevant API request IDs.
+        Log.d("User status in flow: ", linkData.get("status"));
+        // The requet ID keys may or may not exist depending on when the user exited
+        // the Link flow.
+        Log.d("Link request ID: ", linkData.get("link_request_id"));
+        Log.d("API request ID: ", linkData.get("plaid_api_request_id"));
+
+        // Reload Link in the Webview
+        // You will likely want to transition the view at this point.
+
+        // Intent intent = new Intent(PlaidActivity.this, MenuActivity.class);
+        // intent.putExtra("public_token", "");
+        // startActivity(intent);
     }
 
     private void onConnected(HashMap<String, String> linkData) {

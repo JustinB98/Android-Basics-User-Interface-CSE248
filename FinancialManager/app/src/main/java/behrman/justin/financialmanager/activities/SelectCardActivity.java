@@ -56,6 +56,7 @@ public class SelectCardActivity extends AppCompatActivity {
     private void switchLayout(Card item) {
         Intent intent = new Intent(this, ViewHistoryActivity.class);
         intent.putExtra(StringConstants.CARD_NAME, item.getCardName());
+        intent.putExtra(StringConstants.CARD_TYPE, item.getCardType());
         startActivity(intent);
     }
 
