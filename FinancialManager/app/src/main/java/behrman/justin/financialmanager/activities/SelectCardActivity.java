@@ -23,6 +23,7 @@ import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardSelecterAdapter;
 import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.model.CardTypeClassConverter;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -33,10 +34,14 @@ public class SelectCardActivity extends AppCompatActivity {
     private ListView listView;
     private ProgressBar progressBar;
 
+    private CardTypeClassConverter classConverter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_card);
+        classConverter = (CardTypeClassConverter) getIntent().getSerializableExtra(StringConstants.NEXT_CLASS);
+        Log.i("MenuActivitydebug", "converter: " + (classConverter == null ? "null" : classConverter));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         listView = (ListView) findViewById(R.id.list_view);
         setListViewItemListener();
@@ -54,7 +59,8 @@ public class SelectCardActivity extends AppCompatActivity {
     }
 
     private void switchLayout(Card item) {
-        Intent intent = new Intent(this, ViewHistoryActivity.class);
+        Class<?> classToOpen = classConverter.convertCardTypeToClass(item.getCardType());
+        Intent intent = new Intent(this, classToOpen);
         intent.putExtra(StringConstants.CARD_NAME, item.getCardName());
         intent.putExtra(StringConstants.CARD_TYPE, item.getCardType());
         startActivity(intent);

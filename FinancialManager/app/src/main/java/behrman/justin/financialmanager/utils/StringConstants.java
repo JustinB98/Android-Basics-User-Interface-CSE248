@@ -11,6 +11,8 @@ public final class StringConstants {
     public final static String CONVERT_ACCESS_URL = SERVER_URL + "converttoaccess";
     public final static String GET_TRANSACTIONS_URL = SERVER_URL + "getTransactions";
 
+    public final static String PARSE_TRANSACTIONS_CLOUD_FUNCTION = "getTransactions";
+
     /* DATABASE FIELDS */
     public final static String AUTO_CARD_NAME = "name";
     public final static String MANUAL_CARD_NAME = "name";
@@ -31,11 +33,14 @@ public final class StringConstants {
     public final static String MANUAL_CARD_TRANSACTIONS_END_DATE = "endDate";
 
     public final static String PLAID_TRANSACTION_ERROR_CODE = "error_code";
-    public final static String PLAID_TRANSACTION_ERRRO_CODE_MESSAGE = "PRODUCT_NOT_READY";
+    public final static String PLAID_TRANSACTION_ERROR_CODE_MESSAGE = "PRODUCT_NOT_READY";
 
     /* OTHER */
     // for passing card names across intents
     public final static String CARD_NAME = "cardName";
     public final static String CARD_TYPE = "cardType";
+
+    // for the class to open after another class (ie Select Card to View Card History)
+    public final static String NEXT_CLASS = "nextClass";
 
 }

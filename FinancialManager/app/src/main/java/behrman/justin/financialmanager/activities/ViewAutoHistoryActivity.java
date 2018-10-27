@@ -8,17 +8,17 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.InputStream;
+import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.model.InputStreamCallBack;
-import behrman.justin.financialmanager.utils.NetworkUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -62,17 +62,31 @@ public class ViewAutoHistoryActivity extends AppCompatActivity {
         int year = ProjectUtils.getCurrentYear();
         String startDate = getDateAsString(month, 1, year);
         String endDate = getDateAsString(month, day, year);
-        String jsonRequest = generateJSON(userId, startDate, endDate);
-        sendRequest(jsonRequest);
+        HashMap<String, Object> request = generateRequestHashMap(userId, startDate, endDate);
+        // sendRequest(jsonRequest);
+        sendRequest(request);
     }
 
-    private void sendRequest(String jsonRequest) {
-        NetworkUtils.makePostRequest(StringConstants.GET_TRANSACTIONS_URL, jsonRequest, new InputStreamCallBack() {
+    private void sendRequest(HashMap<String, Object> request) {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_TRANSACTIONS_CLOUD_FUNCTION, request, new FunctionCallback<HashMap<String, Object>>() {
             @Override
-            public void callback(InputStream is) {
-
+            public void done(HashMap<String, Object> response, ParseException e) {
+                if (e == null) {
+                    Log.i(LOG_TAG, "response: " + (response == null ? "null" : response.toString()));
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString());
+                }
             }
         });
+    }
+
+    private HashMap<String, Object> generateRequestHashMap(String userId, String startDate, String endDate) {
+        HashMap<String, Object> request = new HashMap<>(3);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_USER_ID, userId);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CARD_NAME, cardName);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_START_DATE, startDate);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_END_DATE, endDate);
+        return request;
     }
 
     private String generateJSON(String userId, String startDate, String endDate) {

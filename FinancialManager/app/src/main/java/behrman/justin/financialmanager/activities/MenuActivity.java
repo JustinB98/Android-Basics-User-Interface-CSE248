@@ -6,9 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import behrman.justin.financialmanager.R;
+import java.io.Serializable;
 
-public class MenuActivity extends AppCompatActivity {
+import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.CardTypeClassConverter;
+import behrman.justin.financialmanager.model.CardTypeClassConverterViewHistoryImpl;
+import behrman.justin.financialmanager.utils.StringConstants;
+
+public class MenuActivity extends AppCompatActivity implements Serializable {
+
+    private final static String LOG_TAG = MenuActivity.class.getSimpleName() + "debug";
 
     private Button addManualCardBtn, addAutoCardBtn, editCardBtn, checkHistoryBtn;
 
@@ -23,7 +30,22 @@ public class MenuActivity extends AppCompatActivity {
     private void initClickListeners() {
         initSingleClickListener(addManualCardBtn, AddManualCardActivity.class);
         initSingleClickListener(addAutoCardBtn, PlaidActivity.class);
-        initSingleClickListener(checkHistoryBtn, SelectCardActivity.class);
+        setUpHistoryBtn();
+    }
+
+    private void setUpHistoryBtn() {
+        initTypeDependentClickListener(checkHistoryBtn, SelectCardActivity.class, new CardTypeClassConverterViewHistoryImpl());
+    }
+
+    private void initTypeDependentClickListener(Button btn, final Class<?> initialClass, final CardTypeClassConverter converter) {
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, initialClass);
+                intent.putExtra(StringConstants.NEXT_CLASS, converter);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initSingleClickListener(Button btn, final Class<?> classToOpen) {
