@@ -9,6 +9,7 @@ public final class StringConstants {
     public final static String SERVER_URL = "https://financial-manager-app.herokuapp.com/";
     public final static String PARSE_URL = SERVER_URL + "parse/";
     public final static String CONVERT_ACCESS_URL = SERVER_URL + "converttoaccess";
+    public final static String GET_TRANSACTIONS_URL = SERVER_URL + "getTransactions";
 
     /* DATABASE FIELDS */
     public final static String AUTO_CARD_NAME = "name";
@@ -24,7 +25,13 @@ public final class StringConstants {
     public final static String MANUAL_CARD_TRANSACTIONS_AMOUNT = "amount";
     public final static String MANUAL_CARD_TRANSACTIONS_DATE = "date";
     public final static String MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE = "currencyCode";
+    public final static String MANUAL_CARD_TRANSACTIONS_USER_ID = "userId";
+    public final static String MANUAL_CARD_TRANSACTIONS_CARD_NAME = "cardName";
+    public final static String MANUAL_CARD_TRANSACTIONS_START_DATE = "startDate";
+    public final static String MANUAL_CARD_TRANSACTIONS_END_DATE = "endDate";
 
+    public final static String PLAID_TRANSACTION_ERROR_CODE = "error_code";
+    public final static String PLAID_TRANSACTION_ERRRO_CODE_MESSAGE = "PRODUCT_NOT_READY";
 
     /* OTHER */
     // for passing card names across intents

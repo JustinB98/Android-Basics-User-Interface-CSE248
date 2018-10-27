@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import behrman.justin.financialmanager.model.CardType;
@@ -53,6 +54,30 @@ public class ProjectUtils {
             return CardType.MANUAL;
         } else {
             return null;
+        }
+    }
+
+    public static int getCurrentMonth() {
+        return Calendar.getInstance().get(Calendar.MONTH);
+    }
+
+    public static int getCurrentDay() {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+    }
+
+    public static int getCurrentYear() {
+        return Calendar.getInstance().get(Calendar.YEAR);
+    }
+
+    public static String turnToJSONObject(String... objects) {
+        // looked at Arrays.toString();
+        StringBuilder sb = new StringBuilder("{");
+        for (int i = 0; ; ++i) {
+            sb.append(objects[i]);
+            if (i == sb.length() - 1) {
+                return sb.append("}").toString();
+            }
+            sb.append(",");
         }
     }
 

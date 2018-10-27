@@ -12,8 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -21,6 +23,7 @@ import com.parse.ParseUser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
@@ -51,6 +54,26 @@ public class MainActivity extends AppCompatActivity {
         initThreadLog();
         // Log.i("currentuser", ParseUser.getCurrentUser().toString());
         // initTest();
+        // parseCloudTest();
+    }
+
+    private void parseCloudTest() {
+        ParseCloud.callFunctionInBackground("hello", new HashMap<String, Object>(), new FunctionCallback<HashMap<String, Object>>() {
+            @Override
+            public void done(HashMap<String, Object> response, ParseException e) {
+                if (e == null) {
+                    Log.i(LOG_TAG, "response: " + response.toString());
+                    Log.i(LOG_TAG, "msg: " + response.get("msg"));
+                    int num = (int) response.get("num");
+                    Log.i(LOG_TAG, "num: " + num);
+                    HashMap<String, Object> request = (HashMap<String, Object>) response.get("request");
+                    ParseUser user = (ParseUser) request.get("user");
+                    Log.i(LOG_TAG, "user: " + user + ", username: " + user.getUsername());
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.getMessage());
+                }
+            }
+        });
     }
 
     private void initThreadLog() {
