@@ -2,9 +2,7 @@ package behrman.justin.financialmanager.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -15,16 +13,14 @@ import com.parse.ParseUser;
 
 import java.util.HashMap;
 
-import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.AutoCardTransactionsParser;
+import behrman.justin.financialmanager.model.ViewHistoryActivity;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class ViewAutoHistoryActivity extends AppCompatActivity {
+public class ViewAutoHistoryActivity extends ViewHistoryActivity {
 
     private final static String LOG_TAG = ViewAutoHistoryActivity.class.getSimpleName() + "debug";
-
-    private String cardName;
 
     private ListView listView;
     private ProgressBar progressBar;
@@ -32,9 +28,6 @@ public class ViewAutoHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_history);
-        cardName = getIntent().getStringExtra(StringConstants.CARD_NAME);
-        extractViews();
         getTransactions();
     }
 
@@ -62,6 +55,7 @@ public class ViewAutoHistoryActivity extends AppCompatActivity {
                 if (e == null) {
                     AutoCardTransactionsParser transactions = new AutoCardTransactionsParser(response);
                     transactions.listTransactions();
+                    Log.i(LOG_TAG, transactions.toString());
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
                 }
@@ -88,21 +82,6 @@ public class ViewAutoHistoryActivity extends AppCompatActivity {
             monthString = "0" + monthString;
         }
         return year + "-" + monthString + "-" + dayString;
-    }
-
-    private void extractViews() {
-        listView = (ListView) findViewById(R.id.list_view);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-    }
-
-    private void setToLoadView() {
-        listView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void setToListView() {
-        listView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
     }
 
 }

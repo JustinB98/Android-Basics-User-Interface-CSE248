@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ViewHistoryActivity">
+    tools:context=".model.ViewHistoryActivity">
 
     <DatePicker
+        android:id="@+id/date_picker"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"

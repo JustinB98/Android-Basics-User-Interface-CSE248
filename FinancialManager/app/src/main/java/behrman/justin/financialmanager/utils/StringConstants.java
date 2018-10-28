@@ -32,6 +32,9 @@ public final class StringConstants {
     public final static String MANUAL_CARD_TRANSACTIONS_START_DATE = "startDate";
     public final static String MANUAL_CARD_TRANSACTIONS_END_DATE = "endDate";
 
+    public final static String MANUAL_CARD_TRANSACTIONS_YEAR = "year";
+    public final static String MANUAL_CARD_TRANSACTIONS_MONTH = "month";
+
     public final static String PLAID_TRANSACTION_ERROR_CODE = "error_code";
     public final static String PLAID_TRANSACTION_ERROR_CODE_MESSAGE = "PRODUCT_NOT_READY";
 
@@ -50,5 +53,7 @@ public final class StringConstants {
     public final static String PLAID_DATE = "date";
     public final static String PLAID_AMOUNT = "amount";
     public final static String PLAID_CURRENCY_CODE = "iso_currency_code";
+
+    public final static String GET_MANUAL_TRANSACTIONS_FUNCTION = "getManualTransactions";
 
 }

@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // Log.i("currentuser", ParseUser.getCurrentUser().toString());
         // initTest();
         // parseCloudTest();
-        parseManualCardTest();
+        // parseManualCardTest();
     }
 
     private void parseManualCardTest() {

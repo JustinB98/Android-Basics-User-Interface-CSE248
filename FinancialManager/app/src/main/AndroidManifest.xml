@@ -28,7 +28,6 @@
         <activity android:name=".activities.SelectCardActivity" />
         <activity android:name=".activities.ViewAutoHistoryActivity" />
         <activity android:name=".activities.ViewManualHistoryActivity" />
-        <activity android:name=".activities.ViewHistoryActivity"></activity>
     </application>
 
 </manifest>
