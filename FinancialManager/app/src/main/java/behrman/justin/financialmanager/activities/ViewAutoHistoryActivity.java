@@ -9,13 +9,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.parse.FunctionCallback;
-import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
@@ -42,20 +40,10 @@ public class ViewAutoHistoryActivity extends AppCompatActivity {
 
     private void getTransactions() {
         setToLoadView();
-        ParseQuery<ParseObject> query = getQuery();
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject object, ParseException e) {
-                if (e == null) {
-                    setData(object);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString());
-                }
-            }
-        });
+        setData();
     }
 
-    private void setData(ParseObject card) {
+    private void setData() {
         String userId = ParseUser.getCurrentUser().getObjectId();
         int month = ProjectUtils.getCurrentMonth() + 1;
         int day = ProjectUtils.getCurrentDay();
@@ -72,7 +60,25 @@ public class ViewAutoHistoryActivity extends AppCompatActivity {
             @Override
             public void done(HashMap<String, Object> response, ParseException e) {
                 if (e == null) {
-                    Log.i(LOG_TAG, "response: " + (response == null ? "null" : response.toString()));
+                    Log.i(LOG_TAG, "transaction response: " + (response == null ? "null" : response.toString()));
+                    Log.i(LOG_TAG, "length: " + response.get("length"));
+                    Log.i(LOG_TAG, "response class: " + response.getClass());
+                    Object transaction = response.get("transactions");
+                    Log.i(LOG_TAG, "transactions: " + transaction);
+                    Log.i(LOG_TAG, "transactions class = " + transaction.getClass());
+                    ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String, Object>>) transaction;
+                    Log.i(LOG_TAG, "list: " + list);
+                    Log.i(LOG_TAG, "list class: " + list.getClass());
+                    Log.i(LOG_TAG, "first: " + list.get(0));
+                    HashMap<String, Object> first = list.get(0);
+                    Object date = first.get("date");
+                    Log.i(LOG_TAG, "date class: " + (date == null ? "null" : date.getClass()));
+                    Log.i(LOG_TAG, "date: " + (date == null ? "null" : date));
+
+                    Object amount = first.get("amount");
+                    Log.i(LOG_TAG, "amount class: " + (amount == null ? "null" : amount.getClass()));
+                    Log.i(LOG_TAG, "amount: " + (amount == null ? "null" : amount));
+
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
                 }
@@ -89,23 +95,16 @@ public class ViewAutoHistoryActivity extends AppCompatActivity {
         return request;
     }
 
-    private String generateJSON(String userId, String startDate, String endDate) {
-        String userIdObj = ProjectUtils.convertToJSON(StringConstants.MANUAL_CARD_TRANSACTIONS_USER_ID, userId);
-        String cardNameObj = ProjectUtils.convertToJSON(StringConstants.MANUAL_CARD_TRANSACTIONS_CARD_NAME, cardName);
-        String startDateObj = ProjectUtils.convertToJSON(StringConstants.MANUAL_CARD_TRANSACTIONS_START_DATE, startDate);
-        String endDateObj = ProjectUtils.convertToJSON(StringConstants.MANUAL_CARD_TRANSACTIONS_END_DATE, endDate);
-        return ProjectUtils.turnToJSONObject(userIdObj, cardNameObj, startDateObj, endDateObj);
-    }
-
     private String getDateAsString(int month, int day, int year) {
-        return year + "-" + month + "-" + day;
-    }
-
-    private ParseQuery<ParseObject> getQuery() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.AUTO_CARD_CLASS);
-        query.whereEqualTo(StringConstants.AUTO_CARD_OWNER, ParseUser.getCurrentUser());
-        query.whereEqualTo(StringConstants.AUTO_CARD_NAME, cardName);
-        return query;
+        String dayString = day + "";
+        if (day < 10) {
+            dayString = "0" + day;
+        }
+        String monthString = month + "";
+        if (month < 10) {
+            monthString = "0" + monthString;
+        }
+        return year + "-" + monthString + "-" + dayString;
     }
 
     private void extractViews() {

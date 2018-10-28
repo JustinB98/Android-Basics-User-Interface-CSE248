@@ -40,7 +40,15 @@ public final class StringConstants {
     public final static String CARD_NAME = "cardName";
     public final static String CARD_TYPE = "cardType";
 
+    public final static String TRANSACTIONS_LENGTH = "length";
+    public final static String TRANSACTIONS_KEY = "transactions";
+
     // for the class to open after another class (ie Select Card to View Card History)
     public final static String NEXT_CLASS = "nextClass";
+
+    public final static String PLAID_PLACE_NAME = "name";
+    public final static String PLAID_DATE = "date";
+    public final static String PLAID_AMOUNT = "amount";
+    public final static String PLAID_CURRENCY_CODE = "iso_currency_code";
 
 }

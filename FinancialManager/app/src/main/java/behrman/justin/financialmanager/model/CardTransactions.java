@@ -1,79 +1,48 @@
 package behrman.justin.financialmanager.model;
 
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.StringConstants;
 
 public class CardTransactions {
 
-    public final static String LOG_TAG = CardTransactions.class.getSimpleName();
+    private HashMap<Date, LinkedList<Transaction>> transactionMap;
+    private int length;
 
-    private HashMap<Date, LinkedList<Transaction>> cardTransactionsMap;
+    public CardTransactions(HashMap<String, Object> responseMap) {
+        length = (int) responseMap.get(StringConstants.TRANSACTIONS_LENGTH);
+        transactionMap = new HashMap<>(length);
+        ArrayList<HashMap<String, Object>> transactions = (ArrayList<HashMap<String, Object>>) responseMap.get(StringConstants.TRANSACTIONS_KEY);
+        parseData(transactions);
+    }
 
-    public CardTransactions(String jsonResponse) {
-        try {
-            parseJsonResponse(jsonResponse);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, "json response couldn't be parsed!", e);
+    private void parseData(ArrayList<HashMap<String, Object>> transactions) {
+        for (int i = 0; i < transactions.size(); ++i) {
+            Transaction transactionObj = convertToTransaction(transactions.get(i));
+            insertToMap(transactionObj);
         }
     }
 
-    // ---------------------------- START PARSE JSON ----------------------------
-    private void parseJsonResponse(String json) throws JSONException {
-        JSONObject root = new JSONObject(json);
-        int length = root.getInt("length");
-        cardTransactionsMap = new HashMap<>(length);
-        JSONArray transactions = root.getJSONArray("transactions");
-        parseTransactionResponse(transactions);
-    }
-
-    private void parseTransactionResponse(JSONArray transactionsArray) throws JSONException {
-        for (int i = 0; i < transactionsArray.length(); ++i) {
-            JSONObject transaction = transactionsArray.getJSONObject(i);
-            Transaction t = extractJSONData(transaction);
-            insertTransactionToMap(t);
+    private void insertToMap(Transaction transaction) {
+        LinkedList<Transaction> transactionsForDate = transactionMap.get(transaction.getDate());
+        if (transactionsForDate == null) {
+            transactionsForDate = new LinkedList<>();
+            transactionMap.put(transaction.getDate(), transactionsForDate);
         }
+        transactionsForDate.add(transaction);
     }
 
-    private void insertTransactionToMap(Transaction t) {
-        LinkedList<Transaction> transactionList = cardTransactionsMap.get(t.getDate());
-        if (transactionList == null) {
-            transactionList = new LinkedList<>();
-            transactionList.add(t);
-            cardTransactionsMap.put(t.getDate(), transactionList);
-        } else {
-            transactionList.add(t);
-        }
-    }
-
-    private Transaction extractJSONData(JSONObject transaction) throws JSONException {
-        String date = transaction.getString("date");
-        String currentCode = transaction.getString("iso_currency_code");
-        double amount = transaction.getDouble("amount");
-        String place = transaction.getString("name");
-        Date dateObj = ProjectUtils.convertToDate(date);
-        return new Transaction(place, amount, dateObj, currentCode);
-    }
-
-    // ---------------------------- END PARSE JSON ----------------------------
-
-    // for debugging
-    public void listTransactions() {
-        StringBuilder sb = new StringBuilder();
-        for (Date date: cardTransactionsMap.keySet()) {
-            sb.append(cardTransactionsMap.get(date));
-        }
-
-        Log.i(LOG_TAG, sb.toString());
-
+    private Transaction convertToTransaction(HashMap<String, Object> transaction) {
+        String name = (String) transaction.get(StringConstants.PLAID_PLACE_NAME);
+        String dateStr = (String) transaction.get(StringConstants.PLAID_DATE);
+        String currencyCode = (String) transaction.get(StringConstants.PLAID_CURRENCY_CODE);
+        double amount = (double) transaction.get(StringConstants.PLAID_AMOUNT);
+        Date date = ProjectUtils.convertToDate(dateStr);
+        return new Transaction(name, amount, date, currencyCode);
     }
 
 }
