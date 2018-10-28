@@ -13,10 +13,10 @@ import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.AutoCardTransactionsParser;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -60,25 +60,8 @@ public class ViewAutoHistoryActivity extends AppCompatActivity {
             @Override
             public void done(HashMap<String, Object> response, ParseException e) {
                 if (e == null) {
-                    Log.i(LOG_TAG, "transaction response: " + (response == null ? "null" : response.toString()));
-                    Log.i(LOG_TAG, "length: " + response.get("length"));
-                    Log.i(LOG_TAG, "response class: " + response.getClass());
-                    Object transaction = response.get("transactions");
-                    Log.i(LOG_TAG, "transactions: " + transaction);
-                    Log.i(LOG_TAG, "transactions class = " + transaction.getClass());
-                    ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String, Object>>) transaction;
-                    Log.i(LOG_TAG, "list: " + list);
-                    Log.i(LOG_TAG, "list class: " + list.getClass());
-                    Log.i(LOG_TAG, "first: " + list.get(0));
-                    HashMap<String, Object> first = list.get(0);
-                    Object date = first.get("date");
-                    Log.i(LOG_TAG, "date class: " + (date == null ? "null" : date.getClass()));
-                    Log.i(LOG_TAG, "date: " + (date == null ? "null" : date));
-
-                    Object amount = first.get("amount");
-                    Log.i(LOG_TAG, "amount class: " + (amount == null ? "null" : amount.getClass()));
-                    Log.i(LOG_TAG, "amount: " + (amount == null ? "null" : amount));
-
+                    AutoCardTransactionsParser transactions = new AutoCardTransactionsParser(response);
+                    transactions.listTransactions();
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
                 }

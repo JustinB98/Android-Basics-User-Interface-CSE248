@@ -28,6 +28,7 @@ import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.InputStreamCallBack;
+import behrman.justin.financialmanager.model.ManualCardTransactionParser;
 import behrman.justin.financialmanager.utils.NetworkUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -55,6 +56,26 @@ public class MainActivity extends AppCompatActivity {
         // Log.i("currentuser", ParseUser.getCurrentUser().toString());
         // initTest();
         // parseCloudTest();
+        parseManualCardTest();
+    }
+
+    private void parseManualCardTest() {
+        HashMap<String, Object> map = new HashMap<>(3);
+        map.put("year", 2018);
+        map.put("month", 10);
+        map.put("cardName", "new card");
+        ParseCloud.callFunctionInBackground("getManualTransactions", map, new FunctionCallback<HashMap<String, Object>>() {
+            @Override
+            public void done(HashMap<String, Object> object, ParseException e) {
+                if (e == null) {
+                    ManualCardTransactionParser cardTrans = new ManualCardTransactionParser(object);
+                    Log.i(LOG_TAG, cardTrans.toString());
+                    cardTrans.listTransactions();
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString());
+                }
+            }
+        });
     }
 
     private void parseCloudTest() {
