@@ -21,7 +21,7 @@ import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.model.CardSelecterAdapter;
+import behrman.justin.financialmanager.adapters.CardSelecterAdapter;
 import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.model.CardTypeClassConverter;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -41,7 +41,6 @@ public class SelectCardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_card);
         classConverter = (CardTypeClassConverter) getIntent().getSerializableExtra(StringConstants.NEXT_CLASS);
-        Log.i("MenuActivitydebug", "converter: " + (classConverter == null ? "null" : classConverter));
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         listView = (ListView) findViewById(R.id.list_view);
         setListViewItemListener();

@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,7 +32,16 @@ public class ProjectUtils {
             Log.e(LOG_TAG, "Trouble parsing date string: " + date);
             return null;
         }
+    }
 
+    public static String convertDateToString(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date);
+    }
+
+    public static String formatNumber(double d) {
+        NumberFormat nf = NumberFormat.getCurrencyInstance();
+        return nf.format(d);
     }
 
     // https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard

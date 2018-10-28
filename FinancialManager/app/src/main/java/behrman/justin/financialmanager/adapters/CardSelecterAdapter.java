@@ -1,4 +1,4 @@
-package behrman.justin.financialmanager.model;
+package behrman.justin.financialmanager.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.Card;
 
 public class CardSelecterAdapter extends ArrayAdapter<Card> {
 

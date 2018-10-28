@@ -31,7 +31,8 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
         getTransactions();
     }
 
-    private void getTransactions() {
+    @Override
+    public void getTransactions() {
         setToLoadView();
         setData();
     }
@@ -54,8 +55,7 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
             public void done(HashMap<String, Object> response, ParseException e) {
                 if (e == null) {
                     AutoCardTransactionsParser transactions = new AutoCardTransactionsParser(response);
-                    transactions.listTransactions();
-                    Log.i(LOG_TAG, transactions.toString());
+                    ViewAutoHistoryActivity.super.setTransactionData(transactions);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
                 }

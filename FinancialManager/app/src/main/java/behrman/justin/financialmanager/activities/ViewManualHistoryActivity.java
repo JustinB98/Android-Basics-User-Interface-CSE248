@@ -26,14 +26,12 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTransactions();
     }
 
-    private void getTransactions() {
-        setToLoadView();
+    @Override
+    public void getTransactions() {
         getData();
     }
-
     private void getData() {
         HashMap<String, Object> params = getParameters();
         ParseCloud.callFunctionInBackground(StringConstants.GET_MANUAL_TRANSACTIONS_FUNCTION, params, new FunctionCallback<HashMap<String, Object>>() {
@@ -42,7 +40,7 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
                 if (e == null) {
                     ManualCardTransactionParser cardTransactions = new ManualCardTransactionParser(object);
                     Log.i(LOG_TAG, "cardTransactions: " + cardTransactions);
-                    cardTransactions.listTransactions();
+                    ViewManualHistoryActivity.super.setTransactionData(cardTransactions);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
                 }

@@ -1,9 +1,10 @@
 package behrman.justin.financialmanager.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 // @ParseClassName(StringConstants.TRANSACTION_CLASS)
-public class Transaction /* extends ParseObject */ {
+public class Transaction /* extends ParseObject */ implements Serializable {
 
     private String mPlace;
     private double mAmount;
