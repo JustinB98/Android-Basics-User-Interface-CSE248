@@ -102,7 +102,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
                 Log.i("errorlog", e.toString());
-                e.printStackTrace();
+                for (int i = 0; i < e.getStackTrace().length; ++i) {
+                    Log.i("errorlog", e.getStackTrace()[i].toString()); // want it on different lines
+                }
             }
         });
     }
