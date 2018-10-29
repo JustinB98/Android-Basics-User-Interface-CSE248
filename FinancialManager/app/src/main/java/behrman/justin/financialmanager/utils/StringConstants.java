@@ -56,4 +56,6 @@ public final class StringConstants {
 
     public final static String GET_MANUAL_TRANSACTIONS_FUNCTION = "getManualTransactions";
 
+    public final static String ORIGINAL_CARD_KEY = "originalCard";
+
 }

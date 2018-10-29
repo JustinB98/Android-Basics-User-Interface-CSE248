@@ -1,6 +1,8 @@
 package behrman.justin.financialmanager.model;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
 
     private String mCardName;
     private CardType mCardType;

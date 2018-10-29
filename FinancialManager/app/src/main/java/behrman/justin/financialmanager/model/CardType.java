@@ -1,6 +1,8 @@
 package behrman.justin.financialmanager.model;
 
-public enum CardType {
+import java.io.Serializable;
+
+public enum CardType implements Serializable {
 
     MANUAL, AUTO, MANUAL_LOCAL;
 
