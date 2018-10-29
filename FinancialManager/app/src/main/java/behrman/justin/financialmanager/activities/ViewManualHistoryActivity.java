@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 import behrman.justin.financialmanager.model.ManualCardTransactionParser;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
-import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewManualHistoryActivity extends ViewHistoryActivity {
@@ -29,11 +28,11 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
     }
 
     @Override
-    public void getTransactions() {
-        getData();
+    public void getTransactions(int year, int month) {
+        getData(year, month);
     }
-    private void getData() {
-        HashMap<String, Object> params = getParameters();
+    private void getData(int year, int month) {
+        HashMap<String, Object> params = getParameters(year, month);
         ParseCloud.callFunctionInBackground(StringConstants.GET_MANUAL_TRANSACTIONS_FUNCTION, params, new FunctionCallback<HashMap<String, Object>>() {
             @Override
             public void done(HashMap<String, Object> object, ParseException e) {
@@ -48,10 +47,11 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
         });
     }
 
-    private HashMap<String, Object> getParameters() {
+    private HashMap<String, Object> getParameters(int year, int month) {
         HashMap<String, Object> params = new HashMap<>(3);
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_YEAR, ProjectUtils.getCurrentYear());
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_MONTH, ProjectUtils.getCurrentMonth() + 1); // need to offset by 1
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_YEAR, year);
+        // month needs to be 1-12
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_MONTH, month); // need to offset by 1
         params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CARD_NAME, cardName);
         return params;
     }

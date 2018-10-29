@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import behrman.justin.financialmanager.model.CardType;
 
@@ -44,6 +45,17 @@ public class ProjectUtils {
         return nf.format(d);
     }
 
+    /**
+     *
+     * @param month 1-12
+     * @return
+     */
+    public static int maxDaysInMonth(int year, int month) {
+        // calendar object deals with 0-11, need to offset
+        Calendar cal = new GregorianCalendar(year, month - 1, 1);
+        return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+    }
+
     // https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard
     public static void hideKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -68,8 +80,12 @@ public class ProjectUtils {
         }
     }
 
+    /**
+     * 1-12
+     * @return
+     */
     public static int getCurrentMonth() {
-        return Calendar.getInstance().get(Calendar.MONTH);
+        return Calendar.getInstance().get(Calendar.MONTH) + 1;
     }
 
     public static int getCurrentDay() {

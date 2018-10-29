@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -18,9 +19,12 @@ import java.util.LinkedList;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.ViewTransactionsForDateActivity;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public abstract class ViewHistoryActivity extends AppCompatActivity {
+
+    private final static String LOG_TAG = ViewHistoryActivity.class.getSimpleName() + "debug";
 
     private ProgressBar progressBar;
     private CalendarView calendarView;
@@ -28,7 +32,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     protected String cardName;
 
-    private Date dateSelected;
+    private GregorianCalendar dateSelected = new GregorianCalendar(ProjectUtils.getCurrentYear(), ProjectUtils.getCurrentMonth() - 1, ProjectUtils.getCurrentDay());
 
     private HashMap<Date, LinkedList<Transaction>> cardTransactions;
 
@@ -47,23 +51,26 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
-                dateSelected = calendar.getTime();
+                GregorianCalendar calendar = new GregorianCalendar(year, month, dayOfMonth);
+                if (calendar.get(Calendar.MONTH) != dateSelected.get(Calendar.MONTH) || calendar.get(Calendar.YEAR) != dateSelected.get(Calendar.YEAR)) {
+                    Log.i(LOG_TAG, "getting new  transactions");
+                    getTransactions(year, month + 1);
+                }
+                dateSelected = calendar;
             }
         });
     }
 
     private void refresh() {
         setToLoadView();
-        getTransactions();
+        getTransactions(ProjectUtils.getCurrentYear(), ProjectUtils.getCurrentMonth());
     }
 
     private void initButtonClick() {
         viewTransactionHistoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date = new Date(calendarView.getDate());
-                LinkedList<Transaction> transactions = cardTransactions.get(dateSelected);
+                LinkedList<Transaction> transactions = cardTransactions.get(dateSelected.getTime());
                 changeView(transactions);
             }
         });
@@ -71,7 +78,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private void changeView(LinkedList<Transaction> transactions) {
         if (transactions == null) {
-            Toast.makeText(this, "there's no transactions for this date: " + dateSelected, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "there's no transactions for this date: " + dateSelected.getTime(), Toast.LENGTH_LONG).show();
         } else {
             switchToShowTransactionsActivity(transactions);
         }
@@ -90,18 +97,21 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     }
 
     public void setToLoadView() {
+        viewTransactionHistoryBtn.setVisibility(View.GONE);
         calendarView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     public void setToDateView() {
+        viewTransactionHistoryBtn.setVisibility(View.VISIBLE);
         calendarView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
     }
 
-    public abstract void getTransactions();
+    public abstract void getTransactions(int year, int month);
 
     protected void setTransactionData(HashMap<Date, LinkedList<Transaction>> cardTransactions) {
+        Log.i(LOG_TAG, "got some transactions");
         setToDateView();
         this.cardTransactions = cardTransactions;
     }

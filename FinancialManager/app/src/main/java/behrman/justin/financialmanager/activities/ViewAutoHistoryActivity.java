@@ -3,8 +3,6 @@ package behrman.justin.financialmanager.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -22,28 +20,23 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
 
     private final static String LOG_TAG = ViewAutoHistoryActivity.class.getSimpleName() + "debug";
 
-    private ListView listView;
-    private ProgressBar progressBar;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTransactions();
     }
 
     @Override
-    public void getTransactions() {
-        setToLoadView();
-        setData();
+    public void getTransactions(int year, int month) {
+        setData(year, month);
     }
 
-    private void setData() {
+    private void setData(int year, int month) {
         String userId = ParseUser.getCurrentUser().getObjectId();
-        int month = ProjectUtils.getCurrentMonth() + 1;
-        int day = ProjectUtils.getCurrentDay();
-        int year = ProjectUtils.getCurrentYear();
+        // int month = ProjectUtils.getCurrentMonth() + 1;
+        // int day = ProjectUtils.getCurrentDay();
+        // int year = ProjectUtils.getCurrentYear();
         String startDate = getDateAsString(month, 1, year);
-        String endDate = getDateAsString(month, day, year);
+        String endDate = getDateAsString(month, ProjectUtils.maxDaysInMonth(year, month), year);
         HashMap<String, Object> request = generateRequestHashMap(userId, startDate, endDate);
         // sendRequest(jsonRequest);
         sendRequest(request);
@@ -55,6 +48,7 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
             public void done(HashMap<String, Object> response, ParseException e) {
                 if (e == null) {
                     AutoCardTransactionsParser transactions = new AutoCardTransactionsParser(response);
+                    Log.i(LOG_TAG, "transactions: " + transactions);
                     ViewAutoHistoryActivity.super.setTransactionData(transactions);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());

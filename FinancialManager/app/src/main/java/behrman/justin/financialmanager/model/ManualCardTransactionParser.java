@@ -6,9 +6,11 @@ import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ManualCardTransactionParser extends HashMap<Date, LinkedList<Transaction>> {
@@ -40,9 +42,23 @@ public class ManualCardTransactionParser extends HashMap<Date, LinkedList<Transa
     private Transaction getTransaction(ParseObject object) {
         String place = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_PLACE);
         Date date = (Date) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_DATE);
+        date = reformatDate(date);
         String currencyCode = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE);
         double amount = getTransactionAmount(object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_AMOUNT));
         return new Transaction(place, amount, date, currencyCode);
+    }
+
+    // need to reformat the date so the times aren't compared
+    // the date parameter has a time, this method gets rid of that and just
+    // has the year, month, and day
+    private Date reformatDate(Date date) {
+        String dateStr = ProjectUtils.convertDateToString(date);
+        String[] dateTokens = dateStr.split("-");
+        int year = Integer.parseInt(dateTokens[0]);
+        int month = Integer.parseInt(dateTokens[1]);
+        int day = Integer.parseInt(dateTokens[2]);
+        Log.i(LOG_TAG, year + "-" + month + "-" + day);
+        return new GregorianCalendar(year, month - 1, day).getTime();
     }
 
     private double getTransactionAmount(Object amount) {
