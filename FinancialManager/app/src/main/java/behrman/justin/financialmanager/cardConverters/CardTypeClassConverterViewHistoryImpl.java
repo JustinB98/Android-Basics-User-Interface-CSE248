@@ -1,9 +1,11 @@
-package behrman.justin.financialmanager.model;
+package behrman.justin.financialmanager.cardConverters;
 
 import java.io.Serializable;
 
 import behrman.justin.financialmanager.activities.ViewAutoHistoryActivity;
 import behrman.justin.financialmanager.activities.ViewManualHistoryActivity;
+import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.model.CardTypeClassConverter;
 
 public class CardTypeClassConverterViewHistoryImpl implements CardTypeClassConverter, Serializable {
     @Override

@@ -39,7 +39,8 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        cardName = getIntent().getStringExtra(StringConstants.CARD_NAME);
+        Card card = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
+        cardName = card.getCardName();
         setContentView(R.layout.activity_view_history);
         extractViews();
         initButtonClick();

@@ -60,8 +60,10 @@ public class SelectCardActivity extends AppCompatActivity {
     private void switchLayout(Card item) {
         Class<?> classToOpen = classConverter.convertCardTypeToClass(item.getCardType());
         Intent intent = new Intent(this, classToOpen);
-        intent.putExtra(StringConstants.CARD_NAME, item.getCardName());
-        intent.putExtra(StringConstants.CARD_TYPE, item.getCardType());
+        Card card = new Card(item.getCardName(), item.getCardType());
+        // intent.putExtra(StringConstants.CARD_NAME, item.getCardName());
+        // intent.putExtra(StringConstants.CARD_TYPE, item.getCardType());
+        intent.putExtra(StringConstants.CARD_KEY, card);
         startActivity(intent);
     }
 

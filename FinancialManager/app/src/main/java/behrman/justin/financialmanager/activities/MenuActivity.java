@@ -9,8 +9,9 @@ import android.widget.Button;
 import java.io.Serializable;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.cardConverters.CardTypeIndependentConverterImpl;
 import behrman.justin.financialmanager.model.CardTypeClassConverter;
-import behrman.justin.financialmanager.model.CardTypeClassConverterViewHistoryImpl;
+import behrman.justin.financialmanager.cardConverters.CardTypeClassConverterViewHistoryImpl;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class MenuActivity extends AppCompatActivity implements Serializable {
@@ -30,11 +31,12 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     private void initClickListeners() {
         initSingleClickListener(addManualCardBtn, AddManualCardActivity.class);
         initSingleClickListener(addAutoCardBtn, PlaidActivity.class);
-        setUpHistoryBtn();
+        setUpSelectCardsBtns();
     }
 
-    private void setUpHistoryBtn() {
+    private void setUpSelectCardsBtns() {
         initTypeDependentClickListener(checkHistoryBtn, SelectCardActivity.class, new CardTypeClassConverterViewHistoryImpl());
+        initTypeDependentClickListener(editCardBtn, SelectCardActivity.class, new CardTypeIndependentConverterImpl(EditCardActivity.class));
     }
 
     private void initTypeDependentClickListener(Button btn, final Class<?> initialClass, final CardTypeClassConverter converter) {
