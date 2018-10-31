@@ -62,9 +62,11 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_FUNCTION_RENAME_AUTO_CARD = "renameAutoCard";
     public final static String PARSE_CLOUD_NEW_CARD_NAME_PARAMETER = "newName";
     public final static String PARSE_CLOUD_ORIGINAL_CARD_NAME_PARAMETER = "originalName";
+    public final static String PARSE_CLOUD_FUNCTION_ADD_MANUAL_TRANSACTION = "addManualTransaction";
 
     public final static String CARD_KEY = "card";
 
     public static final String CARD_TYPE_KEY = "cardType";
+    public final static String TRANSACTION_KEY = "transaction";
 
 }
