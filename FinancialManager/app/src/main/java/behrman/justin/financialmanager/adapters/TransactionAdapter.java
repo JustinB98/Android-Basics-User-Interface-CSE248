@@ -36,7 +36,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         TextView placeView = convertView.findViewById(R.id.place_view);
         placeView.setText(t.getPlace());
         TextView amountView = convertView.findViewById(R.id.amount_view);
-        amountView.setText(ProjectUtils.formatNumber(t.getAmount()));
+        amountView.setText(ProjectUtils.formatNumber(t.getAmount()).substring(1)); // want to get rid of $
         TextView date_view = convertView.findViewById(R.id.date_view);
         date_view.setText(ProjectUtils.convertDateToString(t.getDate()));
         TextView currencyCodeView = convertView.findViewById(R.id.currency_code_view);

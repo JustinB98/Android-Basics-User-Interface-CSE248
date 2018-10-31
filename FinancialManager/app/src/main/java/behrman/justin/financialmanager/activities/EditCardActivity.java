@@ -39,6 +39,7 @@ public class EditCardActivity extends AppCompatActivity {
         originalCard = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
         extractViews();
         initClickListener();
+        cardNameField.setText(originalCard.getCardName());
     }
 
     private void initClickListener() {
