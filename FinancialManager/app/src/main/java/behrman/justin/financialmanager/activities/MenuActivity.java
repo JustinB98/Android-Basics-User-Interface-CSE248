@@ -9,16 +9,17 @@ import android.widget.Button;
 import java.io.Serializable;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.cardConverters.CardTypeIndependentConverterImpl;
-import behrman.justin.financialmanager.model.CardTypeClassConverter;
 import behrman.justin.financialmanager.cardConverters.CardTypeClassConverterViewHistoryImpl;
+import behrman.justin.financialmanager.cardConverters.CardTypeIndependentConverterImpl;
+import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.model.CardTypeClassConverter;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class MenuActivity extends AppCompatActivity implements Serializable {
 
     private final static String LOG_TAG = MenuActivity.class.getSimpleName() + "debug";
 
-    private Button addManualCardBtn, addAutoCardBtn, editCardBtn, checkHistoryBtn;
+    private Button addManualCardBtn, addAutoCardBtn, editCardBtn, checkHistoryBtn, addManualTransactionBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,21 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     private void setUpSelectCardsBtns() {
         initTypeDependentClickListener(checkHistoryBtn, SelectCardActivity.class, new CardTypeClassConverterViewHistoryImpl());
         initTypeDependentClickListener(editCardBtn, SelectCardActivity.class, new CardTypeIndependentConverterImpl(EditCardActivity.class));
+        initAddManualTransactionBtn();
+    }
+
+    private void initAddManualTransactionBtn() {
+        addManualTransactionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, SelectCardActivity.class);
+                CardTypeIndependentConverterImpl cardConverter = new CardTypeIndependentConverterImpl(AddManualTransactionActivity.class);
+                intent.putExtra(StringConstants.NEXT_CLASS, cardConverter);
+                intent.putExtra(StringConstants.CARD_TYPE_KEY, CardType.MANUAL);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void initTypeDependentClickListener(Button btn, final Class<?> initialClass, final CardTypeClassConverter converter) {
@@ -59,10 +75,11 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     }
 
     private void extractViews() {
-        addManualCardBtn = (Button) findViewById(R.id.add_manual_card_btn);
-        addAutoCardBtn = (Button) findViewById(R.id.add_auto_card_btn);
-        editCardBtn = (Button) findViewById(R.id.edit_card_btn);
-        checkHistoryBtn = (Button) findViewById(R.id.card_history_btn);
+        addManualCardBtn = findViewById(R.id.add_manual_card_btn);
+        addAutoCardBtn = findViewById(R.id.add_auto_card_btn);
+        editCardBtn = findViewById(R.id.edit_card_btn);
+        checkHistoryBtn = findViewById(R.id.card_history_btn);
+        addManualTransactionBtn = findViewById(R.id.add_manual_transaction_btn);
     }
 
     @Override

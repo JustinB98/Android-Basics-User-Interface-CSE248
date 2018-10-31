@@ -36,11 +36,15 @@ public class SelectCardActivity extends AppCompatActivity {
 
     private CardTypeClassConverter classConverter;
 
+    // if null show all cards
+    private CardType typeToShow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_card);
         classConverter = (CardTypeClassConverter) getIntent().getSerializableExtra(StringConstants.NEXT_CLASS);
+        typeToShow = (CardType) getIntent().getSerializableExtra(StringConstants.CARD_TYPE_KEY);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         listView = (ListView) findViewById(R.id.list_view);
         setListViewItemListener();
@@ -72,7 +76,11 @@ public class SelectCardActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "starting update");
         setToLoadView();
         // List<Card> cards = getCards();
-        setListViewToCards();
+        if (typeToShow == CardType.AUTO) {
+            findAutoCards(null);
+        } else {
+            findManualCards();
+        }
     }
 
     private void setToLoadView() {
@@ -85,7 +93,7 @@ public class SelectCardActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-    private void setListViewToCards() {
+    private void findManualCards() {
         ParseQuery<ParseObject> manualCardQuery = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS);
         manualCardQuery.whereEqualTo(StringConstants.MANUAL_CARD_OWNER, ParseUser.getCurrentUser());
         Log.i(LOG_TAG, "starting manual find");
@@ -93,7 +101,11 @@ public class SelectCardActivity extends AppCompatActivity {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 Log.i(LOG_TAG, "found manual objects " + (objects == null ? "null" : objects.size()));
-                findAutoCards(objects);
+                if (typeToShow == null) {
+                    findAutoCards(objects);
+                } else {
+                    afterFind(objects, e); // if we don't need to look for auto cards, then just set the list view
+                }
             }
         });
     }
@@ -107,7 +119,9 @@ public class SelectCardActivity extends AppCompatActivity {
             public void done(List<ParseObject> objects, ParseException e) {
                 Log.i(LOG_TAG, "found auto objects " + (objects == null ? "null" : objects.size()));
                 Log.i(LOG_TAG, e == null ? "null" : e.toString());
-                objects.addAll(manualObjects);
+                if (typeToShow == null && manualObjects != null) {
+                    objects.addAll(manualObjects);
+                }
                 afterFind(objects, e);
             }
         });

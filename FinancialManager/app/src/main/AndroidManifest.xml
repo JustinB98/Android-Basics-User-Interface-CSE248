@@ -29,7 +29,8 @@
         <activity android:name=".activities.ViewAutoHistoryActivity" />
         <activity android:name=".activities.ViewManualHistoryActivity" />
         <activity android:name=".activities.ViewTransactionsForDateActivity" />
-        <activity android:name=".activities.EditCardActivity"></activity>
+        <activity android:name=".activities.EditCardActivity" />
+        <activity android:name=".activities.AddManualTransactionActivity"></activity>
     </application>
 
 </manifest>
