@@ -1,18 +1,17 @@
 package behrman.justin.financialmanager.subactivities;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.Toast;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.ViewTransactionsForDateActivity;
@@ -29,10 +28,8 @@ public class ViewHistoryCalendarViewSubActivity {
     private TransactionCommunicator communicator;
     private View root;
 
-    private CalendarView calendarView;
+    private MaterialCalendarView calendarView;
     private Button viewTransactionBtn;
-
-    private GregorianCalendar dateSelected = new GregorianCalendar(ProjectUtils.getCurrentYear(), ProjectUtils.getCurrentMonth() - 1, ProjectUtils.getCurrentDay());
 
     public ViewHistoryCalendarViewSubActivity(AppCompatActivity activity, TransactionCommunicator communicator) {
         root = LayoutInflater.from(activity).inflate(R.layout.activity_view_history, null);
@@ -53,15 +50,12 @@ public class ViewHistoryCalendarViewSubActivity {
     }
 
     private void initCalendarChange() {
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                GregorianCalendar calendar = new GregorianCalendar(year, month, dayOfMonth);
-                if (calendar.get(Calendar.MONTH) != dateSelected.get(Calendar.MONTH) || calendar.get(Calendar.YEAR) != dateSelected.get(Calendar.YEAR)) {
-                    Log.i(LOG_TAG, "getting new  transactions");
-                    communicator.requestNewTransactions(year, month + 1);
-                }
-                dateSelected = calendar;
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+                int month = date.getMonth() + 1;
+                int year = date.getYear();
+                communicator.requestNewTransactions(year, month);
             }
         });
     }
@@ -70,7 +64,8 @@ public class ViewHistoryCalendarViewSubActivity {
         viewTransactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Transaction> transactions = communicator.getTransactions().get(dateSelected.getTime());
+                CalendarDay selectedDay = calendarView.getSelectedDate();
+                ArrayList<Transaction> transactions = communicator.getTransactions().get(selectedDay.getDate());
                 changeView(transactions);
             }
         });
@@ -78,7 +73,7 @@ public class ViewHistoryCalendarViewSubActivity {
 
     private void changeView(ArrayList<Transaction> transactions) {
         if (transactions == null) {
-            String fullDate = ProjectUtils.getFullDate(dateSelected.getTime());
+            String fullDate = ProjectUtils.getFullDate(calendarView.getSelectedDate().getDate());
             Toast.makeText(activity, "there's no transactions for " + fullDate, Toast.LENGTH_LONG).show();
         } else {
             switchToShowTransactionsActivity(transactions);
@@ -88,20 +83,35 @@ public class ViewHistoryCalendarViewSubActivity {
     private void switchToShowTransactionsActivity(ArrayList<Transaction> list) {
         Intent intent = new Intent(activity, ViewTransactionsForDateActivity.class);
         intent.putExtra(StringConstants.TRANSACTIONS_KEY, list);
-        intent.putExtra(StringConstants.DATE_KEY, dateSelected.getTime());
+        intent.putExtra(StringConstants.DATE_KEY, calendarView.getSelectedDate().getDate());
         activity.startActivity(intent);
     }
 
     public int getMonthSelected() {
-        return dateSelected.get(Calendar.MONTH) + 1;
+        CalendarDay cal = calendarView.getSelectedDate();
+        if (cal == null) {
+            return ProjectUtils.getCurrentMonth();
+        } else {
+            return calendarView.getSelectedDate().getMonth();
+        }
     }
 
     public int getYearSelected() {
-        return dateSelected.get(Calendar.YEAR);
+        CalendarDay cal = calendarView.getSelectedDate();
+        if (cal == null) {
+            return ProjectUtils.getCurrentYear();
+        } else {
+            return calendarView.getSelectedDate().getYear();
+        }
     }
 
     public int getDaySelected() {
-        return dateSelected.get(Calendar.DAY_OF_MONTH);
+        CalendarDay cal = calendarView.getSelectedDate();
+        if (cal == null) {
+            return ProjectUtils.getCurrentDay();
+        } else {
+            return calendarView.getSelectedDate().getDay();
+        }
     }
 
 }
