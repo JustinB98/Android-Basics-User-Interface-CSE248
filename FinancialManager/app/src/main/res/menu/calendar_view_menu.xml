@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/calendar_menu_item"
-        android:icon="@drawable/rounded_rectangle"
+        android:icon="@drawable/baseline_calendar_today_24"
         android:title="CalendarView"
         app:showAsAction="ifRoom"
         android:onClick="menuAction" />

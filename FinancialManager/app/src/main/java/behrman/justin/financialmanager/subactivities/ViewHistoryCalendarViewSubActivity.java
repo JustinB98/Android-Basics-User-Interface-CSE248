@@ -78,7 +78,8 @@ public class ViewHistoryCalendarViewSubActivity {
 
     private void changeView(ArrayList<Transaction> transactions) {
         if (transactions == null) {
-            Toast.makeText(activity, "there's no transactions for this date: " + dateSelected.getTime(), Toast.LENGTH_LONG).show();
+            String fullDate = ProjectUtils.getFullDate(dateSelected.getTime());
+            Toast.makeText(activity, "there's no transactions for " + fullDate, Toast.LENGTH_LONG).show();
         } else {
             switchToShowTransactionsActivity(transactions);
         }

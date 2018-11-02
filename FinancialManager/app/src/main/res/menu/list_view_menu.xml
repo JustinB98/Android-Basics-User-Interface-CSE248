@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/list_menu_item"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/baseline_list_24"
         android:title="ListView"
         app:showAsAction="ifRoom"
         android:onClick="menuAction" />
