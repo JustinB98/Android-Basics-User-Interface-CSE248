@@ -11,11 +11,11 @@ import android.widget.CalendarView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.ViewTransactionsForDateActivity;
@@ -34,7 +34,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private GregorianCalendar dateSelected = new GregorianCalendar(ProjectUtils.getCurrentYear(), ProjectUtils.getCurrentMonth() - 1, ProjectUtils.getCurrentDay());
 
-    private HashMap<Date, LinkedList<Transaction>> cardTransactions;
+    private HashMap<Date, ArrayList<Transaction>> cardTransactions;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -71,13 +71,13 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         viewTransactionHistoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LinkedList<Transaction> transactions = cardTransactions.get(dateSelected.getTime());
+                ArrayList<Transaction> transactions = cardTransactions.get(dateSelected.getTime());
                 changeView(transactions);
             }
         });
     }
 
-    private void changeView(LinkedList<Transaction> transactions) {
+    private void changeView(ArrayList<Transaction> transactions) {
         if (transactions == null) {
             Toast.makeText(this, "there's no transactions for this date: " + dateSelected.getTime(), Toast.LENGTH_LONG).show();
         } else {
@@ -85,7 +85,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         }
     }
 
-    private void switchToShowTransactionsActivity(LinkedList<Transaction> list) {
+    private void switchToShowTransactionsActivity(ArrayList<Transaction> list) {
         Intent intent = new Intent(this, ViewTransactionsForDateActivity.class);
         intent.putExtra(StringConstants.TRANSACTIONS_KEY, list);
         intent.putExtra(StringConstants.DATE_KEY, dateSelected.getTime());
@@ -112,7 +112,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     public abstract void getTransactions(int year, int month);
 
-    protected void setTransactionData(HashMap<Date, LinkedList<Transaction>> cardTransactions) {
+    protected void setTransactionData(HashMap<Date, ArrayList<Transaction>> cardTransactions) {
         Log.i(LOG_TAG, "got some transactions");
         setToDateView();
         this.cardTransactions = cardTransactions;

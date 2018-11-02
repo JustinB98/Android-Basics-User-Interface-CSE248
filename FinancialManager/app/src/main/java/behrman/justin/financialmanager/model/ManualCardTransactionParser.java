@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class ManualCardTransactionParser extends HashMap<Date, LinkedList<Transaction>> {
+public class ManualCardTransactionParser extends HashMap<Date, ArrayList<Transaction>> {
 
     private final static String LOG_TAG = ManualCardTransactionParser.class.getSimpleName() + "debug";
 
@@ -31,9 +30,9 @@ public class ManualCardTransactionParser extends HashMap<Date, LinkedList<Transa
     }
 
     private void insertToMap(Transaction transaction) {
-        LinkedList<Transaction> transactionsForDate = get(transaction.getDate());
+        ArrayList<Transaction> transactionsForDate = get(transaction.getDate());
         if (transactionsForDate == null) {
-            transactionsForDate = new LinkedList<>();
+            transactionsForDate = new ArrayList<>();
             put(transaction.getDate(), transactionsForDate);
         }
         transactionsForDate.add(transaction);

@@ -5,12 +5,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class AutoCardTransactionsParser extends HashMap<Date, LinkedList<Transaction>>{
+public class AutoCardTransactionsParser extends HashMap<Date, ArrayList<Transaction>>{
 
     public final static String LOG_TAG = AutoCardTransactionsParser.class.getSimpleName() + "debug";
 
@@ -28,9 +27,9 @@ public class AutoCardTransactionsParser extends HashMap<Date, LinkedList<Transac
     }
 
     private void insertToMap(Transaction transaction) {
-        LinkedList<Transaction> transactionsForDate = get(transaction.getDate());
+        ArrayList<Transaction> transactionsForDate = get(transaction.getDate());
         if (transactionsForDate == null) {
-            transactionsForDate = new LinkedList<>();
+            transactionsForDate = new ArrayList<>();
             put(transaction.getDate(), transactionsForDate);
         }
         transactionsForDate.add(transaction);
