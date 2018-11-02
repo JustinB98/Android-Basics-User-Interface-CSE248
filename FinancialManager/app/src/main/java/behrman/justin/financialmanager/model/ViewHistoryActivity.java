@@ -5,20 +5,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.ViewTransactionsForDateActivity;
+import behrman.justin.financialmanager.adapters.TransactionForMonthAdapter;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -27,6 +32,59 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     private final static String LOG_TAG = ViewHistoryActivity.class.getSimpleName() + "debug";
 
     private ProgressBar progressBar;
+
+    private Menu menu;
+
+    private ListView listView;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        switchMenu(R.menu.list_view_menu);
+        return true;
+    }
+
+    private void switchMenu(int resId) {
+        getMenuInflater().inflate(resId, menu);
+    }
+
+    public void menuAction(MenuItem item) {
+        menu.clear();
+        switch (item.getItemId()) {
+            case R.id.list_menu_item:
+                switchToListView();
+                break;
+            case R.id.calendar_menu_item:
+                switchToCalendarView();
+                break;
+        }
+    }
+
+    private void switchToListView() {
+        setContentView(R.layout.view_all_transactions_for_month);
+        extractListViews();
+        setListViewContent();
+        switchMenu(R.menu.calendar_view_menu);
+    }
+
+    private void setListViewContent() {
+        ArrayList<Transaction> transactions = new ArrayList<>(cardTransactions.size()); // won't be exact
+        for (Date date : cardTransactions.keySet()) {
+            transactions.addAll(cardTransactions.get(date));
+        }
+        Collections.sort(transactions);
+        TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(this, transactions);
+        listView.setAdapter(adapter);
+    }
+
+    private void switchToCalendarView() {
+        setContentView(R.layout.activity_view_history);
+        extractCalendarViews();
+        initButtonClick();
+        initCalendarChange();
+        switchMenu(R.menu.list_view_menu);
+    }
+
     private CalendarView calendarView;
     private Button viewTransactionHistoryBtn;
 
@@ -41,8 +99,9 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstance);
         Card card = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
         cardName = card.getCardName();
+        // just get the list view reference
         setContentView(R.layout.activity_view_history);
-        extractViews();
+        extractCalendarViews();
         initButtonClick();
         initCalendarChange();
         refresh();
@@ -92,10 +151,14 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void extractViews() {
+    private void extractCalendarViews() {
         calendarView = (CalendarView) findViewById(R.id.calendar_view);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         viewTransactionHistoryBtn  = (Button) findViewById(R.id.view_transaction_btn);
+    }
+
+    private void extractListViews() {
+        listView = findViewById(R.id.list_view);
     }
 
     public void setToLoadView() {

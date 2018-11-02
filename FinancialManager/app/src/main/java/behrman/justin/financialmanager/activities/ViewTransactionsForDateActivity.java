@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.adapters.TransactionAdapter;
+import behrman.justin.financialmanager.adapters.TransactionForSingleDayAdapter;
 import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -30,7 +30,7 @@ public class ViewTransactionsForDateActivity extends AppCompatActivity {
     }
 
     private void setUp() {
-        TransactionAdapter adapter = new TransactionAdapter(this, transactions);
+        TransactionForSingleDayAdapter adapter = new TransactionForSingleDayAdapter(this, transactions);
         listView.setAdapter(adapter);
     }
 

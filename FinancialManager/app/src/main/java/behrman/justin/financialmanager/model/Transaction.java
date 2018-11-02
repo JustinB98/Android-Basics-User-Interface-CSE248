@@ -1,10 +1,12 @@
 package behrman.justin.financialmanager.model;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.Date;
 
 // @ParseClassName(StringConstants.TRANSACTION_CLASS)
-public class Transaction /* extends ParseObject */ implements Serializable {
+public class Transaction /* extends ParseObject */ implements Serializable, Comparable<Transaction> {
 
     private String mPlace;
     private double mAmount;
@@ -33,6 +35,12 @@ public class Transaction /* extends ParseObject */ implements Serializable {
     public String getCurrencyCode() {
         return mCurrencyCode;
     }
+
+    @Override
+    public int compareTo(@NonNull Transaction o) {
+        return mDate.compareTo(o.mDate);
+    }
+
 
     @Override
     public String toString() {

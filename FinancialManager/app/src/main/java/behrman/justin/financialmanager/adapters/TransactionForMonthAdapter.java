@@ -15,9 +15,9 @@ import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 
-public class TransactionAdapter extends ArrayAdapter<Transaction> {
+public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
 
-    public TransactionAdapter(Context context, List<Transaction> transactions) {
+    public TransactionForMonthAdapter(Context context, List<Transaction> transactions) {
         super(context, 0, transactions);
     }
 
@@ -25,7 +25,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_transactions_for_date, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_transactions, parent, false);
         }
         Transaction t = getItem(position);
         setFields(convertView, t);
@@ -39,6 +39,8 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         amountView.setText(ProjectUtils.formatNumber(t.getAmount()).substring(1)); // want to get rid of $
         TextView currencyCodeView = convertView.findViewById(R.id.currency_code_view);
         currencyCodeView.setText(t.getCurrencyCode());
+        TextView dateView = convertView.findViewById(R.id.date_view);
+        dateView.setText(ProjectUtils.convertDateToString(t.getDate()));
     }
 
 }

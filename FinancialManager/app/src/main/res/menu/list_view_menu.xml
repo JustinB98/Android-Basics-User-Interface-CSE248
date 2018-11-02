@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/list_menu_item"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="ListView"
+        android:onClick="menuAction" />
+
+</menu>
