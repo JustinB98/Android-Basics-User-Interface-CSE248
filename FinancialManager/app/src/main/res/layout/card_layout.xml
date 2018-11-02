@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="8dp">
 
     <TextView
+        android:maxWidth="200dp"
         android:id="@+id/card_name_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="32sp"
-        tools:text="Card name" />
+        tools:text="brand new card"
+        android:layout_alignParentLeft="true"/>
 
     <TextView
         android:id="@+id/card_type_view"
@@ -18,6 +22,8 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/darker_gray"
         android:textSize="24sp"
-        tools:text="AUTO" />
+        android:layout_centerVertical="true"
+        tools:text="AUTO"
+        android:layout_alignParentRight="true"/>
 
-</LinearLayout>
+</RelativeLayout>

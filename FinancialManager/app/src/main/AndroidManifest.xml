@@ -30,7 +30,8 @@
         <activity android:name=".activities.ViewManualHistoryActivity" />
         <activity android:name=".activities.ViewTransactionsForDateActivity" />
         <activity android:name=".activities.EditCardActivity" />
-        <activity android:name=".activities.AddManualTransactionActivity"></activity>
+        <activity android:name=".activities.AddManualTransactionActivity" />
+        <activity android:name=".EditTransactionActivity"></activity>
     </application>
 
 </manifest>
