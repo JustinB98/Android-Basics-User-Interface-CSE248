@@ -2,8 +2,6 @@ package behrman.justin.financialmanager.activities;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.DatePicker;
-import android.widget.ProgressBar;
 
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -19,9 +17,6 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
 
     private final static String LOG_TAG = ViewManualHistoryActivity.class.getSimpleName() + "debug";
 
-    private DatePicker datePicker;
-    private ProgressBar progressBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +26,7 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
     public void getTransactions(int year, int month) {
         getData(year, month);
     }
+
     private void getData(int year, int month) {
         HashMap<String, Object> params = getParameters(year, month);
         ParseCloud.callFunctionInBackground(StringConstants.GET_MANUAL_TRANSACTIONS_FUNCTION, params, new FunctionCallback<HashMap<String, Object>>() {

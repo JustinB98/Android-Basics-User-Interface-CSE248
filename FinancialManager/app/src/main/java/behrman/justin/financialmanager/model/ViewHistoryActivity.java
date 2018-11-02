@@ -88,6 +88,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     private void switchToShowTransactionsActivity(LinkedList<Transaction> list) {
         Intent intent = new Intent(this, ViewTransactionsForDateActivity.class);
         intent.putExtra(StringConstants.TRANSACTIONS_KEY, list);
+        intent.putExtra(StringConstants.DATE_KEY, dateSelected.getTime());
         startActivity(intent);
     }
 

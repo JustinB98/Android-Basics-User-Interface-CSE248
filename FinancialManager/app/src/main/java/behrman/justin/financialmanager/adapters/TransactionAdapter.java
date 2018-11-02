@@ -25,7 +25,7 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_transactions, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_transactions_for_date, parent, false);
         }
         Transaction t = getItem(position);
         setFields(convertView, t);
@@ -37,8 +37,6 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         placeView.setText(t.getPlace());
         TextView amountView = convertView.findViewById(R.id.amount_view);
         amountView.setText(ProjectUtils.formatNumber(t.getAmount()).substring(1)); // want to get rid of $
-        TextView date_view = convertView.findViewById(R.id.date_view);
-        date_view.setText(ProjectUtils.convertDateToString(t.getDate()));
         TextView currencyCodeView = convertView.findViewById(R.id.currency_code_view);
         currencyCodeView.setText(t.getCurrencyCode());
     }

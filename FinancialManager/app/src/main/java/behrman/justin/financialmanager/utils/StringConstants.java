@@ -69,4 +69,6 @@ public final class StringConstants {
     public static final String CARD_TYPE_KEY = "cardType";
     public final static String TRANSACTION_KEY = "transaction";
 
+    public final static String DATE_KEY = "date";
+
 }

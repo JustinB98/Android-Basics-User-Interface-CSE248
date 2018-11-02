@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
+import java.util.Date;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.TransactionAdapter;
 import behrman.justin.financialmanager.model.Transaction;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewTransactionsForDateActivity extends AppCompatActivity {
@@ -22,6 +24,8 @@ public class ViewTransactionsForDateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_transactions_for_date);
         listView = findViewById(R.id.transactions_list_view);
         transactions = (List<Transaction>) getIntent().getSerializableExtra(StringConstants.TRANSACTIONS_KEY);
+        Date date = (Date) getIntent().getSerializableExtra(StringConstants.DATE_KEY);
+        getSupportActionBar().setTitle(ProjectUtils.getFullDate(date));
         setUp();
     }
 
