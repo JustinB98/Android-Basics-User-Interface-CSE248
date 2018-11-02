@@ -20,6 +20,7 @@ import behrman.justin.financialmanager.model.TransactionCommunicator;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
+// https://github.com/prolificinteractive/material-calendarview/
 public class ViewHistoryCalendarViewSubActivity {
 
     private final static String LOG_TAG = ViewHistoryCalendarViewSubActivity.class.getSimpleName() + "debug";
@@ -55,6 +56,7 @@ public class ViewHistoryCalendarViewSubActivity {
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
                 int month = date.getMonth() + 1;
                 int year = date.getYear();
+                calendarView.clearSelection();
                 communicator.requestNewTransactions(year, month);
             }
         });
@@ -65,8 +67,10 @@ public class ViewHistoryCalendarViewSubActivity {
             @Override
             public void onClick(View v) {
                 CalendarDay selectedDay = calendarView.getSelectedDate();
-                ArrayList<Transaction> transactions = communicator.getTransactions().get(selectedDay.getDate());
-                changeView(transactions);
+                if (selectedDay != null) {
+                    ArrayList<Transaction> transactions = communicator.getTransactions().get(selectedDay.getDate());
+                    changeView(transactions);
+                }
             }
         });
     }
