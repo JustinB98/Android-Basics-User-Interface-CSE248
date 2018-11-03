@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 import behrman.justin.financialmanager.model.AutoCardTransactionsParser;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
-import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewAutoHistoryActivity extends ViewHistoryActivity {
@@ -35,15 +34,13 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
         // int month = ProjectUtils.getCurrentMonth() + 1;
         // int day = ProjectUtils.getCurrentDay();
         // int year = ProjectUtils.getCurrentYear();
-        String startDate = getDateAsString(month, 1, year);
-        String endDate = getDateAsString(month, ProjectUtils.maxDaysInMonth(year, month), year);
-        HashMap<String, Object> request = generateRequestHashMap(userId, startDate, endDate);
+        HashMap<String, Object> request = generateRequestHashMap(userId, year, month);
         // sendRequest(jsonRequest);
         sendRequest(request);
     }
 
     private void sendRequest(HashMap<String, Object> request) {
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_TRANSACTIONS_CLOUD_FUNCTION, request, new FunctionCallback<HashMap<String, Object>>() {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_AUTO_TRANSACTIONS_CLOUD_FUNCTION, request, new FunctionCallback<HashMap<String, Object>>() {
             @Override
             public void done(HashMap<String, Object> response, ParseException e) {
                 if (e == null) {
@@ -57,12 +54,12 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
         });
     }
 
-    private HashMap<String, Object> generateRequestHashMap(String userId, String startDate, String endDate) {
+    private HashMap<String, Object> generateRequestHashMap(String userId, int year, int month) {
         HashMap<String, Object> request = new HashMap<>(3);
         request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_USER_ID, userId);
         request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CARD_NAME, cardName);
-        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_START_DATE, startDate);
-        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_END_DATE, endDate);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_YEAR, year);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_MONTH, month);
         return request;
     }
 

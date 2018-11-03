@@ -1,6 +1,7 @@
 package behrman.justin.financialmanager.utils;
 
 import android.app.Activity;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -149,6 +150,18 @@ public class ProjectUtils {
                 return "December";
             default:
                 return "";
+        }
+    }
+
+    public static boolean deepEquals(@Nullable String s1, @Nullable String s2) {
+        if (s1 == s2) { // same object?
+            return true;
+        } else if (s1 == null || s2 == null) { // one is null and other is not?
+            return false;
+        } else if (s1.trim().toLowerCase().equals(s2.trim().toLowerCase())) { // contents equal?
+            return true;
+        } else {
+            return false;
         }
     }
 

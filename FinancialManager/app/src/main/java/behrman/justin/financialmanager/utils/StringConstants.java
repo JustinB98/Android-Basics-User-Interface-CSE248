@@ -11,7 +11,7 @@ public final class StringConstants {
     public final static String CONVERT_ACCESS_URL = SERVER_URL + "converttoaccess";
     public final static String GET_TRANSACTIONS_URL = SERVER_URL + "getTransactions";
 
-    public final static String PARSE_TRANSACTIONS_CLOUD_FUNCTION = "getTransactions";
+    public final static String PARSE_AUTO_TRANSACTIONS_CLOUD_FUNCTION = "getAutoTransactions";
 
     /* DATABASE FIELDS */
     public final static String AUTO_CARD_NAME = "name";
@@ -63,6 +63,8 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_NEW_CARD_NAME_PARAMETER = "newName";
     public final static String PARSE_CLOUD_ORIGINAL_CARD_NAME_PARAMETER = "originalName";
     public final static String PARSE_CLOUD_FUNCTION_ADD_MANUAL_TRANSACTION = "addManualTransaction";
+
+    public final static String PARSE_CLOUD_FUNCTION_ADD_AUTO_CARD = "addAutoCard";
 
     public final static String CARD_KEY = "card";
 

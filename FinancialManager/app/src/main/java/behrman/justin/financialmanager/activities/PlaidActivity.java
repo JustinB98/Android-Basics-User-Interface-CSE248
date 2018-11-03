@@ -8,20 +8,15 @@ import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.model.InputStreamCallBack;
-import behrman.justin.financialmanager.utils.NetworkUtils;
-import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 /**
@@ -149,33 +144,26 @@ public class PlaidActivity extends AppCompatActivity {
         // plaidLinkWebview.loadUrl(linkInitializationUrl.toString());
         String publicToken = linkData.get("public_token");
         String name = linkData.get("account_name");
-        ParseObject autoCard = new ParseObject(StringConstants.AUTO_CARD_CLASS);
-        autoCard.put(StringConstants.AUTO_CARD_OWNER, ParseUser.getCurrentUser());
-        autoCard.put(StringConstants.AUTO_CARD_PUBLIC_TOKEN, publicToken);
-        autoCard.put(StringConstants.AUTO_CARD_NAME, name);
-        String publicTokenJson = "{" + ProjectUtils.convertToJSON(StringConstants.AUTO_CARD_PUBLIC_TOKEN, publicToken) + "}";
+        HashMap<String, Object> params = new HashMap<>(2);
+        params.put(StringConstants.CARD_NAME, name);
+        params.put(StringConstants.AUTO_CARD_PUBLIC_TOKEN, publicToken);
         publicToken = null; // get rid of public token reference asap
         linkData.put("public_token", null);
-        saveCardToDataBase(autoCard, publicTokenJson);
+        saveCardToDataBase(params);
     }
 
-    private void saveCardToDataBase(ParseObject autoCard, final String jsonRequest) {
-        // need to save card to data base, then tell server to convert that public token to an access token and item id
-        autoCard.saveInBackground(new SaveCallback() {
+    private void saveCardToDataBase(HashMap<String, Object> params) {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_ADD_AUTO_CARD, params, new FunctionCallback<String>() {
             @Override
-            public void done(ParseException e) {
-                NetworkUtils.makePostRequest(StringConstants.CONVERT_ACCESS_URL, jsonRequest, new InputStreamCallBack() {
-                    @Override
-                    public void callback(InputStream is) {
-                        try {
-                            String s = NetworkUtils.readFromStream(is);
-                            Log.i(LOG_TAG, "the result string is " + s);
-                        } catch (IOException e) {
-                            Log.i(LOG_TAG, "ERROR", e);
-                        }
+            public void done(String object, ParseException e) {
+                if (e == null) {
+                    if (object != null && object.trim().toLowerCase().equals("success")) {
+                        Toast.makeText(PlaidActivity.this, "added card", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
-                });
-                finish();
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                }
             }
         });
     }

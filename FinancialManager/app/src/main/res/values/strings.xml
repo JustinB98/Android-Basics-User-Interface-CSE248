@@ -23,8 +23,8 @@
     <string name="invalid_credentials">Username or password is invalid!</string>
     <string name="invalid_email">Email isn\'t valid</string>
     <string name="invalid_password">Password isn\'t valid\nMust have 5 characters, 1 uppercase, 1 number</string>
-    <string name="auth_failed">Authentication failed...</string>
-    <string name="server_issue">Couldn\'t connect to server...</string>
+    <string name="auth_failed">Authentication failed…</string>
+    <string name="server_issue">Couldn\'t connect to server…</string>
     <string name="passwords_not_equal">Passwords Are Not Equal</string>
     <!-- END Create Account Screen -->
 
