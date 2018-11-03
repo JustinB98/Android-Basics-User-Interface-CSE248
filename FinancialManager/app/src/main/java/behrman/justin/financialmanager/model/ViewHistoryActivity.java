@@ -34,6 +34,8 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private TransactionCommunicator communicator;
 
+    private boolean menuCreated, activityCreated;
+
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -45,6 +47,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         listViewSubActivity = new ViewHistoryListViewSubActivity(this, communicator);
         calendarSubActivity.setToView();
         getTransactions(calendarSubActivity.getYearSelected(), calendarSubActivity.getMonthSelected());
+        activityCreated = true;
     }
 
     private void initCommunicator() {
@@ -56,6 +59,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
             @Override
             public void requestNewTransactions(int year, int month) {
+                Log.i(LOG_TAG, "getting transactions for: " + month + ", " + year);
                 ViewHistoryActivity.this.getTransactions(year, month);
             }
 
@@ -71,6 +75,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         switchMenu(R.menu.list_view_menu);
+        menuCreated = true;
         return true;
     }
 
@@ -108,4 +113,16 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         this.cardTransactions = cardTransactions;
     }
 
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (menuCreated && activityCreated) {
+            menu.clear();
+            calendarSubActivity.setToView();
+            switchToCalendarView();
+            getTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
+        }
+    }
 }

@@ -2,6 +2,7 @@ package behrman.justin.financialmanager.subactivities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,8 @@ public class ViewHistoryCalendarViewSubActivity {
     private MaterialCalendarView calendarView;
     private Button viewTransactionBtn;
 
+    private int savedMonth, savedYear;
+
     public ViewHistoryCalendarViewSubActivity(AppCompatActivity activity, TransactionCommunicator communicator) {
         root = LayoutInflater.from(activity).inflate(R.layout.activity_view_history, null);
         this.activity = activity;
@@ -54,10 +57,11 @@ public class ViewHistoryCalendarViewSubActivity {
         calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
             @Override
             public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-                int month = date.getMonth() + 1;
-                int year = date.getYear();
+                savedMonth = date.getMonth() + 1;
+                savedYear = date.getYear();
+                Log.i(LOG_TAG, "month was changed: " + savedMonth + ", " + savedYear);
                 calendarView.clearSelection();
-                communicator.requestNewTransactions(year, month);
+                communicator.requestNewTransactions(savedYear, savedMonth);
             }
         });
     }
@@ -95,9 +99,11 @@ public class ViewHistoryCalendarViewSubActivity {
     public int getMonthSelected() {
         CalendarDay cal = calendarView.getSelectedDate();
         if (cal == null) {
+            Log.i(LOG_TAG, "return current month: " + ProjectUtils.getCurrentMonth());
             return ProjectUtils.getCurrentMonth();
         } else {
-            return calendarView.getSelectedDate().getMonth();
+            Log.i(LOG_TAG, "returning selected month: " + calendarView.getSelectedDate().getMonth());
+            return calendarView.getSelectedDate().getMonth() + 1;
         }
     }
 
@@ -117,6 +123,14 @@ public class ViewHistoryCalendarViewSubActivity {
         } else {
             return calendarView.getSelectedDate().getDay();
         }
+    }
+
+    public int getSavedMonth() {
+        return savedMonth;
+    }
+
+    public int getSavedYear() {
+        return savedYear;
     }
 
 }
