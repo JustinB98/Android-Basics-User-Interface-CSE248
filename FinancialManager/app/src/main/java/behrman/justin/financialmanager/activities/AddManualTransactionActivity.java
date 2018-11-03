@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.parse.FunctionCallback;
@@ -30,7 +31,8 @@ public class AddManualTransactionActivity extends AppCompatActivity {
 
     private View transactionContainer;
     private Button addTransactionBtn;
-    private EditText placeField, amountField, currencyField;
+    private EditText placeField, amountField;
+    private Spinner currencySpinner;
     private CalendarView calendarView;
 
     private int month, day, year;
@@ -109,7 +111,7 @@ public class AddManualTransactionActivity extends AppCompatActivity {
     private Transaction getTransaction() {
         String place = placeField.getText().toString();
         double amount = Double.parseDouble(amountField.getText().toString());
-        String currencyCode = currencyField.getText().toString();
+        String currencyCode = (String) currencySpinner.getSelectedItem();
         Date date = new GregorianCalendar(year, month, day).getTime();
         return new Transaction(place, amount, date, currencyCode);
     }
@@ -123,10 +125,6 @@ public class AddManualTransactionActivity extends AppCompatActivity {
             Toast.makeText(this, "amount cannot be empty", Toast.LENGTH_SHORT).show();
             Log.i(LOG_TAG, "amount is empty");
             return false;
-        } else if (TextUtils.isEmpty(currencyField.getText())) {
-            Log.i(LOG_TAG, "currencyfield is empty");
-            Toast.makeText(this, "currency cannot be empty", Toast.LENGTH_SHORT).show();
-            return false;
         }
         return true;
     }
@@ -136,7 +134,7 @@ public class AddManualTransactionActivity extends AppCompatActivity {
         addTransactionBtn = findViewById(R.id.add_manual_transaction_btn);
         placeField = findViewById(R.id.place_input);
         amountField = findViewById(R.id.amount_input);
-        currencyField = findViewById(R.id.currency_input);
+        currencySpinner = findViewById(R.id.currency_spinner);
         calendarView = findViewById(R.id.calendar_input);
     }
 

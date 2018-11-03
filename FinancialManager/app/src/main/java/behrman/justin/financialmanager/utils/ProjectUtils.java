@@ -1,6 +1,7 @@
 package behrman.justin.financialmanager.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.CardType;
 
 public class ProjectUtils {
@@ -163,6 +165,22 @@ public class ProjectUtils {
         } else {
             return false;
         }
+    }
+
+    /**
+     * TODO fix this method because it's using sequential search, maybe binary search? Maybe I shouldn't worry because it's not like there
+     * @param currencyCode
+     * @param context
+     * @return
+     */
+    public static int convertCurrencyCodeStringToIndex(String currencyCode, Context context) {
+        String[] currencyCodes = context.getResources().getStringArray(R.array.currency_codes);
+        for (int i = 0; i < currencyCodes.length; ++i) {
+            if (currencyCode.equals(currencyCodes[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 }
