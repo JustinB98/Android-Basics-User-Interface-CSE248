@@ -17,6 +17,8 @@ import behrman.justin.financialmanager.utils.ProjectUtils;
 
 public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
 
+    private final static String LOG_TAG = TransactionForMonthAdapter.class.getSimpleName() + "debug";
+
     public TransactionForMonthAdapter(Context context, List<Transaction> transactions) {
         super(context, 0, transactions);
     }
@@ -36,11 +38,11 @@ public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
         TextView placeView = convertView.findViewById(R.id.place_view);
         placeView.setText(t.getPlace());
         TextView amountView = convertView.findViewById(R.id.amount_view);
-        amountView.setText(ProjectUtils.formatNumber(t.getAmount()).substring(1)); // want to get rid of $
+        amountView.setText(ProjectUtils.formatNumber(t.getAmount()).replace("$", "")); // want to get rid of $
         TextView currencyCodeView = convertView.findViewById(R.id.currency_code_view);
         currencyCodeView.setText(t.getCurrencyCode());
         TextView dateView = convertView.findViewById(R.id.date_view);
-        dateView.setText(ProjectUtils.convertDateToString(t.getDate()));
+        dateView.setText(ProjectUtils.getFullDate(t.getDate()));
     }
 
 }

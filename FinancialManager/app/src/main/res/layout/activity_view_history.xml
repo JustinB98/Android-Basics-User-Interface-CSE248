@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".model.ViewHistoryActivity">
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
@@ -16,10 +17,8 @@
         android:id="@+id/view_transaction_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/calendar_view"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="56dp"
-        android:layout_marginBottom="-56dp"
+        android:layout_alignParentBottom="true"
         android:text="go" />
 
     <ProgressBar
