@@ -15,4 +15,6 @@ public interface TransactionCommunicator {
      */
     void requestNewTransactions(int year, int month);
 
+    boolean isManualCard();
+
 }

@@ -88,6 +88,7 @@ public class ViewHistoryCalendarViewSubActivity {
         Intent intent = new Intent(activity, ViewTransactionsForDateActivity.class);
         intent.putExtra(StringConstants.TRANSACTIONS_KEY, list);
         intent.putExtra(StringConstants.DATE_KEY, calendarView.getSelectedDate().getDate());
+        intent.putExtra(StringConstants.IS_MANUAL_CARD_KEY, communicator.isManualCard());
         activity.startActivity(intent);
     }
 

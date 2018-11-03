@@ -28,7 +28,7 @@
         <activity android:name=".activities.SelectCardActivity" />
         <activity android:name=".activities.ViewAutoHistoryActivity" />
         <activity android:name=".activities.ViewManualHistoryActivity" />
-        <activity android:name=".activities.ViewTransactionsForDateActivity" />
+        <activity android:name=".activities.ViewTransactionsForDateActivity" android:noHistory="true" />
         <activity android:name=".activities.EditCardActivity" />
         <activity android:name=".activities.AddManualTransactionActivity" />
         <activity android:name=".activities.EditTransactionActivity"></activity>

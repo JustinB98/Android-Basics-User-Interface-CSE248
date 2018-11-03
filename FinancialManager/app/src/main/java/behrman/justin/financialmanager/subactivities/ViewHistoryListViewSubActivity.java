@@ -1,8 +1,10 @@
 package behrman.justin.financialmanager.subactivities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -13,9 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.activities.EditTransactionActivity;
 import behrman.justin.financialmanager.adapters.TransactionForMonthAdapter;
 import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.model.TransactionCommunicator;
+import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewHistoryListViewSubActivity {
 
@@ -30,6 +34,25 @@ public class ViewHistoryListViewSubActivity {
         this.activity = activity;
         this.communicator = communicator;
         extractViews();
+        if (communicator.isManualCard()) {
+            initListViewItemListener();
+        }
+    }
+
+    private void initListViewItemListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Transaction t = (Transaction) parent.getItemAtPosition(position);
+                switchToEditTransaction(t);
+            }
+        });
+    }
+
+    private void switchToEditTransaction(Transaction t) {
+        Intent intent = new Intent(activity, EditTransactionActivity.class);
+        intent.putExtra(StringConstants.TRANSACTION_KEY, t);
+        activity.startActivity(intent);
     }
 
     public void setToView() {

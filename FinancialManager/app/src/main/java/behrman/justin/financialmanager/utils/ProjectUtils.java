@@ -160,7 +160,7 @@ public class ProjectUtils {
             return true;
         } else if (s1 == null || s2 == null) { // one is null and other is not?
             return false;
-        } else if (s1.trim().toLowerCase().equals(s2.trim().toLowerCase())) { // contents equal?
+        } else if (s1.trim().equalsIgnoreCase(s2.trim())) { // contents equal?
             return true;
         } else {
             return false;

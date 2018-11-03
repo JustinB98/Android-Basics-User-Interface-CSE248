@@ -25,6 +25,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     private Menu menu;
 
     protected String cardName;
+    private boolean isManualCard;
 
     private HashMap<Date, ArrayList<Transaction>> cardTransactions;
 
@@ -38,6 +39,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstance);
         Card card = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
         cardName = card.getCardName();
+        isManualCard = card.getCardType() == CardType.MANUAL;
         initCommunicator();
         calendarSubActivity = new ViewHistoryCalendarViewSubActivity(this, communicator);
         listViewSubActivity = new ViewHistoryListViewSubActivity(this, communicator);
@@ -56,6 +58,12 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             public void requestNewTransactions(int year, int month) {
                 ViewHistoryActivity.this.getTransactions(year, month);
             }
+
+            @Override
+            public boolean isManualCard() {
+                return isManualCard;
+            }
+
         };
     }
 

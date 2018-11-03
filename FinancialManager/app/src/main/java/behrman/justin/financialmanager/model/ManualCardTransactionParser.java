@@ -44,7 +44,9 @@ public class ManualCardTransactionParser extends HashMap<Date, ArrayList<Transac
         date = reformatDate(date);
         String currencyCode = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE);
         double amount = getTransactionAmount(object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_AMOUNT));
-        return new Transaction(place, amount, date, currencyCode);
+        String objectId = object.getObjectId();
+        Log.i(LOG_TAG, "objectId: " + objectId);
+        return new Transaction(place, amount, date, currencyCode, objectId);
     }
 
     // need to reformat the date so the times aren't compared

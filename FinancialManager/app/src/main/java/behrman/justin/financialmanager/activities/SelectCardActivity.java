@@ -152,6 +152,12 @@ public class SelectCardActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        update();
+    }
+
     private Card convertParseObjectToCard(ParseObject obj) {
         CardType cardType = ProjectUtils.convertToCardType(obj.getClassName());
         String key = cardType == CardType.AUTO ? StringConstants.AUTO_CARD_NAME : StringConstants.MANUAL_CARD_NAME;

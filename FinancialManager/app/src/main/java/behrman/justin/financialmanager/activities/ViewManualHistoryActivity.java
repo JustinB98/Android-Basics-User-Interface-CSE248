@@ -33,6 +33,7 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
             @Override
             public void done(HashMap<String, Object> object, ParseException e) {
                 if (e == null) {
+                    Log.i(LOG_TAG, "object: " + (object == null ? "null" : object.toString()));
                     ManualCardTransactionParser cardTransactions = new ManualCardTransactionParser(object);
                     Log.i(LOG_TAG, "cardTransactions: " + cardTransactions);
                     ViewManualHistoryActivity.super.setTransactionData(cardTransactions);

@@ -73,4 +73,10 @@ public final class StringConstants {
 
     public final static String DATE_KEY = "date";
 
+    public final static String OBJECT_ID_KEY = "objectId";
+
+    public final static String PARSE_CLOUD_FUNCTION_EDIT_MANUAL_CARD = "editManualTransaction";
+
+    public final static String IS_MANUAL_CARD_KEY = "isManual";
+
 }
