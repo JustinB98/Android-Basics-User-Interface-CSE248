@@ -52,14 +52,20 @@ public class EditCardActivity extends AppCompatActivity {
     }
 
     private void sendEditNameRequest() {
+        if (originalCard.getCardName().equals(cardNameField.getText())) {
+            finish();
+        }
         ParseQuery<ParseObject> query = getQuery();
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
+                Log.i(LOG_TAG, "returned");
                 if (e == null) { // no errors, so there must be a result
                     Toast.makeText(EditCardActivity.this, "card already exists with this name!", Toast.LENGTH_SHORT).show();
                 } else if (e.getCode() == ParseException.OBJECT_NOT_FOUND) { // no object found, so it must be an free name
                     saveIfNeeded(object);
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
                 }
             }
         });

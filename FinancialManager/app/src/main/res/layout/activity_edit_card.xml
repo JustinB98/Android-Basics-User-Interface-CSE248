@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:text="Add Card" />
+            android:text="Rename Card" />
     </LinearLayout>
 
     <ProgressBar

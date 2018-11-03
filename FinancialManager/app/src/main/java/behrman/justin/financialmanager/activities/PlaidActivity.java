@@ -8,7 +8,6 @@ import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -17,6 +16,8 @@ import com.parse.ParseException;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 /**
@@ -144,28 +145,36 @@ public class PlaidActivity extends AppCompatActivity {
         // plaidLinkWebview.loadUrl(linkInitializationUrl.toString());
         String publicToken = linkData.get("public_token");
         String name = linkData.get("account_name");
+        String suggestedName = linkData.get("institution_name") + " " + name;
         HashMap<String, Object> params = new HashMap<>(2);
-        params.put(StringConstants.CARD_NAME, name);
+        params.put(StringConstants.CARD_NAME, suggestedName);
         params.put(StringConstants.AUTO_CARD_PUBLIC_TOKEN, publicToken);
         publicToken = null; // get rid of public token reference asap
         linkData.put("public_token", null);
-        saveCardToDataBase(params);
+        saveCardToDataBase(params, suggestedName);
     }
 
-    private void saveCardToDataBase(HashMap<String, Object> params) {
+    private void saveCardToDataBase(HashMap<String, Object> params, final String suggestedName) {
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_ADD_AUTO_CARD, params, new FunctionCallback<String>() {
             @Override
             public void done(String object, ParseException e) {
                 if (e == null) {
                     if (object != null && object.trim().toLowerCase().equals("success")) {
-                        Toast.makeText(PlaidActivity.this, "added card", Toast.LENGTH_SHORT).show();
                         finish();
+                        switchToChangeName(suggestedName);
                     }
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
                 }
             }
         });
+    }
+
+    private void switchToChangeName(String name) {
+        Card card = new Card(name, CardType.AUTO);
+        Intent intent = new Intent(this, EditCardActivity.class);
+        intent.putExtra(StringConstants.CARD_KEY, card);
+        startActivity(intent);
     }
 
 
