@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="No Transactions For this Month"
+        android:text="@string/no_transactions_found"
         android:textAlignment="center"
         android:textSize="24sp"
         android:visibility="visible" />

@@ -3,27 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="8dp">
 
     <TextView
-        android:maxWidth="200dp"
         android:id="@+id/card_name_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:maxWidth="200dp"
         android:textSize="32sp"
-        tools:text="brand new card"
-        android:layout_alignParentLeft="true"/>
+        tools:text="brand new card" />
 
     <TextView
         android:id="@+id/card_type_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:textColor="@android:color/darker_gray"
         android:textSize="24sp"
-        android:layout_centerVertical="true"
-        tools:text="AUTO"
-        android:layout_alignParentRight="true"/>
+        tools:text="AUTO" />
 
 </RelativeLayout>

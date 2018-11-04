@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
 
     private final static String LOG_TAG = MenuActivity.class.getSimpleName() + "debug";
 
-    private Button addManualCardBtn, addAutoCardBtn, editCardBtn, checkHistoryBtn, addManualTransactionBtn;
+    private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +30,19 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     }
 
     private void initClickListeners() {
-        initSingleClickListener(addManualCardBtn, AddManualCardActivity.class);
-        initSingleClickListener(addAutoCardBtn, PlaidActivity.class);
+        initSingleClickListener(addManualCardView, AddManualCardActivity.class);
+        initSingleClickListener(addAutoCardView, PlaidActivity.class);
         setUpSelectCardsBtns();
     }
 
     private void setUpSelectCardsBtns() {
-        initTypeDependentClickListener(checkHistoryBtn, SelectCardActivity.class, new CardTypeClassConverterViewHistoryImpl());
-        initTypeDependentClickListener(editCardBtn, SelectCardActivity.class, new CardTypeIndependentConverterImpl(EditCardActivity.class));
+        initTypeDependentClickListener(checkHistoryView, SelectCardActivity.class, new CardTypeClassConverterViewHistoryImpl());
+        initTypeDependentClickListener(editCardView, SelectCardActivity.class, new CardTypeIndependentConverterImpl(EditCardActivity.class));
         initAddManualTransactionBtn();
     }
 
     private void initAddManualTransactionBtn() {
-        addManualTransactionBtn.setOnClickListener(new View.OnClickListener() {
+        addManualTransactionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, SelectCardActivity.class);
@@ -55,8 +55,8 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
 
     }
 
-    private void initTypeDependentClickListener(Button btn, final Class<?> initialClass, final CardTypeClassConverter converter) {
-        btn.setOnClickListener(new View.OnClickListener() {
+    private void initTypeDependentClickListener(TextView view, final Class<?> initialClass, final CardTypeClassConverter converter) {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, initialClass);
@@ -66,8 +66,8 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         });
     }
 
-    private void initSingleClickListener(Button btn, final Class<?> classToOpen) {
-        btn.setOnClickListener(new View.OnClickListener() {
+    private void initSingleClickListener(TextView view, final Class<?> classToOpen) {
+        view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MenuActivity.this, classToOpen));
             }
@@ -75,11 +75,11 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     }
 
     private void extractViews() {
-        addManualCardBtn = findViewById(R.id.add_manual_card_btn);
-        addAutoCardBtn = findViewById(R.id.add_auto_card_btn);
-        editCardBtn = findViewById(R.id.edit_card_btn);
-        checkHistoryBtn = findViewById(R.id.card_history_btn);
-        addManualTransactionBtn = findViewById(R.id.add_manual_transaction_btn);
+        addManualCardView = findViewById(R.id.add_manual_card_btn);
+        addAutoCardView = findViewById(R.id.add_auto_card_btn);
+        editCardView = findViewById(R.id.edit_card_btn);
+        checkHistoryView = findViewById(R.id.card_history_btn);
+        addManualTransactionView = findViewById(R.id.add_manual_transaction_btn);
     }
 
     @Override

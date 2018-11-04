@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change Card Name:"
+            android:text="@string/change_card_name"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -24,14 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="This is just something you use to identify your card"
+            android:text="@string/this_is_just_something_you_use_to_identify_your_card"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(can't be a card name that already exists) "
+            android:text="@string/cant_be_a_card_name_that_already_exists"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <EditText
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="Card Identifier" />
+            android:hint="@string/card_identifier" />
 
         <Button
             android:id="@+id/edit_card_btn"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:text="Rename Card" />
+            android:text="@string/rename_card" />
     </LinearLayout>
 
     <ProgressBar

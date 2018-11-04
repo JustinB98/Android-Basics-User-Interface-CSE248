@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter Card Identifier:"
+            android:text="@string/enter_card_identifier"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -26,14 +26,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="This is just something you use to identify your card"
+            android:text="@string/this_is_just_something_you_use_to_identify_your_card"
             android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(can't be a card name that already exists) "
+            android:text="@string/cant_be_a_card_name_that_already_exists"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <EditText
@@ -41,7 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="Card Identifier" />
+            android:hint="@string/card_identifier"
+            android:inputType="" />
 
         <Button
             android:id="@+id/add_card_btn"
@@ -49,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:text="Add Card" />
+            android:text="@string/add_card" />
     </LinearLayout>
 
     <ProgressBar

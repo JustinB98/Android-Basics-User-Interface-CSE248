@@ -1,12 +1,17 @@
 <resources>
+    <!-- START other -->
     <string name="app_name">Financial Manager</string>
+    <!-- END other -->
 
+    <!-- START Arrays -->
+    <!-- Change order for each language if needed -->
     <string-array name="currency_codes">
         <item>USD</item>
         <item>EUR</item>
         <item>CAD</item>
         <item>JPY</item>
     </string-array>
+    <!-- END Arrays -->
 
     <!-- START Login Screen -->
     <string name="username">Username:</string>
@@ -34,5 +39,35 @@
     <string name="server_issue">Couldn\'t connect to server…</string>
     <string name="passwords_not_equal">Passwords Are Not Equal</string>
     <!-- END Create Account Screen -->
+
+    <!-- START Menu Screen -->
+    <string name="add_manual_card">Add Manual Card</string>
+    <string name="edit_a_card">Edit a Card</string>
+    <string name="add_auto_card">Add Auto Card</string>
+    <string name="check_card_history">Check Card History</string>
+    <string name="add_manual_transaction">Add manual transaction</string>
+    <string name="rename_card">Rename Card</string>
+    <string name="change_card_name">Change Card Name:</string>
+    <!-- END Menu Screen -->
+
+    <!-- START Add Manual/Edit Card Screen -->
+    <string name="enter_card_identifier">Enter Card Identifier:</string>
+    <string name="this_is_just_something_you_use_to_identify_your_card">This is just something you use to identify your card</string>
+    <string name="cant_be_a_card_name_that_already_exists">(can\'t be a card name that already exists)</string>
+    <string name="add_card">Add Card</string>
+    <string name="card_identifier">Card Identifier</string>
+    <!-- END Add Manual/Edit Card Screen -->
+
+    <!-- START Add/Edit Transaction -->
+    <string name="place">Place</string>
+    <string name="amount">Amount</string>
+    <string name="edit_transaction">Edit Transaction</string>
+    <string name="add_this_transaction">Add this transaction</string>
+    <!-- END Add/Edit Transaction -->
+
+    <!-- START View History -->
+    <string name="view_history_text">Go</string>
+    <string name="no_transactions_found">No Transactions For this Month</string>
+    <!-- END View History -->
 
 </resources>
