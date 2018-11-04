@@ -1,82 +1,69 @@
 package behrman.justin.financialmanager.utils;
 
+/**
+ * Strings that don't need to translated but may be changed
+ */
 public final class StringConstants {
 
     /* Utility class */
     private StringConstants() {}
 
-    /* URLS */
+    // ---------------------- START URLS ----------------------
     public final static String SERVER_URL = "https://financial-manager-app.herokuapp.com/";
     public final static String PARSE_URL = SERVER_URL + "parse/";
-    public final static String CONVERT_ACCESS_URL = SERVER_URL + "converttoaccess";
-    public final static String GET_TRANSACTIONS_URL = SERVER_URL + "getTransactions";
+    // ---------------------- END URLS ----------------------
 
-    public final static String PARSE_AUTO_TRANSACTIONS_CLOUD_FUNCTION = "getAutoTransactions";
+    // ---------------------- START DATABASE ----------------------
+    public final static String DATABASE_CARD_NAME_COLUMN = "name";
+    public final static String DATABASE_CARD_OWNER_COLUMN = "owner";
+    public final static String AUTO_CARD_PUBLIC_TOKEN_COLUMN = "publicToken";
+    public final static String MANUAL_CARD_CLASS_NAME = "ManualCards";
+    public final static String AUTO_CARD_CLASS_NAME = "AutoCards";
+    public final static String MANUAL_CARD_TRANSACTIONS_PLACE_COLUMN = "place";
+    public final static String MANUAL_CARD_TRANSACTIONS_AMOUNT_COLUMN = "amount";
+    public final static String MANUAL_CARD_TRANSACTIONS_DATE_COLUMN = "date";
+    public final static String MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE_COLUMN = "currencyCode";
+    public final static String MANUAL_CARD_TRANSACTIONS_USER_ID_COLUMN = "userId";
+    public final static String MANUAL_CARD_TRANSACTIONS_CARD_NAME_COLUMN = "cardName";
+    public final static String MANUAL_CARD_TRANSACTIONS_YEAR_COLUMN = "year";
+    public final static String MANUAL_CARD_TRANSACTIONS_MONTH_COLUMN = "month";
+    // ---------------------- END PARSE CLOUD PARAMETERS----------------------
 
-    /* DATABASE FIELDS */
-    public final static String AUTO_CARD_NAME = "name";
-    public final static String MANUAL_CARD_NAME = "name";
-    public final static String AUTO_CARD_OWNER = "owner";
-    public final static String MANUAL_CARD_OWNER = "owner";
-    public final static String AUTO_CARD_PUBLIC_TOKEN = "publicToken";
-    public final static String MANUAL_CARD_CLASS = "ManualCards";
-    public final static String AUTO_CARD_CLASS = "AutoCards";
-    public final static String TRANSACTION_CLASS = "Transactions";
-    public final static String MANUAL_CARD_TRANSACTIONS = "transactions";
-    public final static String MANUAL_CARD_TRANSACTIONS_PLACE = "place";
-    public final static String MANUAL_CARD_TRANSACTIONS_AMOUNT = "amount";
-    public final static String MANUAL_CARD_TRANSACTIONS_DATE = "date";
-    public final static String MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE = "currencyCode";
-    public final static String MANUAL_CARD_TRANSACTIONS_USER_ID = "userId";
-    public final static String MANUAL_CARD_TRANSACTIONS_CARD_NAME = "cardName";
-    public final static String MANUAL_CARD_TRANSACTIONS_START_DATE = "startDate";
-    public final static String MANUAL_CARD_TRANSACTIONS_END_DATE = "endDate";
-
-    public final static String MANUAL_CARD_TRANSACTIONS_YEAR = "year";
-    public final static String MANUAL_CARD_TRANSACTIONS_MONTH = "month";
-
-    public final static String PLAID_TRANSACTION_ERROR_CODE = "error_code";
-    public final static String PLAID_TRANSACTION_ERROR_CODE_MESSAGE = "PRODUCT_NOT_READY";
-
-    /* OTHER */
-    // for passing card names across intents
-    public final static String CARD_NAME = "cardName";
-    public final static String CARD_TYPE = "cardType";
-
-    public final static String TRANSACTIONS_LENGTH = "length";
-    public final static String TRANSACTIONS_KEY = "transactions";
-
-    // for the class to open after another class (ie Select Card to View Card History)
-    public final static String NEXT_CLASS = "nextClass";
-
+    // ---------------------- START PLAID KEYS ----------------------
     public final static String PLAID_PLACE_NAME = "name";
     public final static String PLAID_DATE = "date";
     public final static String PLAID_AMOUNT = "amount";
     public final static String PLAID_CURRENCY_CODE = "iso_currency_code";
+    // ---------------------- END PLAID KEYS----------------------
 
-    public final static String GET_MANUAL_TRANSACTIONS_FUNCTION = "getManualTransactions";
-
-    public final static String ORIGINAL_CARD_KEY = "originalCard";
-
+    // ---------------------- START PARSE CLOUD FUNCTIONS ----------------------
+    public final static String PARSE_CLOUD_FUNCTION_GET_MANUAL_TRANSACTIONS = "getManualTransactions";
     public final static String PARSE_CLOUD_FUNCTION_RENAME_MANUAL_CARD = "renameManualCard";
     public final static String PARSE_CLOUD_FUNCTION_RENAME_AUTO_CARD = "renameAutoCard";
-    public final static String PARSE_CLOUD_NEW_CARD_NAME_PARAMETER = "newName";
-    public final static String PARSE_CLOUD_ORIGINAL_CARD_NAME_PARAMETER = "originalName";
     public final static String PARSE_CLOUD_FUNCTION_ADD_MANUAL_TRANSACTION = "addManualTransaction";
-
     public final static String PARSE_CLOUD_FUNCTION_ADD_AUTO_CARD = "addAutoCard";
+    public final static String PARSE_CLOUD_FUNCTION_EDIT_MANUAL_CARD = "editManualTransaction";
+    public final static String PARSE_CLOUD_FUNCTION_GET_AUTO_TRANSACTIONS = "getAutoTransactions";
+    // ---------------------- END PARSE CLOUD FUNCTIONS----------------------
 
+    // ---------------------- START PARSE CLOUD PARAMETERS----------------------
+    public final static String PARSE_CLOUD_PARAMETER_NEW_CARD_NAME = "newName";
+    public final static String PARSE_CLOUD_PARAMETER_ORIGINAL_CARD_NAME = "originalName";
+    // ---------------------- END PARSE CLOUD PARAMETERS----------------------
+
+
+    // ---------------------- START KEYS ----------------------
+    // for the class to open after another class (ie Select Card to View Card History)
+    public final static String NEXT_CLASS_KEY = "nextClass";
+
+    public final static String CARD_NAME_KEY = "cardName";
+    public final static String TRANSACTIONS_LENGTH_KEY = "length";
+    public final static String TRANSACTIONS_INTENT_KEY = "transactions";
     public final static String CARD_KEY = "card";
-
     public static final String CARD_TYPE_KEY = "cardType";
     public final static String TRANSACTION_KEY = "transaction";
-
     public final static String DATE_KEY = "date";
-
     public final static String OBJECT_ID_KEY = "objectId";
-
-    public final static String PARSE_CLOUD_FUNCTION_EDIT_MANUAL_CARD = "editManualTransaction";
-
     public final static String IS_MANUAL_CARD_KEY = "isManual";
-
+    // ---------------------- END KEYS ----------------------
 }

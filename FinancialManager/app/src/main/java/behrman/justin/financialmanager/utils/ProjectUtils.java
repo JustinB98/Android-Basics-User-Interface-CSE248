@@ -76,9 +76,9 @@ public class ProjectUtils {
     }
 
     public static CardType convertToCardType(String cardType) {
-        if (cardType.equals(StringConstants.AUTO_CARD_CLASS)) {
+        if (cardType.equals(StringConstants.AUTO_CARD_CLASS_NAME)) {
             return CardType.AUTO;
-        } else if (cardType.equals(StringConstants.MANUAL_CARD_CLASS)) {
+        } else if (cardType.equals(StringConstants.MANUAL_CARD_CLASS_NAME)) {
             return CardType.MANUAL;
         } else {
             return null;

@@ -43,7 +43,7 @@ public class SelectCardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_card);
-        classConverter = (CardTypeClassConverter) getIntent().getSerializableExtra(StringConstants.NEXT_CLASS);
+        classConverter = (CardTypeClassConverter) getIntent().getSerializableExtra(StringConstants.NEXT_CLASS_KEY);
         typeToShow = (CardType) getIntent().getSerializableExtra(StringConstants.CARD_TYPE_KEY);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         listView = (ListView) findViewById(R.id.list_view);
@@ -65,7 +65,7 @@ public class SelectCardActivity extends AppCompatActivity {
         Class<?> classToOpen = classConverter.convertCardTypeToClass(item.getCardType());
         Intent intent = new Intent(this, classToOpen);
         Card card = new Card(item.getCardName(), item.getCardType());
-        // intent.putExtra(StringConstants.CARD_NAME, item.getCardName());
+        // intent.putExtra(StringConstants.CARD_NAME_KEY, item.getCardName());
         // intent.putExtra(StringConstants.CARD_TYPE, item.getCardType());
         intent.putExtra(StringConstants.CARD_KEY, card);
         startActivity(intent);
@@ -94,8 +94,8 @@ public class SelectCardActivity extends AppCompatActivity {
     }
 
     private void findManualCards() {
-        ParseQuery<ParseObject> manualCardQuery = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS);
-        manualCardQuery.whereEqualTo(StringConstants.MANUAL_CARD_OWNER, ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> manualCardQuery = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS_NAME);
+        manualCardQuery.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
         Log.i(LOG_TAG, "starting manual find");
         manualCardQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -111,8 +111,8 @@ public class SelectCardActivity extends AppCompatActivity {
     }
 
     private void findAutoCards(final List<ParseObject> manualObjects) {
-        ParseQuery<ParseObject> autoCardQuery = ParseQuery.getQuery(StringConstants.AUTO_CARD_CLASS);
-        autoCardQuery.whereEqualTo(StringConstants.AUTO_CARD_OWNER, ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> autoCardQuery = ParseQuery.getQuery(StringConstants.AUTO_CARD_CLASS_NAME);
+        autoCardQuery.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
         Log.i(LOG_TAG, "starting auto card query");
         autoCardQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -161,8 +161,7 @@ public class SelectCardActivity extends AppCompatActivity {
 
     private Card convertParseObjectToCard(ParseObject obj) {
         CardType cardType = ProjectUtils.convertToCardType(obj.getClassName());
-        String key = cardType == CardType.AUTO ? StringConstants.AUTO_CARD_NAME : StringConstants.MANUAL_CARD_NAME;
-        String name = obj.getString(key);
+        String name = obj.getString(StringConstants.DATABASE_CARD_NAME_COLUMN);
         return new Card(name, cardType);
     }
 

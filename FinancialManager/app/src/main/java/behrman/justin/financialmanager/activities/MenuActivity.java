@@ -48,7 +48,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, SelectCardActivity.class);
                 CardTypeIndependentConverterImpl cardConverter = new CardTypeIndependentConverterImpl(AddManualTransactionActivity.class);
-                intent.putExtra(StringConstants.NEXT_CLASS, cardConverter);
+                intent.putExtra(StringConstants.NEXT_CLASS_KEY, cardConverter);
                 intent.putExtra(StringConstants.CARD_TYPE_KEY, CardType.MANUAL);
                 startActivity(intent);
             }
@@ -61,7 +61,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, initialClass);
-                intent.putExtra(StringConstants.NEXT_CLASS, converter);
+                intent.putExtra(StringConstants.NEXT_CLASS_KEY, converter);
                 startActivity(intent);
             }
         });

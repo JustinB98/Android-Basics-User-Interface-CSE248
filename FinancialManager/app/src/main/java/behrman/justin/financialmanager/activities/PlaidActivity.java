@@ -147,8 +147,8 @@ public class PlaidActivity extends AppCompatActivity {
         String name = linkData.get("account_name");
         String suggestedName = linkData.get("institution_name") + " " + name;
         HashMap<String, Object> params = new HashMap<>(2);
-        params.put(StringConstants.CARD_NAME, suggestedName);
-        params.put(StringConstants.AUTO_CARD_PUBLIC_TOKEN, publicToken);
+        params.put(StringConstants.CARD_NAME_KEY, suggestedName);
+        params.put(StringConstants.AUTO_CARD_PUBLIC_TOKEN_COLUMN, publicToken);
         publicToken = null; // get rid of public token reference asap
         linkData.put("public_token", null);
         saveCardToDataBase(params, suggestedName);

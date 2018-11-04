@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import java.io.Serializable;
 import java.util.Date;
 
-// @ParseClassName(StringConstants.TRANSACTION_CLASS)
+// @ParseClassName(StringConstants.TRANSACTION_CLASS_NAME)
 public class Transaction /* extends ParseObject */ implements Serializable, Comparable<Transaction> {
 
     /**

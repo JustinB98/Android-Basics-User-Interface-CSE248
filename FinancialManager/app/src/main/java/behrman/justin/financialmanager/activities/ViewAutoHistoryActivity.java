@@ -40,7 +40,7 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
     }
 
     private void sendRequest(HashMap<String, Object> request) {
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_AUTO_TRANSACTIONS_CLOUD_FUNCTION, request, new FunctionCallback<HashMap<String, Object>>() {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_AUTO_TRANSACTIONS, request, new FunctionCallback<HashMap<String, Object>>() {
             @Override
             public void done(HashMap<String, Object> response, ParseException e) {
                 if (e == null) {
@@ -56,10 +56,10 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
 
     private HashMap<String, Object> generateRequestHashMap(String userId, int year, int month) {
         HashMap<String, Object> request = new HashMap<>(3);
-        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_USER_ID, userId);
-        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CARD_NAME, cardName);
-        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_YEAR, year);
-        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_MONTH, month);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_USER_ID_COLUMN, userId);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CARD_NAME_COLUMN, cardName);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_YEAR_COLUMN, year);
+        request.put(StringConstants.MANUAL_CARD_TRANSACTIONS_MONTH_COLUMN, month);
         return request;
     }
 

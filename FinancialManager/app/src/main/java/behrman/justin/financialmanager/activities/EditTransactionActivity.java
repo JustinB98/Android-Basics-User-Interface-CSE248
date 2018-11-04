@@ -114,10 +114,10 @@ public class EditTransactionActivity extends AppCompatActivity {
 
     private HashMap<String, Object> getParams(Transaction t) {
         HashMap<String, Object> params = new HashMap<>(5);
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_PLACE, t.getPlace());
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_AMOUNT, t.getAmount());
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE, t.getCurrencyCode());
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_DATE, t.getDate());
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_PLACE_COLUMN, t.getPlace());
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_AMOUNT_COLUMN, t.getAmount());
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE_COLUMN, t.getCurrencyCode());
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_DATE_COLUMN, t.getDate());
         params.put(StringConstants.OBJECT_ID_KEY, originalTransaction.getObjectId());
         return params;
     }

@@ -14,8 +14,8 @@ public class AutoCardTransactionsParser extends HashMap<Date, ArrayList<Transact
     public final static String LOG_TAG = AutoCardTransactionsParser.class.getSimpleName() + "debug";
 
     public AutoCardTransactionsParser(HashMap<String, Object> responseMap) {
-        super((int) responseMap.get(StringConstants.TRANSACTIONS_LENGTH));
-        ArrayList<HashMap<String, Object>> transactions = (ArrayList<HashMap<String, Object>>) responseMap.get(StringConstants.TRANSACTIONS_KEY);
+        super((int) responseMap.get(StringConstants.TRANSACTIONS_LENGTH_KEY));
+        ArrayList<HashMap<String, Object>> transactions = (ArrayList<HashMap<String, Object>>) responseMap.get(StringConstants.TRANSACTIONS_INTENT_KEY);
         parseData(transactions);
     }
 

@@ -29,7 +29,7 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
 
     private void getData(int year, int month) {
         HashMap<String, Object> params = getParameters(year, month);
-        ParseCloud.callFunctionInBackground(StringConstants.GET_MANUAL_TRANSACTIONS_FUNCTION, params, new FunctionCallback<HashMap<String, Object>>() {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_MANUAL_TRANSACTIONS, params, new FunctionCallback<HashMap<String, Object>>() {
             @Override
             public void done(HashMap<String, Object> object, ParseException e) {
                 if (e == null) {
@@ -46,10 +46,10 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
 
     private HashMap<String, Object> getParameters(int year, int month) {
         HashMap<String, Object> params = new HashMap<>(3);
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_YEAR, year);
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_YEAR_COLUMN, year);
         // month needs to be 1-12
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_MONTH, month); // need to offset by 1
-        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CARD_NAME, cardName);
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_MONTH_COLUMN, month); // need to offset by 1
+        params.put(StringConstants.MANUAL_CARD_TRANSACTIONS_CARD_NAME_COLUMN, cardName);
         return params;
     }
 

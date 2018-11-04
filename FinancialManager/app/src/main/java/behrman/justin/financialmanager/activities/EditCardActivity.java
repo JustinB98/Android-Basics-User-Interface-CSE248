@@ -93,8 +93,8 @@ public class EditCardActivity extends AppCompatActivity {
 
     private HashMap<String, Object> getParameters() {
         HashMap<String, Object> params = new HashMap<>(2);
-        params.put(StringConstants.PARSE_CLOUD_NEW_CARD_NAME_PARAMETER, cardNameField.getText().toString());
-        params.put(StringConstants.PARSE_CLOUD_ORIGINAL_CARD_NAME_PARAMETER, originalCard.getCardName());
+        params.put(StringConstants.PARSE_CLOUD_PARAMETER_NEW_CARD_NAME, cardNameField.getText().toString());
+        params.put(StringConstants.PARSE_CLOUD_PARAMETER_ORIGINAL_CARD_NAME, originalCard.getCardName());
         return params;
     }
 
@@ -121,16 +121,16 @@ public class EditCardActivity extends AppCompatActivity {
     }
 
     private ParseQuery<ParseObject> getManualQuery() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS);
-        query.whereEqualTo(StringConstants.MANUAL_CARD_OWNER, ParseUser.getCurrentUser());
-        query.whereEqualTo(StringConstants.MANUAL_CARD_NAME, cardNameField.getText().toString());
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS_NAME);
+        query.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
+        query.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, cardNameField.getText().toString());
         return query;
     }
 
     private ParseQuery<ParseObject> getAutoQuery() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.AUTO_CARD_CLASS);
-        query.whereEqualTo(StringConstants.AUTO_CARD_OWNER, ParseUser.getCurrentUser());
-        query.whereEqualTo(StringConstants.AUTO_CARD_NAME, cardNameField.getText().toString());
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.AUTO_CARD_CLASS_NAME);
+        query.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
+        query.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, cardNameField.getText().toString());
         return query;
     }
 

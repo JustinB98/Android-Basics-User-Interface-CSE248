@@ -49,9 +49,9 @@ public class AddManualCardActivity extends AppCompatActivity {
     }
 
     private void sendData() {
-        ParseQuery<ParseObject> cardInformation = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS);
-        cardInformation.whereEqualTo(StringConstants.MANUAL_CARD_NAME, cardNameField.getText().toString());
-        cardInformation.whereEqualTo(StringConstants.MANUAL_CARD_OWNER, ParseUser.getCurrentUser());
+        ParseQuery<ParseObject> cardInformation = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS_NAME);
+        cardInformation.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, cardNameField.getText().toString());
+        cardInformation.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
         cardInformation.countInBackground(new CountCallback() {
             @Override
             public void done(int count, ParseException e) {
@@ -88,9 +88,9 @@ public class AddManualCardActivity extends AppCompatActivity {
     }
 
     private ParseObject createCardObject() {
-        ParseObject card = new ParseObject(StringConstants.MANUAL_CARD_CLASS);
-        card.put(StringConstants.MANUAL_CARD_NAME, cardNameField.getText().toString());
-        card.put(StringConstants.MANUAL_CARD_OWNER, ParseUser.getCurrentUser());
+        ParseObject card = new ParseObject(StringConstants.MANUAL_CARD_CLASS_NAME);
+        card.put(StringConstants.DATABASE_CARD_NAME_COLUMN, cardNameField.getText().toString());
+        card.put(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
         return card;
     }
 

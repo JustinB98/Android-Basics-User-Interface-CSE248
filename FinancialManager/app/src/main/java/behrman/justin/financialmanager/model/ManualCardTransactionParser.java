@@ -17,8 +17,8 @@ public class ManualCardTransactionParser extends HashMap<Date, ArrayList<Transac
     private final static String LOG_TAG = ManualCardTransactionParser.class.getSimpleName() + "debug";
 
     public ManualCardTransactionParser(HashMap<String, Object> responseMap) {
-        super((int) responseMap.get(StringConstants.TRANSACTIONS_LENGTH));
-        ArrayList<ParseObject> transactions = (ArrayList<ParseObject>) responseMap.get(StringConstants.TRANSACTIONS_KEY);
+        super((int) responseMap.get(StringConstants.TRANSACTIONS_LENGTH_KEY));
+        ArrayList<ParseObject> transactions = (ArrayList<ParseObject>) responseMap.get(StringConstants.TRANSACTIONS_INTENT_KEY);
         parseData(transactions);
     }
 
@@ -39,11 +39,11 @@ public class ManualCardTransactionParser extends HashMap<Date, ArrayList<Transac
     }
 
     private Transaction getTransaction(ParseObject object) {
-        String place = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_PLACE);
-        Date date = (Date) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_DATE);
+        String place = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_PLACE_COLUMN);
+        Date date = (Date) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_DATE_COLUMN);
         date = reformatDate(date);
-        String currencyCode = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE);
-        double amount = getTransactionAmount(object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_AMOUNT));
+        String currencyCode = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE_COLUMN);
+        double amount = getTransactionAmount(object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_AMOUNT_COLUMN));
         String objectId = object.getObjectId();
         Log.i(LOG_TAG, "objectId: " + objectId);
         return new Transaction(place, amount, date, currencyCode, objectId);
