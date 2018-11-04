@@ -41,6 +41,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstance);
         Card card = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
         cardName = card.getCardName();
+        getSupportActionBar().setTitle(getString(R.string.view_history_title, cardName));
         isManualCard = card.getCardType() == CardType.MANUAL;
         initCommunicator();
         calendarSubActivity = new ViewHistoryCalendarViewSubActivity(this, communicator);

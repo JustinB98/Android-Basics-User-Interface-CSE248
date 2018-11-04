@@ -74,16 +74,16 @@ public class AddManualCardActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(AddManualCardActivity.this, "Already exists", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void afterSave(ParseException e) {
         if (e == null) {
-            Toast.makeText(AddManualCardActivity.this, "Added " + cardNameField.getText().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddManualCardActivity.this, getString(R.string.added_card, cardNameField.getText().toString()), Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(AddManualCardActivity.this, "Already exists", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
         }
     }
 

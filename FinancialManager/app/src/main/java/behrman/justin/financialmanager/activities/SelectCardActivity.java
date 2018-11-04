@@ -134,7 +134,8 @@ public class SelectCardActivity extends AppCompatActivity {
             setListViewAdapter(cards);
         } else {
             Log.i(LOG_TAG, "ERROR", e);
-            Toast.makeText(this, "ERROR " + e.toString(), Toast.LENGTH_LONG);
+            Toast.makeText(this, R.string.error_msg, Toast.LENGTH_LONG);
+            Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
             setToListView();
         }
     }

@@ -61,7 +61,7 @@ public class EditCardActivity extends AppCompatActivity {
             public void done(ParseObject object, ParseException e) {
                 Log.i(LOG_TAG, "returned");
                 if (e == null) { // no errors, so there must be a result
-                    Toast.makeText(EditCardActivity.this, "card already exists with this name!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
                 } else if (e.getCode() == ParseException.OBJECT_NOT_FOUND) { // no object found, so it must be an free name
                     saveIfNeeded(object);
                 } else {
@@ -80,7 +80,7 @@ public class EditCardActivity extends AppCompatActivity {
                 public void done(String object, ParseException e) {
                     Log.i(LOG_TAG, "object returned: " + object);
                     if (object.toLowerCase().equals("success")) {
-                        Toast.makeText(EditCardActivity.this, "success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditCardActivity.this, R.string.edited_card_successfully, Toast.LENGTH_SHORT).show();
                         Log.i(LOG_TAG, "card successfully changed");
                         finish();
                     } else {

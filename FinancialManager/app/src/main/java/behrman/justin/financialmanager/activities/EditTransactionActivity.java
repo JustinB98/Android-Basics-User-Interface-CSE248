@@ -73,7 +73,7 @@ public class EditTransactionActivity extends AppCompatActivity {
     private void setFieldsToTransactions() {
         placeField.setText(originalTransaction.getPlace());
         amountField.setText(originalTransaction.getAmount() + "");
-        currencySpinner.setSelection(ProjectUtils.convertCurrencyCodeStringToIndex(originalTransaction.getCurrencyCode(), this));
+        currencySpinner.setSelection(ProjectUtils.convertCurrencyCodeStringToIndex(originalTransaction.getCurrencyCode()));
         calendarView.setDate(originalTransaction.getDate().getTime());
     }
 
@@ -102,7 +102,7 @@ public class EditTransactionActivity extends AppCompatActivity {
                 Log.i(LOG_TAG, "returned with " + object);
                 if (e == null) {
                     if (ProjectUtils.deepEquals(object, "success")) {
-                        Toast.makeText(EditTransactionActivity.this, "success!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditTransactionActivity.this, R.string.transaction_edited_successfully, Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 } else {
@@ -132,12 +132,10 @@ public class EditTransactionActivity extends AppCompatActivity {
 
     private boolean checkForValidFields() {
         if (TextUtils.isEmpty(placeField.getText())) {
-            Toast.makeText(this, "place cannot be empty", Toast.LENGTH_SHORT).show();
-            Log.i(LOG_TAG, "place is empty");
+            Toast.makeText(this, R.string.transaction_place_empty, Toast.LENGTH_SHORT).show();
             return false;
         } else if (TextUtils.isEmpty(amountField.getText())) {
-            Toast.makeText(this, "amount cannot be empty", Toast.LENGTH_SHORT).show();
-            Log.i(LOG_TAG, "amount is empty");
+            Toast.makeText(this, R.string.transaction_amount_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

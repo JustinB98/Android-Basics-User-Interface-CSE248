@@ -88,7 +88,7 @@ public class AddManualTransactionActivity extends AppCompatActivity {
                 Log.i(LOG_TAG, "returned with " + object);
                 if (e == null) {
                     if (object.trim().toLowerCase().equals("success")) {
-                        Toast.makeText(AddManualTransactionActivity.this, "saved!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddManualTransactionActivity.this, R.string.added_transaction_successfully, Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 } else {
@@ -118,12 +118,10 @@ public class AddManualTransactionActivity extends AppCompatActivity {
 
     private boolean checkForValidFields() {
         if (TextUtils.isEmpty(placeField.getText())) {
-            Toast.makeText(this, "place cannot be empty", Toast.LENGTH_SHORT).show();
-            Log.i(LOG_TAG, "place is empty");
+            Toast.makeText(this, R.string.transaction_place_empty, Toast.LENGTH_SHORT).show();
             return false;
         } else if (TextUtils.isEmpty(amountField.getText())) {
-            Toast.makeText(this, "amount cannot be empty", Toast.LENGTH_SHORT).show();
-            Log.i(LOG_TAG, "amount is empty");
+            Toast.makeText(this, R.string.transaction_amount_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

@@ -22,6 +22,8 @@ public class ProjectUtils {
 
     public final static String LOG_TAG = ProjectUtils.class.getSimpleName();
 
+    private static Context context;
+
     private ProjectUtils() {}
 
     /**
@@ -125,34 +127,8 @@ public class ProjectUtils {
      * @return
      */
     public static String getMonthName(int month) {
-        switch (month) {
-            case 1:
-                return "January";
-            case 2:
-                return "February";
-            case 3:
-                return "March";
-            case 4:
-                return "April";
-            case 5:
-                return "May";
-            case 6:
-                return "June";
-            case 7:
-                return "July";
-            case 8:
-                return "August";
-            case 9:
-                return "September";
-            case 10:
-                return "October";
-            case 11:
-                return "November";
-            case 12:
-                return "December";
-            default:
-                return "";
-        }
+        String[] months = context.getResources().getStringArray(R.array.full_months);
+        return months[month - 1];
     }
 
     public static boolean deepEquals(@Nullable String s1, @Nullable String s2) {
@@ -170,10 +146,9 @@ public class ProjectUtils {
     /**
      * TODO fix this method because it's using sequential search, maybe binary search? Maybe I shouldn't worry because it's not like there
      * @param currencyCode
-     * @param context
      * @return
      */
-    public static int convertCurrencyCodeStringToIndex(String currencyCode, Context context) {
+    public static int convertCurrencyCodeStringToIndex(String currencyCode) {
         String[] currencyCodes = context.getResources().getStringArray(R.array.currency_codes);
         for (int i = 0; i < currencyCodes.length; ++i) {
             if (currencyCode.equals(currencyCodes[i])) {
@@ -181,6 +156,10 @@ public class ProjectUtils {
             }
         }
         return -1;
+    }
+
+    public static void setContext(Context context) {
+        ProjectUtils.context = context;
     }
 
 }

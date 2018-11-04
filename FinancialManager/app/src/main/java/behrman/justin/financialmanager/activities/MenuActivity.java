@@ -13,6 +13,7 @@ import behrman.justin.financialmanager.cardConverters.CardTypeClassConverterView
 import behrman.justin.financialmanager.cardConverters.CardTypeIndependentConverterImpl;
 import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.model.CardTypeClassConverter;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class MenuActivity extends AppCompatActivity implements Serializable {
@@ -89,6 +90,11 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         // ParseUser.logOutInBackground();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ProjectUtils.setContext(this);
+    }
 
     @Override
     public void onBackPressed() {

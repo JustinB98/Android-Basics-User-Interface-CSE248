@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO: 10/17/2018 work on what could cause the login to fail besides poor connection and invalid credentials
     private void showErrorMsg(int errorCode) {
         String msg = null;
-        Toast.makeText(this, "sign in failed!!!!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.sign_in_fail, Toast.LENGTH_LONG).show();
         Log.e(LOG_TAG, "sign in failed!");
     }
 
@@ -261,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        ProjectUtils.setContext(this);
         ParseUser currentUser = ParseUser.getCurrentUser();
         updateUIIfNeeded(currentUser);
         passwordField.setText("");
