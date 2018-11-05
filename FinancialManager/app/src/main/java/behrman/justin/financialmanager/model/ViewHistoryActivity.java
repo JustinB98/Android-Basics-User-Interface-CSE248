@@ -2,9 +2,14 @@ package behrman.justin.financialmanager.model;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -52,6 +57,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         getTransactions(calendarSubActivity.getYearSelected(), calendarSubActivity.getMonthSelected());
         loading = true;
         activityCreated = true;
+        registerForContextMenu(listViewSubActivity.getMainView());
     }
 
     private void initCommunicator() {
@@ -128,6 +134,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (menuCreated && activityCreated) {
+            Log.i(LOG_TAG, "onStart() called: getting transactions for: " + calendarSubActivity.getSavedMonth() + ", " + calendarSubActivity.getSavedYear());
             menu.clear();
             calendarSubActivity.setToView();
             switchToCalendarView();

@@ -80,7 +80,7 @@ public class ViewHistoryListViewSubActivity {
 
     private void setListViewAdapter(List<Transaction> transactions) {
         if (transactions != null && transactions.size() > 0) {
-            TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions);
+            TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions, communicator.isManualCard());
             listView.setAdapter(adapter);
             setToListView();
         } else {
@@ -96,6 +96,10 @@ public class ViewHistoryListViewSubActivity {
     private void setToListView() {
         listView.setVisibility(View.VISIBLE);
         noTransactionsView.setVisibility(View.GONE);
+    }
+
+    public View getMainView() {
+        return listView;
     }
 
 }

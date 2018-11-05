@@ -128,6 +128,10 @@
     <!-- START Menu Items -->
     <string name="list_view_item">List</string>
     <string name="calendar_view_item">Calendar</string>
+    <string name="edit_transaction_item">Edit</string>
+    <string name="delete_transaction_item">Delete</string>
+    <string name="accept_transaction_delete">Delete</string>
+    <string name="cancel_transaction_delete">Keep</string>
     <!-- END Menu Items -->
 
 </resources>

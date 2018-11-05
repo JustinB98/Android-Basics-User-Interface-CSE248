@@ -28,7 +28,7 @@ import behrman.justin.financialmanager.utils.StringConstants;
  */
 public class PlaidActivity extends AppCompatActivity {
 
-    private final String LOG_TAG = PlaidActivity.class.getSimpleName();
+    private final String LOG_TAG = PlaidActivity.class.getSimpleName() + "debug";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,11 +118,11 @@ public class PlaidActivity extends AppCompatActivity {
         // linkData may contain information about the user's status in the Link flow,
         // the institution selected, information about any error encountered,
         // and relevant API request IDs.
-        Log.d("User status in flow: ", linkData.get("status"));
+        // Log.d("User status in flow: ", linkData.get("status"));
         // The requet ID keys may or may not exist depending on when the user exited
         // the Link flow.
-        Log.d("Link request ID: ", linkData.get("link_request_id"));
-        Log.d("API request ID: ", linkData.get("plaid_api_request_id"));
+        // Log.d("Link request ID: ", linkData.get("link_request_id"));
+        // Log.d("API request ID: ", linkData.get("plaid_api_request_id"));
 
         // Reload Link in the Webview
         // You will likely want to transition the view at this point.
@@ -130,6 +130,8 @@ public class PlaidActivity extends AppCompatActivity {
         // Intent intent = new Intent(PlaidActivity.this, MenuActivity.class);
         // intent.putExtra("public_token", "");
         // startActivity(intent);
+        Log.i(LOG_TAG, "onExit() called, finishing activity");
+        finish();
     }
 
     private void onConnected(HashMap<String, String> linkData) {

@@ -92,6 +92,11 @@ public class EditTransactionActivity extends AppCompatActivity {
         if (checkForValidFields(newPlace, newAmount)) {
             Transaction newTransaction = getTransaction(newPlace, newAmount);
             Log.i(LOG_TAG, "transaction: " + newTransaction);
+            if (originalTransaction.equals(newTransaction)) {
+                Log.i(LOG_TAG, "original transaction is the same as the new transaction, finishing activity...");
+                finish();
+                return;
+            }
             sendToDatabase(newTransaction);
         }
     }

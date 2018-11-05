@@ -33,7 +33,8 @@ public class ViewHistoryCalendarViewSubActivity {
     private MaterialCalendarView calendarView;
     private Button viewTransactionBtn;
 
-    private int savedMonth, savedYear;
+    private int savedMonth = ProjectUtils.getCurrentMonth();
+    private int savedYear = ProjectUtils.getCurrentYear();
 
     public ViewHistoryCalendarViewSubActivity(AppCompatActivity activity, TransactionCommunicator communicator) {
         root = LayoutInflater.from(activity).inflate(R.layout.activity_view_history, null);
