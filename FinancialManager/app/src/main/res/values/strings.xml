@@ -125,4 +125,9 @@
     <string name="no_transactions_for_date">There\'s no transactions for %1$s</string>
     <!-- END Toast Messages -->
 
+    <!-- START Menu Items -->
+    <string name="list_view_item">List</string>
+    <string name="calendar_view_item">Calendar</string>
+    <!-- END Menu Items -->
+
 </resources>

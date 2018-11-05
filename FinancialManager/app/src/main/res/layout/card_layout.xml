@@ -13,9 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:maxWidth="200dp"
-        android:textSize="32sp"
-        tools:text="brand new card" />
+        android:maxWidth="280dp"
+        android:textStyle="italic"
+        android:textSize="28sp"
+        tools:text="Citi Plaid Saving rename test" />
 
     <TextView
         android:id="@+id/card_type_view"
@@ -24,7 +25,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:textColor="@android:color/darker_gray"
-        android:textSize="24sp"
-        tools:text="AUTO" />
+        android:textSize="18sp"
+        tools:text="MANUAL" />
 
 </RelativeLayout>

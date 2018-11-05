@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import behrman.justin.financialmanager.utils.StringConstants;
 public class ViewHistoryListViewSubActivity {
 
     private ListView listView;
+    private ProgressBar progressBar;
+
     private TextView noTransactionsView;
     private AppCompatActivity activity;
     private View root;
@@ -62,6 +65,7 @@ public class ViewHistoryListViewSubActivity {
     private void extractViews() {
         listView = root.findViewById(R.id.list_view);
         noTransactionsView = root.findViewById(R.id.no_transactions_view);
+        progressBar = root.findViewById(R.id.progress_bar);
     }
 
     public void setListView() {

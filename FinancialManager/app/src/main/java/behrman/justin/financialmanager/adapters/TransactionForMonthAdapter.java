@@ -3,6 +3,7 @@ package behrman.justin.financialmanager.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
         }
         Transaction t = getItem(position);
         setFields(convertView, t);
+        // initLongClick(convertView);
         return convertView;
     }
 
@@ -43,6 +45,16 @@ public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
         currencyCodeView.setText(t.getCurrencyCode());
         TextView dateView = convertView.findViewById(R.id.date_view);
         dateView.setText(ProjectUtils.getFullDate(t.getDate()));
+    }
+
+    private void initLongClick(View view) {
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.i("long_click_test", "v: " + v + ", long click");
+                return true;
+            }
+        });
     }
 
 }

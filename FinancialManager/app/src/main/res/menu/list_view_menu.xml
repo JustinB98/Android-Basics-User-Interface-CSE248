@@ -5,7 +5,7 @@
     <item
         android:id="@+id/list_menu_item"
         android:icon="@drawable/baseline_list_24"
-        android:title="ListView"
+        android:title="@string/list_view_item"
         app:showAsAction="ifRoom"
         android:onClick="menuAction" />
 

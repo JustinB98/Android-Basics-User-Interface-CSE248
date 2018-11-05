@@ -36,6 +36,8 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private boolean menuCreated, activityCreated;
 
+    private boolean loading;
+
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -48,6 +50,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         listViewSubActivity = new ViewHistoryListViewSubActivity(this, communicator);
         calendarSubActivity.setToView();
         getTransactions(calendarSubActivity.getYearSelected(), calendarSubActivity.getMonthSelected());
+        loading = true;
         activityCreated = true;
     }
 
@@ -60,6 +63,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
             @Override
             public void requestNewTransactions(int year, int month) {
+                loading = true;
                 Log.i(LOG_TAG, "getting transactions for: " + month + ", " + year);
                 ViewHistoryActivity.this.getTransactions(year, month);
             }
@@ -67,6 +71,11 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             @Override
             public boolean isManualCard() {
                 return isManualCard;
+            }
+
+            @Override
+            public boolean loading() {
+                return loading;
             }
 
         };
@@ -111,10 +120,9 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     protected void setTransactionData(HashMap<Date, ArrayList<Transaction>> cardTransactions) {
         Log.i(LOG_TAG, "got some transactions");
+        loading = false;
         this.cardTransactions = cardTransactions;
     }
-
-
 
     @Override
     protected void onStart() {
@@ -124,6 +132,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             calendarSubActivity.setToView();
             switchToCalendarView();
             getTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
+            loading = true;
         }
     }
 }
