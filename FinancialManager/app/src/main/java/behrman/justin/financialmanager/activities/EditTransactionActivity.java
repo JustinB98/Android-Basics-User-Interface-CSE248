@@ -81,14 +81,16 @@ public class EditTransactionActivity extends AppCompatActivity {
         addTransactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editTransaction();
+                String newPlace = ProjectUtils.normalizeString(placeField);
+                String newAmount = ProjectUtils.normalizeString(amountField);
+                editTransaction(newPlace, newAmount);
             }
         });
     }
 
-    private void editTransaction() {
-        if (checkForValidFields()) {
-            Transaction newTransaction = getTransaction();
+    private void editTransaction(String newPlace, String newAmount) {
+        if (checkForValidFields(newPlace, newAmount)) {
+            Transaction newTransaction = getTransaction(newPlace, newAmount);
             Log.i(LOG_TAG, "transaction: " + newTransaction);
             sendToDatabase(newTransaction);
         }
@@ -122,19 +124,18 @@ public class EditTransactionActivity extends AppCompatActivity {
         return params;
     }
 
-    private Transaction getTransaction() {
-        String place = placeField.getText().toString();
-        double amount = Double.parseDouble(amountField.getText().toString());
+    private Transaction getTransaction(String newPlace, String newAmount) {
+        double amount = Double.parseDouble(newAmount);
         String currencyCode = (String) currencySpinner.getSelectedItem();
         Date date = new GregorianCalendar(year, month, day).getTime();
-        return new Transaction(place, amount, date, currencyCode, originalTransaction.getObjectId());
+        return new Transaction(newPlace, amount, date, currencyCode, originalTransaction.getObjectId());
     }
 
-    private boolean checkForValidFields() {
-        if (TextUtils.isEmpty(placeField.getText())) {
+    private boolean checkForValidFields(String newPlace, String newAmount) {
+        if (TextUtils.isEmpty(newPlace)) {
             Toast.makeText(this, R.string.transaction_place_empty, Toast.LENGTH_SHORT).show();
             return false;
-        } else if (TextUtils.isEmpty(amountField.getText())) {
+        } else if (TextUtils.isEmpty(newAmount)) {
             Toast.makeText(this, R.string.transaction_amount_empty, Toast.LENGTH_SHORT).show();
             return false;
         }

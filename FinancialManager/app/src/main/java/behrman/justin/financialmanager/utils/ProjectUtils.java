@@ -3,9 +3,11 @@ package behrman.justin.financialmanager.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -156,6 +158,18 @@ public class ProjectUtils {
             }
         }
         return -1;
+    }
+
+    public static String normalizeString(EditText et) {
+        return normalizeString(et.getText());
+    }
+
+    public static String normalizeString(Editable editable) {
+        return normalizeString(editable.toString());
+    }
+
+    public static String normalizeString(String cs) {
+        return cs.trim();
     }
 
     public static void setContext(Context context) {

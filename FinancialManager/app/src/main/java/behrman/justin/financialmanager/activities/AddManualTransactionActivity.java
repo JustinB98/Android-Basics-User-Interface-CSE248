@@ -23,6 +23,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.Transaction;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class AddManualTransactionActivity extends AppCompatActivity {
@@ -64,16 +65,17 @@ public class AddManualTransactionActivity extends AppCompatActivity {
         addTransactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(LOG_TAG, "button was clicked");
-                addTransaction();
+                String place = ProjectUtils.normalizeString(placeField);
+                String amount = ProjectUtils.normalizeString(amountField);
+                addTransaction(place, amount);
             }
         });
     }
 
-    private void addTransaction() {
-        if (checkForValidFields()) {
+    private void addTransaction(String place, String amount) {
+        if (checkForValidFields(place, amount)) {
             Log.i(LOG_TAG, "transaction was valid");
-            Transaction transaction = getTransaction();
+            Transaction transaction = getTransaction(place, amount);
             Log.i(LOG_TAG, "transaction: " + transaction);
             saveTransaction(transaction);
         }
@@ -108,19 +110,18 @@ public class AddManualTransactionActivity extends AppCompatActivity {
         return params;
     }
 
-    private Transaction getTransaction() {
-        String place = placeField.getText().toString();
-        double amount = Double.parseDouble(amountField.getText().toString());
+    private Transaction getTransaction(String place, String amountStr) {
+        double amount = Double.parseDouble(amountStr);
         String currencyCode = (String) currencySpinner.getSelectedItem();
         Date date = new GregorianCalendar(year, month, day).getTime();
         return new Transaction(place, amount, date, currencyCode);
     }
 
-    private boolean checkForValidFields() {
-        if (TextUtils.isEmpty(placeField.getText())) {
+    private boolean checkForValidFields(String place, String amount) {
+        if (TextUtils.isEmpty(place)) {
             Toast.makeText(this, R.string.transaction_place_empty, Toast.LENGTH_SHORT).show();
             return false;
-        } else if (TextUtils.isEmpty(amountField.getText())) {
+        } else if (TextUtils.isEmpty(amount)) {
             Toast.makeText(this, R.string.transaction_amount_empty, Toast.LENGTH_SHORT).show();
             return false;
         }

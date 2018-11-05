@@ -43,34 +43,35 @@ public class AddManualCardActivity extends AppCompatActivity {
                 ProjectUtils.hideKeyboard(AddManualCardActivity.this);
                 addCardBtn.setEnabled(false);
                 progressBar.setVisibility(View.VISIBLE);
-                sendData();
+                String cardName = ProjectUtils.normalizeString(cardNameField);
+                sendData(cardName);
             }
         });
     }
 
-    private void sendData() {
+    private void sendData(final String cardName) {
         ParseQuery<ParseObject> cardInformation = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS_NAME);
-        cardInformation.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, cardNameField.getText().toString());
+        cardInformation.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, cardName);
         cardInformation.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
         cardInformation.countInBackground(new CountCallback() {
             @Override
             public void done(int count, ParseException e) {
                 Log.i(LOG_TAG, e == null ? "null" : e.toString());
-                afterFind(count);
+                afterFind(count, cardName);
                 progressBar.setVisibility(View.GONE);
                 addCardBtn.setEnabled(true);
             }
         });
     }
 
-    private void afterFind(int count) {
+    private void afterFind(int count, final String cardName) {
         if (count == 0) {
             Log.i(LOG_TAG, "creating a card object");
-            ParseObject card = createCardObject();
+            ParseObject card = createCardObject(cardName);
             card.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    afterSave(e);
+                    afterSave(e, cardName);
                 }
             });
         } else {
@@ -78,18 +79,18 @@ public class AddManualCardActivity extends AppCompatActivity {
         }
     }
 
-    private void afterSave(ParseException e) {
+    private void afterSave(ParseException e, String cardName) {
         if (e == null) {
-            Toast.makeText(AddManualCardActivity.this, getString(R.string.added_card, cardNameField.getText().toString()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddManualCardActivity.this, getString(R.string.added_card, cardName), Toast.LENGTH_SHORT).show();
             finish();
         } else {
             Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private ParseObject createCardObject() {
+    private ParseObject createCardObject(String cardName) {
         ParseObject card = new ParseObject(StringConstants.MANUAL_CARD_CLASS_NAME);
-        card.put(StringConstants.DATABASE_CARD_NAME_COLUMN, cardNameField.getText().toString());
+        card.put(StringConstants.DATABASE_CARD_NAME_COLUMN, cardName);
         card.put(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
         return card;
     }

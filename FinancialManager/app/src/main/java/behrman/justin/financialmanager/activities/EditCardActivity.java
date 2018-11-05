@@ -21,6 +21,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class EditCardActivity extends AppCompatActivity {
@@ -46,16 +47,16 @@ public class EditCardActivity extends AppCompatActivity {
         editCardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEditNameRequest();
+                sendEditNameRequest(ProjectUtils.normalizeString(cardNameField));
             }
         });
     }
 
-    private void sendEditNameRequest() {
-        if (originalCard.getCardName().equals(cardNameField.getText())) {
+    private void sendEditNameRequest(final String cardName) {
+        if (originalCard.getCardName().equals(cardName)) {
             finish();
         }
-        ParseQuery<ParseObject> query = getQuery();
+        ParseQuery<ParseObject> query = getQuery(cardName);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
@@ -63,7 +64,7 @@ public class EditCardActivity extends AppCompatActivity {
                 if (e == null) { // no errors, so there must be a result
                     Toast.makeText(EditCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
                 } else if (e.getCode() == ParseException.OBJECT_NOT_FOUND) { // no object found, so it must be an free name
-                    saveIfNeeded(object);
+                    saveIfNeeded(object, cardName);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
                 }
@@ -71,10 +72,10 @@ public class EditCardActivity extends AppCompatActivity {
         });
     }
 
-    private void saveIfNeeded(ParseObject object) {
+    private void saveIfNeeded(ParseObject object, String newCardName) {
         if (object == null) {
             String functionName = getFunctionName();
-            HashMap<String, Object> params = getParameters();
+            HashMap<String, Object> params = getParameters(newCardName);
             ParseCloud.callFunctionInBackground(functionName, params, new FunctionCallback<String>() {
                 @Override
                 public void done(String object, ParseException e) {
@@ -91,9 +92,9 @@ public class EditCardActivity extends AppCompatActivity {
         }
     }
 
-    private HashMap<String, Object> getParameters() {
+    private HashMap<String, Object> getParameters(String newCardName) {
         HashMap<String, Object> params = new HashMap<>(2);
-        params.put(StringConstants.PARSE_CLOUD_PARAMETER_NEW_CARD_NAME, cardNameField.getText().toString());
+        params.put(StringConstants.PARSE_CLOUD_PARAMETER_NEW_CARD_NAME, newCardName);
         params.put(StringConstants.PARSE_CLOUD_PARAMETER_ORIGINAL_CARD_NAME, originalCard.getCardName());
         return params;
     }
@@ -109,28 +110,28 @@ public class EditCardActivity extends AppCompatActivity {
         }
     }
 
-    private ParseQuery<ParseObject> getQuery() {
+    private ParseQuery<ParseObject> getQuery(String newCardName) {
         if (originalCard.getCardType() == CardType.MANUAL) {
-            return getManualQuery();
+            return getManualQuery(newCardName);
         } else if (originalCard.getCardType() == CardType.AUTO){
-            return getAutoQuery();
+            return getAutoQuery(newCardName);
         } else {
             Log.i(LOG_TAG, "unknown case: " + originalCard.getCardType());
             return null;
         }
     }
 
-    private ParseQuery<ParseObject> getManualQuery() {
+    private ParseQuery<ParseObject> getManualQuery(String newCardName) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS_NAME);
         query.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        query.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, cardNameField.getText().toString());
+        query.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, newCardName);
         return query;
     }
 
-    private ParseQuery<ParseObject> getAutoQuery() {
+    private ParseQuery<ParseObject> getAutoQuery(String newCardName) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.AUTO_CARD_CLASS_NAME);
         query.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        query.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, cardNameField.getText().toString());
+        query.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, newCardName);
         return query;
     }
 
