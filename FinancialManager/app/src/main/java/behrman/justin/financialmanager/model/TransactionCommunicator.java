@@ -1,7 +1,5 @@
 package behrman.justin.financialmanager.model;
 
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;

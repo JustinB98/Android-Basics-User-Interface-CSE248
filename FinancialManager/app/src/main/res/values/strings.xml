@@ -130,6 +130,7 @@
     <string name="calendar_view_item">Calendar</string>
     <string name="edit_transaction_item">Edit</string>
     <string name="delete_transaction_item">Delete</string>
+    <string name="delete_transaction_prompt">Are you sure you want to delete this transaction?</string>
     <string name="accept_transaction_delete">Delete</string>
     <string name="cancel_transaction_delete">Keep</string>
     <!-- END Menu Items -->

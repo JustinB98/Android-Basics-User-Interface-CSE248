@@ -8,6 +8,13 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.Toast;
+
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+
+import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.EditTransactionActivity;
@@ -48,11 +55,25 @@ public class TransactionPopUpUtils {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Are you sure you want to delete this transaction!??!");
+                builder.setMessage(R.string.delete_transaction_prompt);
                 builder.setPositiveButton(R.string.accept_transaction_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.i(LOG_TAG, "deleting transaction");
+                        HashMap<String, Object> params = new HashMap<>(1);
+                        params.put(StringConstants.OBJECT_ID_KEY, itemGetter.getItem(position).getObjectId());
+                        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_DELETE_MANUAL_TRANSACTION, params, new FunctionCallback<String>() {
+                            @Override
+                            public void done(String object, ParseException e) {
+                                if (e == null) {
+                                    if (ProjectUtils.deepEquals(object, "success")) {
+                                        Toast.makeText(context, "Deleted...", Toast.LENGTH_SHORT).show();
+                                        itemGetter.removeItem(itemGetter.getItem(position));
+                                    }
+                                } else {
+                                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                                }
+                            }
+                        });
                     }
                 });
                 builder.setNegativeButton(R.string.cancel_transaction_delete, new DialogInterface.OnClickListener() {

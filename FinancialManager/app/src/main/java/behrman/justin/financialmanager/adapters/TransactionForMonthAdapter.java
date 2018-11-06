@@ -32,6 +32,12 @@ public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
             public Transaction getItem(int position) {
                 return TransactionForMonthAdapter.this.getItem(position);
             }
+
+            @Override
+            public void removeItem(Transaction object) {
+                TransactionForMonthAdapter.this.remove(object);
+            }
+
         });
     }
 

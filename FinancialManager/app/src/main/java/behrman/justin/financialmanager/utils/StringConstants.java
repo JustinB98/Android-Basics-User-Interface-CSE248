@@ -44,6 +44,7 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_FUNCTION_ADD_AUTO_CARD = "addAutoCard";
     public final static String PARSE_CLOUD_FUNCTION_EDIT_MANUAL_CARD = "editManualTransaction";
     public final static String PARSE_CLOUD_FUNCTION_GET_AUTO_TRANSACTIONS = "getAutoTransactions";
+    public final static String PARSE_CLOUD_FUNCTION_DELETE_MANUAL_TRANSACTION = "deleteManualTransaction";
     // ---------------------- END PARSE CLOUD FUNCTIONS----------------------
 
     // ---------------------- START PARSE CLOUD PARAMETERS----------------------
@@ -60,10 +61,17 @@ public final class StringConstants {
     public final static String TRANSACTIONS_LENGTH_KEY = "length";
     public final static String TRANSACTIONS_INTENT_KEY = "transactions";
     public final static String CARD_KEY = "card";
-    public static final String CARD_TYPE_KEY = "cardType";
+    public final static String CARD_TYPE_KEY = "cardType";
     public final static String TRANSACTION_KEY = "transaction";
     public final static String DATE_KEY = "date";
     public final static String OBJECT_ID_KEY = "objectId";
     public final static String IS_MANUAL_CARD_KEY = "isManual";
     // ---------------------- END KEYS ----------------------
+
+    // ---------------------- START LITERALS ----------------------
+
+    public final static String SUCCESS = "success";
+
+    // ---------------------- END LITERALS ----------------------
+
 }

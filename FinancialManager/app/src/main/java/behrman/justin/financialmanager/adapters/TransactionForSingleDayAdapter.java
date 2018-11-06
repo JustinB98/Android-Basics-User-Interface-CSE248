@@ -33,6 +33,12 @@ public class TransactionForSingleDayAdapter extends ArrayAdapter<Transaction> {
             public Transaction getItem(int position) {
                 return TransactionForSingleDayAdapter.this.getItem(position);
             }
+
+            @Override
+            public void removeItem(Transaction object) {
+                TransactionForSingleDayAdapter.this.remove(object);
+            }
+
         });
     }
 
