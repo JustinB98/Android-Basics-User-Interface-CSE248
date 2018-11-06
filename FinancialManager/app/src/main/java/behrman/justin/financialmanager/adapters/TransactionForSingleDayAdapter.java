@@ -12,13 +12,28 @@ import android.widget.TextView;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.ItemGetter;
 import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.TransactionPopUpUtils;
 
 public class TransactionForSingleDayAdapter extends ArrayAdapter<Transaction> {
 
-    public TransactionForSingleDayAdapter(Context context, List<Transaction> transactions) {
+    private final static String LOG_TAG = TransactionForSingleDayAdapter.class.getSimpleName() + "debug";
+
+    private boolean isManual;
+
+    private TransactionPopUpUtils popUpUtils;
+
+    public TransactionForSingleDayAdapter(Context context, List<Transaction> transactions, boolean isManual) {
         super(context, 0, transactions);
+        this.isManual = isManual;
+        popUpUtils = new TransactionPopUpUtils(context, new ItemGetter<Transaction>() {
+            @Override
+            public Transaction getItem(int position) {
+                return TransactionForSingleDayAdapter.this.getItem(position);
+            }
+        });
     }
 
     @NonNull
@@ -26,6 +41,7 @@ public class TransactionForSingleDayAdapter extends ArrayAdapter<Transaction> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.view_transactions_for_date, parent, false);
+            initLongClick(convertView, position);
         }
         Transaction t = getItem(position);
         setFields(convertView, t);
@@ -39,6 +55,18 @@ public class TransactionForSingleDayAdapter extends ArrayAdapter<Transaction> {
         amountView.setText(ProjectUtils.formatNumber(t.getAmount()).substring(1)); // want to get rid of $
         TextView currencyCodeView = convertView.findViewById(R.id.currency_code_view);
         currencyCodeView.setText(t.getCurrencyCode());
+    }
+
+    private void initLongClick(View view, final int position) {
+        if (isManual) {
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    popUpUtils.displayPopUpMenu(v, position);
+                    return true;
+                }
+            });
+        }
     }
 
 }
