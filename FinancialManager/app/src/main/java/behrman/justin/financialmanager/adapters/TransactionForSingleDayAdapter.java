@@ -38,7 +38,6 @@ public class TransactionForSingleDayAdapter extends ArrayAdapter<Transaction> {
             public void removeItem(Transaction object) {
                 TransactionForSingleDayAdapter.this.remove(object);
             }
-
         });
     }
 

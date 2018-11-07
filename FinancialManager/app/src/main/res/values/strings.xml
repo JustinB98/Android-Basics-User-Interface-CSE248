@@ -66,6 +66,7 @@
     <string name="powered_by_plaid">Powered By Plaid</string>
     <string name="login_failed">Invalid Credentials</string>
     <string name="username_taken">Email already exists!</string>
+    <string name="other_login_error">Something went wrong? Can\'t connect to server?</string>
     <!-- END Login Screen -->
 
     <!-- START Create Account Screen -->

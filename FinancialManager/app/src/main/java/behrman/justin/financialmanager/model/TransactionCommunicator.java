@@ -17,6 +17,8 @@ public interface TransactionCommunicator {
 
     boolean isManualCard();
 
-    boolean loading();
+    BooleanProperty loadingProperty();
+
+    void refresh();
 
 }

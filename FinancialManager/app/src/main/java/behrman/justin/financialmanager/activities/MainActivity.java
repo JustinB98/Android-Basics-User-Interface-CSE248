@@ -11,25 +11,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.FunctionCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.model.InputStreamCallBack;
-import behrman.justin.financialmanager.model.ManualCardTransactionParser;
-import behrman.justin.financialmanager.utils.NetworkUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 import okhttp3.OkHttpClient;
@@ -38,12 +25,14 @@ import okhttp3.logging.HttpLoggingInterceptor;
 // https://stackoverflow.com/questions/4905315/error-connection-refused
 public class MainActivity extends AppCompatActivity {
 
-    private final static String LOG_TAG = MainActivity.class.getSimpleName() + "logs";
+    private final static String LOG_TAG = MainActivity.class.getSimpleName() + "debug";
 
     private EditText usernameField, passwordField;
     private Button loginBtn;
     private TextView createAccountView;
     private ProgressBar progressBar;
+
+    private boolean loggingIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,87 +42,16 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         initClickables();
         initThreadLog();
-        // Log.i("currentuser", ParseUser.getCurrentUser().toString());
-        // initTest();
-        // parseCloudTest();
-        // parseManualCardTest();
-    }
-
-    private void parseManualCardTest() {
-        HashMap<String, Object> map = new HashMap<>(3);
-        map.put("year", 2018);
-        map.put("month", 10);
-        map.put("cardName", "new card");
-        ParseCloud.callFunctionInBackground("getManualTransactions", map, new FunctionCallback<HashMap<String, Object>>() {
-            @Override
-            public void done(HashMap<String, Object> object, ParseException e) {
-                if (e == null) {
-                    ManualCardTransactionParser cardTrans = new ManualCardTransactionParser(object);
-                    Log.i(LOG_TAG, cardTrans.toString());
-                    cardTrans.listTransactions();
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString());
-                }
-            }
-        });
-    }
-
-    private void parseCloudTest() {
-        ParseCloud.callFunctionInBackground("hello", new HashMap<String, Object>(), new FunctionCallback<HashMap<String, Object>>() {
-            @Override
-            public void done(HashMap<String, Object> response, ParseException e) {
-                if (e == null) {
-                    Log.i(LOG_TAG, "response: " + response.toString());
-                    Log.i(LOG_TAG, "msg: " + response.get("msg"));
-                    int num = (int) response.get("num");
-                    Log.i(LOG_TAG, "num: " + num);
-                    HashMap<String, Object> request = (HashMap<String, Object>) response.get("request");
-                    ParseUser user = (ParseUser) request.get("user");
-                    Log.i(LOG_TAG, "user: " + user + ", username: " + user.getUsername());
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.getMessage());
-                }
-            }
-        });
     }
 
     private void initThreadLog() {
         Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread t, Throwable e) {
-                Log.i("errorlog", e.toString());
+                String errorLogTag = "errorlog";
+                Log.i(errorLogTag, "Msg: " + e.toString());
                 for (int i = 0; i < e.getStackTrace().length; ++i) {
-                    Log.i("errorlog", e.getStackTrace()[i].toString()); // want it on different lines
-                }
-            }
-        });
-    }
-
-    private void initTest() {
-        final String tag = "parseobjecttesting";
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ManualCards");
-        query.whereEqualTo("name", "justin");
-        query.whereEqualTo("owner", "");
-
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    Log.i(tag, "trying to get the user");
-                    Log.i(tag, "objects len: " + objects.size());
-                    for (ParseObject obj : objects) {
-                        Log.i(tag, "object: " + obj.getObjectId());
-                        // Log.i(tag, "owner: " + obj.get("owner").toString());
-                        // Log.i(tag, "owner 1: " + obj.getParseObject("owner"));
-                        // Log.i(tag, "owner 2: " + obj.getJSONObject("owner").toString());
-                        // ParseUser user = obj.getParseUser("owner");
-                        // Log.i(tag, "got the user " + (user == null ? "null" : user.toString()));
-                        // String email = user.getEmail();
-                        // String username = user.getUsername();
-                        // Log.i(tag, "user info: " + user.getEmail() + " " + user.getUsername());
-                    }
-                } else {
-                    Log.i(tag, "Error Code: " + e.getCode());
+                    Log.i(errorLogTag, e.getStackTrace()[i].toString()); // want it on different lines
                 }
             }
         });
@@ -181,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
         createAccountView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchToCreateAccountIntent();
+                if (!loggingIn) {
+                    switchToCreateAccountIntent();
+                }
             }
         });
     }
@@ -224,26 +144,31 @@ public class MainActivity extends AppCompatActivity {
         user.setUsername(username);
         user.setEmail(username);
         user.setPassword(password);
+        loggingIn = true;
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
                 progressBar.setVisibility(View.GONE);
                 loginBtn.setEnabled(true);
+                loggingIn = false;
                 if (e == null) {
                     goToMainMenu();
                 } else {
-                    showErrorMsg(e.getCode());
+                    showErrorMsg(e);
                 }
             }
         });
 
     }
 
-    // TODO: 10/17/2018 work on what could cause the login to fail besides poor connection and invalid credentials
-    private void showErrorMsg(int errorCode) {
-        String msg = null;
-        Toast.makeText(this, R.string.sign_in_fail, Toast.LENGTH_LONG).show();
-        Log.e(LOG_TAG, "sign in failed!");
+    private void showErrorMsg(ParseException e) {
+        // Toast.makeText(this, R.string.sign_in_fail, Toast.LENGTH_LONG).show();
+        if (e.getCode() == ParseException.OBJECT_NOT_FOUND) { // invalid username/password
+            Toast.makeText(this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.other_login_error, Toast.LENGTH_SHORT).show();
+        }
+        Log.i(LOG_TAG, "sign in failed! message: " + e.toString() + ", code: " + e.getCode());
     }
 
     private void initViews() {
@@ -273,20 +198,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUIIfNeeded(ParseUser currentUser) {
         if (currentUser != null) {
-            Log.i("jsonresponse", "starting");
-            NetworkUtils.makePostRequest(StringConstants.SERVER_URL + "usertest", "{\"email\": " + "\"" +  currentUser.getUsername() +"\",\"sessionToken\":\"" + currentUser.getSessionToken() + "\"}", new InputStreamCallBack() {
-                @Override
-                public void callback(InputStream is) {
-                    Log.i("jsonresponse", "got in callback");
-                    try {
-                        String s = NetworkUtils.readFromStream(is);
-                        Log.i("jsonresponse", "the response was " + s);
-                    } catch (IOException e) {
-                        Log.i("jsonresponse", "error", e);
-                    }
-                }
-            });
-
             goToMainMenu();
         }
     }

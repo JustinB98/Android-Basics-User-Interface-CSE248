@@ -2,6 +2,7 @@ package behrman.justin.financialmanager.subactivities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,8 +19,10 @@ import java.util.List;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.EditTransactionActivity;
 import behrman.justin.financialmanager.adapters.TransactionForMonthAdapter;
+import behrman.justin.financialmanager.model.BooleanProperty;
 import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.model.TransactionCommunicator;
+import behrman.justin.financialmanager.model.ViewHistoryActivity;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewHistoryListViewSubActivity {
@@ -69,18 +72,30 @@ public class ViewHistoryListViewSubActivity {
     }
 
     public void setListView() {
-        ArrayList<Transaction> transactions = new ArrayList<>();
-        HashMap<Date, ArrayList<Transaction>> monthTransactions = communicator.getTransactions();
-        for (Date date : monthTransactions.keySet()) {
-            transactions.addAll(monthTransactions.get(date));
+        Log.i(ViewHistoryActivity.LOG_TAG, "setting list view; loading: " + communicator.loadingProperty().getValue());
+        if (!communicator.loadingProperty().getValue()) {
+            Log.i(ViewHistoryActivity.LOG_TAG, "transactions: " + communicator.getTransactions());
+            ArrayList<Transaction> transactions = new ArrayList<>();
+            HashMap<Date, ArrayList<Transaction>> monthTransactions = communicator.getTransactions();
+            for (Date date : monthTransactions.keySet()) {
+                transactions.addAll(monthTransactions.get(date));
+            }
+            Collections.sort(transactions);
+            setListViewAdapter(transactions);
+        } else {
+            communicator.loadingProperty().addListener(new BooleanProperty.BooleanListener() {
+                @Override
+                public void onChange(boolean newValue) {
+                    setListView();
+                    communicator.loadingProperty().removeListener();
+                }
+            });
         }
-        Collections.sort(transactions);
-        setListViewAdapter(transactions);
     }
 
     private void setListViewAdapter(List<Transaction> transactions) {
         if (transactions != null && transactions.size() > 0) {
-            TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions, communicator.isManualCard());
+            TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions, communicator.isManualCard(), communicator);
             listView.setAdapter(adapter);
             setToListView();
         } else {

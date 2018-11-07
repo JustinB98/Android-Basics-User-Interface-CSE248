@@ -2,14 +2,10 @@ package behrman.justin.financialmanager.model;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -19,11 +15,12 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.subactivities.ViewHistoryCalendarViewSubActivity;
 import behrman.justin.financialmanager.subactivities.ViewHistoryListViewSubActivity;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public abstract class ViewHistoryActivity extends AppCompatActivity {
 
-    private final static String LOG_TAG = ViewHistoryActivity.class.getSimpleName() + "debug";
+    public final static String LOG_TAG = ViewHistoryActivity.class.getSimpleName() + "debug";
 
     private ProgressBar progressBar;
 
@@ -41,11 +38,18 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private boolean menuCreated, activityCreated;
 
-    private boolean loading;
+    private BooleanProperty loading;
+
+    private enum CurrentScreen { CALENDAR, LISTVIEW; };
+
+    private CurrentScreen currentScreen;
+
+    private View loadingScreen;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+        ProjectUtils.setViewHistoryActivity(this);
         Card card = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
         cardName = card.getCardName();
         getSupportActionBar().setTitle(getString(R.string.view_history_title, cardName));
@@ -55,7 +59,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         listViewSubActivity = new ViewHistoryListViewSubActivity(this, communicator);
         calendarSubActivity.setToView();
         getTransactions(calendarSubActivity.getYearSelected(), calendarSubActivity.getMonthSelected());
-        loading = true;
+        loading = new BooleanProperty(true);
         activityCreated = true;
         registerForContextMenu(listViewSubActivity.getMainView());
     }
@@ -69,7 +73,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
             @Override
             public void requestNewTransactions(int year, int month) {
-                loading = true;
+                loading.setValue(true);
                 Log.i(LOG_TAG, "getting transactions for: " + month + ", " + year);
                 ViewHistoryActivity.this.getTransactions(year, month);
             }
@@ -80,11 +84,34 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean loading() {
+            public BooleanProperty loadingProperty() {
                 return loading;
             }
 
+            @Override
+            public void refresh() {
+                ViewHistoryActivity.this.refresh();
+            }
+
         };
+    }
+
+    public void refresh() {
+        // reget transactions
+        loading.setValue(true);
+        // setToRightView();
+        getTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
+    }
+
+    private void setToRightView() {
+        Log.i(LOG_TAG, "currentScreen: " + currentScreen);
+        if (currentScreen == CurrentScreen.LISTVIEW) {
+            switchToListView();
+        } else if (currentScreen == CurrentScreen.CALENDAR) {
+            switchToCalendarView();
+        } else {
+            Log.i(LOG_TAG, "unknown state: " + currentScreen);
+        }
     }
 
     @Override
@@ -96,11 +123,11 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     }
 
     private void switchMenu(int resId) {
+        menu.clear();
         getMenuInflater().inflate(resId, menu);
     }
 
     public void menuAction(MenuItem item) {
-        menu.clear();
         switch (item.getItemId()) {
             case R.id.list_menu_item:
                 switchToListView();
@@ -115,18 +142,20 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         listViewSubActivity.setToView();
         listViewSubActivity.setListView();
         switchMenu(R.menu.calendar_view_menu);
+        currentScreen = CurrentScreen.LISTVIEW;
     }
 
     private void switchToCalendarView() {
         calendarSubActivity.setToView();
         switchMenu(R.menu.list_view_menu);
+        currentScreen = CurrentScreen.CALENDAR;
     }
 
     public abstract void getTransactions(int year, int month);
 
     protected void setTransactionData(HashMap<Date, ArrayList<Transaction>> cardTransactions) {
         Log.i(LOG_TAG, "got some transactions");
-        loading = false;
+        loading.setValue(false);
         this.cardTransactions = cardTransactions;
     }
 
@@ -135,11 +164,9 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         super.onStart();
         if (menuCreated && activityCreated) {
             Log.i(LOG_TAG, "onStart() called: getting transactions for: " + calendarSubActivity.getSavedMonth() + ", " + calendarSubActivity.getSavedYear());
-            menu.clear();
-            calendarSubActivity.setToView();
             switchToCalendarView();
             getTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
-            loading = true;
+            loading.setValue(true);
         }
     }
 }

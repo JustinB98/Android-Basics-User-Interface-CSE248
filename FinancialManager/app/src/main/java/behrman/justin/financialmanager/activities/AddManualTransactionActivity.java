@@ -46,8 +46,15 @@ public class AddManualTransactionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_manual_transaction);
         originalCard = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
         extractViews();
+        initTodaysDate();
         initButton();
         initCalendarListener();
+    }
+
+    private void initTodaysDate() {
+        year = ProjectUtils.getCurrentYear();
+        month = ProjectUtils.getCurrentMonth() - 1; // method returns 1-12 but api uses 0-11
+        day = ProjectUtils.getCurrentDay();
     }
 
     private void initCalendarListener() {

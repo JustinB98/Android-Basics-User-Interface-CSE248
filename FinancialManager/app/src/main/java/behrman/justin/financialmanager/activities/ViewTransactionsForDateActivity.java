@@ -1,6 +1,5 @@
 package behrman.justin.financialmanager.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
@@ -19,8 +18,6 @@ public class ViewTransactionsForDateActivity extends AppCompatActivity {
     private ListView listView;
     private List<Transaction> transactions;
 
-    private Transaction transactionBeingEdited;
-
     private boolean isManual;
 
     @Override
@@ -38,12 +35,6 @@ public class ViewTransactionsForDateActivity extends AppCompatActivity {
     private void setUp() {
         TransactionForSingleDayAdapter adapter = new TransactionForSingleDayAdapter(this, transactions, isManual);
         listView.setAdapter(adapter);
-    }
-
-    private void switchToEditTransaction(Transaction t) {
-        Intent intent = new Intent(this, EditTransactionActivity.class);
-        intent.putExtra(StringConstants.TRANSACTION_KEY, t);
-        startActivity(intent);
     }
 
 }

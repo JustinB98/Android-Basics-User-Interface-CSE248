@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -33,6 +34,10 @@ public class ViewHistoryCalendarViewSubActivity {
     private MaterialCalendarView calendarView;
     private Button viewTransactionBtn;
 
+    private ProgressBar progressBar;
+
+    // saved month and year because when the calendar view is not on the screen, the getSelectedDate returns null.
+    // basically just to get the month and year selected last so a refresh can be performed
     private int savedMonth = ProjectUtils.getCurrentMonth();
     private int savedYear = ProjectUtils.getCurrentYear();
 

@@ -27,7 +27,6 @@ public class TransactionPopUpUtils {
 
     private Context context;
     private ItemGetter<Transaction> itemGetter;
-
     public TransactionPopUpUtils(Context context, ItemGetter<Transaction> itemGetter) {
         this.context = context;
         this.itemGetter = itemGetter;
@@ -37,11 +36,12 @@ public class TransactionPopUpUtils {
         PopupMenu popupMenu = new PopupMenu(context, view);
         MenuItem editItem = popupMenu.getMenu().add(R.string.edit_transaction_item);
         MenuItem deleteItem = popupMenu.getMenu().add(R.string.delete_transaction_item);
-        initClicks(editItem, deleteItem, position);
+        initEditItem(editItem, position);
+        initDeleteMenuItem(deleteItem, position);
         popupMenu.show();
     }
 
-    private void initClicks(MenuItem editItem, MenuItem deleteItem, final int position) {
+    private void initEditItem(MenuItem editItem, final int position) {
         editItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -51,6 +51,10 @@ public class TransactionPopUpUtils {
                 return false;
             }
         });
+
+    }
+
+    private void initDeleteMenuItem(final MenuItem deleteItem, final int position) {
         deleteItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -59,21 +63,7 @@ public class TransactionPopUpUtils {
                 builder.setPositiveButton(R.string.accept_transaction_delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        HashMap<String, Object> params = new HashMap<>(1);
-                        params.put(StringConstants.OBJECT_ID_KEY, itemGetter.getItem(position).getObjectId());
-                        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_DELETE_MANUAL_TRANSACTION, params, new FunctionCallback<String>() {
-                            @Override
-                            public void done(String object, ParseException e) {
-                                if (e == null) {
-                                    if (ProjectUtils.deepEquals(object, "success")) {
-                                        Toast.makeText(context, "Deleted...", Toast.LENGTH_SHORT).show();
-                                        itemGetter.removeItem(itemGetter.getItem(position));
-                                    }
-                                } else {
-                                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                                }
-                            }
-                        });
+                        deleteItem(position);
                     }
                 });
                 builder.setNegativeButton(R.string.cancel_transaction_delete, new DialogInterface.OnClickListener() {
@@ -88,4 +78,22 @@ public class TransactionPopUpUtils {
         });
     }
 
+    private void deleteItem(final int position) {
+        HashMap<String, Object> params = new HashMap<>(1);
+        params.put(StringConstants.OBJECT_ID_KEY, itemGetter.getItem(position).getObjectId());
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_DELETE_MANUAL_TRANSACTION, params, new FunctionCallback<String>() {
+            @Override
+            public void done(String object, ParseException e) {
+                if (e == null) {
+                    if (ProjectUtils.deepEquals(object, "success")) {
+                        Toast.makeText(context, "Deleted...", Toast.LENGTH_SHORT).show();
+                        itemGetter.removeItem(itemGetter.getItem(position));
+                        ProjectUtils.refreshViewHistoryScreen();
+                    }
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                }
+            }
+        });
+    }
 }
