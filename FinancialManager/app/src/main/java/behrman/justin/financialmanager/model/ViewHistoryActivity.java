@@ -99,16 +99,20 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     public void refresh() {
         // reget transactions
         loading.setValue(true);
-        // setToRightView();
+        setToRightView();
         getTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
     }
 
     private void setToRightView() {
         Log.i(LOG_TAG, "currentScreen: " + currentScreen);
         if (currentScreen == CurrentScreen.LISTVIEW) {
+            // change just in case there are no more transactions so the text view will show
+            //  instead of the list view
             switchToListView();
         } else if (currentScreen == CurrentScreen.CALENDAR) {
-            switchToCalendarView();
+            // no real reason for this because in the current date history activity it won't make a difference and will remain in the
+            // view current date history activity
+            // switchToCalendarView();
         } else {
             Log.i(LOG_TAG, "unknown state: " + currentScreen);
         }
@@ -155,8 +159,8 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     protected void setTransactionData(HashMap<Date, ArrayList<Transaction>> cardTransactions) {
         Log.i(LOG_TAG, "got some transactions");
-        loading.setValue(false);
         this.cardTransactions = cardTransactions;
+        loading.setValue(false);
     }
 
     @Override
