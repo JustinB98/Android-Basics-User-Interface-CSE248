@@ -181,7 +181,9 @@ public class ProjectUtils {
 
     // TODO: 11/6/2018 i know this looks bad but trust me it really does help with neating up the code just a little bit. Might fix later
     public static void refreshViewHistoryScreen() {
-        viewHistoryActivityInstance.refresh();
+        if (viewHistoryActivityInstance != null) {
+            viewHistoryActivityInstance.refresh();
+        }
     }
 
     public static void setViewHistoryActivity(ViewHistoryActivity v) {

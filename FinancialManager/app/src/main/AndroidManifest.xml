@@ -22,16 +22,33 @@
         <activity
             android:name=".activities.CreateAccountActivity"
             android:label="@string/create_account_title" />
-        <activity android:name=".activities.MenuActivity" android:label="@string/menu_title"/>
-        <activity android:name=".activities.AddManualCardActivity" android:label="@string/add_manual_card_title"/>
-        <activity android:name=".activities.PlaidActivity" android:label="@string/add_auto_card_title"/>
-        <activity android:name=".activities.SelectCardActivity" android:label="@string/select_card_title"/>
+        <activity
+            android:name=".activities.MenuActivity"
+            android:label="@string/menu_title" />
+        <activity
+            android:name=".activities.AddManualCardActivity"
+            android:label="@string/add_manual_card_title" />
+        <activity
+            android:name=".activities.PlaidActivity"
+            android:label="@string/add_auto_card_title" />
+        <activity
+            android:name=".activities.SelectCardActivity"
+            android:label="@string/select_card_title" />
         <activity android:name=".activities.ViewAutoHistoryActivity" />
         <activity android:name=".activities.ViewManualHistoryActivity" />
-        <activity android:name=".activities.ViewTransactionsForDateActivity" android:noHistory="true" />
-        <activity android:name=".activities.EditCardActivity" android:label="@string/edit_card_title"/>
-        <activity android:name=".activities.AddManualTransactionActivity" android:label="@string/add_manual_transaction_title"/>
-        <activity android:name=".activities.EditTransactionActivity" android:label="@string/edit_transaction_title"></activity>
+        <activity
+            android:name=".activities.ViewTransactionsForDateActivity"
+            android:noHistory="true" />
+        <activity
+            android:name=".activities.EditCardActivity"
+            android:label="@string/edit_card_title" />
+        <activity
+            android:name=".activities.AddManualTransactionActivity"
+            android:label="@string/add_manual_transaction_title" />
+        <activity
+            android:name=".activities.EditTransactionActivity"
+            android:label="@string/edit_transaction_title" />
+        <activity android:name=".activities.DeleteCardActivity"></activity>
     </application>
 
 </manifest>

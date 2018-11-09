@@ -173,4 +173,10 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             loading.setValue(true);
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ProjectUtils.setViewHistoryActivity(null);
+    }
 }

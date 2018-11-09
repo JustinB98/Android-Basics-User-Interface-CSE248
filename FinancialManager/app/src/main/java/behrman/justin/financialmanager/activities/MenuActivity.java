@@ -20,7 +20,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
 
     private final static String LOG_TAG = MenuActivity.class.getSimpleName() + "debug";
 
-    private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView;
+    private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView, deleteCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     private void setUpSelectCardsBtns() {
         initTypeDependentClickListener(checkHistoryView, SelectCardActivity.class, new CardTypeClassConverterViewHistoryImpl());
         initTypeDependentClickListener(editCardView, SelectCardActivity.class, new CardTypeIndependentConverterImpl(EditCardActivity.class));
+        initTypeDependentClickListener(deleteCardView, SelectCardActivity.class, new CardTypeIndependentConverterImpl(DeleteCardActivity.class));
         initAddManualTransactionBtn();
     }
 
@@ -81,6 +82,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         editCardView = findViewById(R.id.edit_card_btn);
         checkHistoryView = findViewById(R.id.card_history_btn);
         addManualTransactionView = findViewById(R.id.add_manual_transaction_btn);
+        deleteCardView = findViewById(R.id.delete_card_btn);
     }
 
     @Override

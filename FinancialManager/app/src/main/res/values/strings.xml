@@ -54,6 +54,7 @@
     <string name="view_history_title">History For %1$s</string>
     <string name="edit_card_title">Edit Card</string>
     <string name="edit_transaction_title">Edit Transaction</string>
+    <string name="delete_card_title">Delete %1$s?</string>
     <!-- END Titles -->
 
     <!-- START Login Screen -->
@@ -88,12 +89,13 @@
     <string name="edit_a_card">Edit a Card</string>
     <string name="add_auto_card">Add Auto Card</string>
     <string name="check_card_history">Check Card History</string>
-    <string name="add_manual_transaction">Add manual transaction</string>
+    <string name="add_manual_transaction">Add Manual transaction</string>
     <string name="rename_card">Rename Card</string>
-    <string name="change_card_name">Change Card Name:</string>
+    <string name="delete_card_option">Delete a Card</string>
     <!-- END Menu Screen -->
 
     <!-- START Add Manual/Edit Card Screen -->
+    <string name="change_card_name">Change Card Name:</string>
     <string name="enter_card_identifier">Enter Card Identifier:</string>
     <string name="this_is_just_something_you_use_to_identify_your_card">This is just something you use to identify your card</string>
     <string name="cant_be_a_card_name_that_already_exists">(can\'t be a card name that already exists)</string>
@@ -113,6 +115,14 @@
     <string name="no_transactions_found">No Transactions For this Month</string>
     <!-- END View History -->
 
+    <!-- START Delete Card -->
+    <string name="confirm_delete">Are You Sure?!?!?</string>
+    <string name="delete_card_info">If you delete this card, you won\'t be able to be it back!!</string>
+    <string name="delete_manual_card_info">Since this is Manual Card, All Transactions will be deleted!!</string>
+    <string name="confirm_card_name">Enter the name of the card</string>
+    <string name="delete_card_btn_text">Yes I\'m sure\nDelete this Card</string>
+    <!-- END Delete Card -->
+
     <!-- START Toast Messages -->
     <string name="sign_in_fail">Sign in Failed!</string>
     <string name="card_already_exists">Card Already Exists!</string>
@@ -124,6 +134,8 @@
     <string name="added_transaction_successfully">Added Transaction!</string>
     <string name="edited_card_successfully">Successfully Edited Card</string>
     <string name="no_transactions_for_date">There\'s no transactions for %1$s</string>
+    <string name="card_name_not_confirmed">That isn\'t the name of the card…</string>
+    <string name="deleted_card">Deleted card…</string>
     <!-- END Toast Messages -->
 
     <!-- START Menu Items -->

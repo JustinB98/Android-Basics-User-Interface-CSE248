@@ -45,6 +45,8 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_FUNCTION_EDIT_MANUAL_CARD = "editManualTransaction";
     public final static String PARSE_CLOUD_FUNCTION_GET_AUTO_TRANSACTIONS = "getAutoTransactions";
     public final static String PARSE_CLOUD_FUNCTION_DELETE_MANUAL_TRANSACTION = "deleteManualTransaction";
+    public final static String PARSE_CLOUD_FUNCTION_DELETE_AUTO_CARD = "deleteAutoCard";
+    public final static String PARSE_CLOUD_FUNCTION_DELETE_MANUAL_CARD = "deleteManualCard";
     // ---------------------- END PARSE CLOUD FUNCTIONS----------------------
 
     // ---------------------- START PARSE CLOUD PARAMETERS----------------------
@@ -69,9 +71,7 @@ public final class StringConstants {
     // ---------------------- END KEYS ----------------------
 
     // ---------------------- START LITERALS ----------------------
-
     public final static String SUCCESS = "success";
-
     // ---------------------- END LITERALS ----------------------
 
 }

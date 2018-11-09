@@ -50,6 +50,11 @@
             android:id="@+id/add_manual_transaction_btn"
             style="@style/menu_item"
             android:text="@string/add_manual_transaction"/>
+
+        <TextView
+            android:id="@+id/delete_card_btn"
+            style="@style/menu_item"
+            android:text="@string/delete_card_option"/>
     </LinearLayout>
 
 </LinearLayout>
