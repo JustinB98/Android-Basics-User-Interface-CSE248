@@ -48,8 +48,8 @@ public class SelectableAdapter extends ArrayAdapter<Card> {
         cardNameView.setText(currentCard.getCardName());
         TextView cardTypeView = (TextView) convertView.findViewById(R.id.card_type_view);
         cardTypeView.setText(currentCard.getCardType().toString());
-        // CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
-        // checkBox.setChecked(listView.isItemChecked(pos));
+        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+        checkBox.setChecked(convertView.isSelected());
     }
 
     private void initOnClick(View convertView) {
@@ -70,6 +70,7 @@ public class SelectableAdapter extends ArrayAdapter<Card> {
                 // View view = (View) buttonView.getParent();
                 // view.setSelected(isChecked);
                 // turns out that you get can the list view by getting the parent of the parent
+                // ListView listView = (ListView) buttonView.getParent().getParent();
                 listView.setItemChecked(position, isChecked);
             }
         });
