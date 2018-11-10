@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="linkColor">#0000FF</color>
     <color name="red">#FF0000</color>
+    <color name="rectangle_stroke">#D6F5D6</color>
 </resources>

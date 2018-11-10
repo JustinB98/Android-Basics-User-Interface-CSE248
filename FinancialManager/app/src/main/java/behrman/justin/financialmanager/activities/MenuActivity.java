@@ -3,7 +3,11 @@ package behrman.justin.financialmanager.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -22,12 +26,62 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
 
     private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView, deleteCardView;
 
+    private ViewGroup rootView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        rootView = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_menu, null, false);
+        setContentView(rootView);
         extractViews();
         initClickListeners();
+        initSizes();
+    }
+
+    // https://stackoverflow.com/questions/24927575/how-to-make-perfect-square-shaped-image-button
+    // https://stackoverflow.com/questions/2963152/how-to-resize-a-custom-view-programmatically
+    private void initSizes() {
+        if(rootView.getViewTreeObserver().isAlive()){
+            rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout(){
+                    int width = rootView.getMeasuredWidth();
+                    int height = rootView.getMeasuredHeight();
+                    // int singleHeight = height / rootView.getChildCount();
+                    int singleHeight = getNewHeight(height, rootView.getChildCount());
+                    int singleWidth = width / 2;
+                    for (int i = 0; i < rootView.getChildCount(); ++i) {
+                        // getting linear layout
+                        ViewGroup btnHolder = (ViewGroup) rootView.getChildAt(i);
+                        setChildView(btnHolder, singleWidth, singleHeight);
+                    }
+
+                    // Destroy the onGlobalLayout afterwards, otherwise it keeps changing
+                    // the sizes non-stop, even though it's already done
+                    rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            });
+        }
+    }
+
+    private void setChildView(ViewGroup btnHolder, int singleWidth, int singleHeight) {
+        View view1 = btnHolder.getChildAt(0);
+        View view2 = btnHolder.getChildAt(1);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(singleWidth, singleHeight);
+        view1.setLayoutParams(params);
+        view2.setLayoutParams(params);
+
+    }
+
+    private int getNewHeight(int height, int count) {
+        int i;
+        Log.i(LOG_TAG, "height: " + height + ", count: " + count);
+        for (i = height; i >= 0; --i) {
+            if (i % count == 0) {
+                return i / count;
+            }
+        }
+        return i;
     }
 
     private void initClickListeners() {
