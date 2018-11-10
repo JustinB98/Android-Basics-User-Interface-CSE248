@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.CardType;
@@ -188,6 +189,17 @@ public class ProjectUtils {
 
     public static void setViewHistoryActivity(ViewHistoryActivity v) {
         viewHistoryActivityInstance = v;
+    }
+
+    public static <T> List<T> combineLists(List<T> list1, List<T> list2) {
+        if (list1 == null) {
+            return list2;
+        } else if (list2 == null) {
+            return list1;
+        } else {
+            list1.addAll(list2);
+            return list1;
+        }
     }
 
 }

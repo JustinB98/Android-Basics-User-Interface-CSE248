@@ -48,7 +48,8 @@
         <activity
             android:name=".activities.EditTransactionActivity"
             android:label="@string/edit_transaction_title" />
-        <activity android:name=".activities.DeleteCardActivity"></activity>
+        <activity android:name=".activities.DeleteCardActivity" />
+        <activity android:name=".activities.MonthlyCalculationsActivity"></activity>
     </application>
 
 </manifest>

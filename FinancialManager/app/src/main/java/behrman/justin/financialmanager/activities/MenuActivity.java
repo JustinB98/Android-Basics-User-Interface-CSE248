@@ -24,7 +24,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
 
     private final static String LOG_TAG = MenuActivity.class.getSimpleName() + "debug";
 
-    private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView, deleteCardView;
+    private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView, deleteCardView, monthlyCalculationView;
 
     private ViewGroup rootView;
 
@@ -47,15 +47,12 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
                 public void onGlobalLayout(){
                     int width = rootView.getMeasuredWidth();
                     int height = rootView.getMeasuredHeight();
-                    // int singleHeight = height / rootView.getChildCount();
                     int singleHeight = getNewHeight(height, rootView.getChildCount());
-                    int singleWidth = width / 2;
                     for (int i = 0; i < rootView.getChildCount(); ++i) {
                         // getting linear layout
                         ViewGroup btnHolder = (ViewGroup) rootView.getChildAt(i);
-                        setChildView(btnHolder, singleWidth, singleHeight);
+                        setChildView(btnHolder, singleHeight, width);
                     }
-
                     // Destroy the onGlobalLayout afterwards, otherwise it keeps changing
                     // the sizes non-stop, even though it's already done
                     rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -64,13 +61,13 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         }
     }
 
-    private void setChildView(ViewGroup btnHolder, int singleWidth, int singleHeight) {
-        View view1 = btnHolder.getChildAt(0);
-        View view2 = btnHolder.getChildAt(1);
+    private void setChildView(ViewGroup btnHolder, int singleHeight, int fullWidth) {
+        int singleWidth = fullWidth / btnHolder.getChildCount();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(singleWidth, singleHeight);
-        view1.setLayoutParams(params);
-        view2.setLayoutParams(params);
-
+        for (int i = 0; i < btnHolder.getChildCount(); ++i) {
+            View view = btnHolder.getChildAt(i);
+            view.setLayoutParams(params);
+        }
     }
 
     private int getNewHeight(int height, int count) {
@@ -91,10 +88,11 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     }
 
     private void setUpSelectCardsBtns() {
-        initTypeDependentClickListener(checkHistoryView, SelectCardActivity.class, new CardTypeClassConverterViewHistoryImpl());
-        initTypeDependentClickListener(editCardView, SelectCardActivity.class, new CardTypeIndependentConverterImpl(EditCardActivity.class));
-        initTypeDependentClickListener(deleteCardView, SelectCardActivity.class, new CardTypeIndependentConverterImpl(DeleteCardActivity.class));
+        initTypeDependentClickListener(checkHistoryView, new CardTypeClassConverterViewHistoryImpl());
+        initTypeDependentClickListener(editCardView, new CardTypeIndependentConverterImpl(EditCardActivity.class));
+        initTypeDependentClickListener(deleteCardView, new CardTypeIndependentConverterImpl(DeleteCardActivity.class));
         initAddManualTransactionBtn();
+        initSingleClickListener(monthlyCalculationView, MonthlyCalculationsActivity.class);
     }
 
     private void initAddManualTransactionBtn() {
@@ -111,11 +109,11 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
 
     }
 
-    private void initTypeDependentClickListener(TextView view, final Class<?> initialClass, final CardTypeClassConverter converter) {
+    private void initTypeDependentClickListener(TextView view, final CardTypeClassConverter converter) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, initialClass);
+                Intent intent = new Intent(MenuActivity.this, SelectCardActivity.class);
                 intent.putExtra(StringConstants.NEXT_CLASS_KEY, converter);
                 startActivity(intent);
             }
@@ -137,6 +135,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         checkHistoryView = findViewById(R.id.card_history_btn);
         addManualTransactionView = findViewById(R.id.add_manual_transaction_btn);
         deleteCardView = findViewById(R.id.delete_card_btn);
+        monthlyCalculationView = findViewById(R.id.monthly_calculations_view);
     }
 
     @Override

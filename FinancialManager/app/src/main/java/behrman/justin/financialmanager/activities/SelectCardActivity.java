@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.adapters.CardSelecterAdapter;
+import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.model.CardTypeClassConverter;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -45,10 +45,14 @@ public class SelectCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_card);
         classConverter = (CardTypeClassConverter) getIntent().getSerializableExtra(StringConstants.NEXT_CLASS_KEY);
         typeToShow = (CardType) getIntent().getSerializableExtra(StringConstants.CARD_TYPE_KEY);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        listView = (ListView) findViewById(R.id.list_view);
+        extractViews();
         setListViewItemListener();
         update();
+    }
+
+    private void extractViews() {
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        listView = (ListView) findViewById(R.id.list_view);
     }
 
     private void setListViewItemListener() {
@@ -134,7 +138,7 @@ public class SelectCardActivity extends AppCompatActivity {
             setListViewAdapter(cards);
         } else {
             Log.i(LOG_TAG, "ERROR", e);
-            Toast.makeText(this, R.string.error_msg, Toast.LENGTH_LONG);
+            Toast.makeText(this, R.string.error_msg, Toast.LENGTH_LONG).show();
             Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
             setToListView();
         }
