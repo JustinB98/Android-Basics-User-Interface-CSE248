@@ -27,4 +27,13 @@ public class Card implements Serializable {
     public void setCardType(CardType mCardType) {
         this.mCardType = mCardType;
     }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "mCardName='" + mCardName + '\'' +
+                ", mCardType=" + mCardType +
+                '}';
+    }
+
 }

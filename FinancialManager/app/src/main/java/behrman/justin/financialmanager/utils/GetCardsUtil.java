@@ -24,18 +24,18 @@ public class GetCardsUtil {
                 findAllCards0(cards, onReceive);
             }
         };
-        findAllManualCards(next);
+        findAllAutoCards(next);
     }
 
-    private static void findAllCards0(final List<Card> manualCards, final CardReceiever onReceive) {
+    private static void findAllCards0(final List<Card> autoCards, final CardReceiever onReceive) {
         CardReceiever next = new CardReceiever() {
             @Override
             public void receiveCards(List<Card> cards) {
-                List<Card> newList = ProjectUtils.combineLists(manualCards, cards);
+                List<Card> newList = ProjectUtils.combineLists(autoCards, cards);
                 onReceive.receiveCards(newList);
             }
         };
-        findAllAutoCards(next);
+        findAllManualCards(next);
     }
 
 
