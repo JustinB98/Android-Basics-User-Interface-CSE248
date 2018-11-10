@@ -8,23 +8,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardSelecterAdapter;
 import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.model.CardReceiever;
 import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.model.CardTypeClassConverter;
-import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.GetCardsUtil;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class SelectCardActivity extends AppCompatActivity {
@@ -80,10 +73,18 @@ public class SelectCardActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "starting update");
         setToLoadView();
         // List<Card> cards = getCards();
+        CardReceiever receiver = new CardReceiever() {
+            @Override
+            public void receiveCards(List<Card> cards) {
+                setListViewAdapter(cards);
+            }
+        };
         if (typeToShow == CardType.AUTO) {
-            findAutoCards(null);
+            GetCardsUtil.findAllAutoCards(receiver);
+        } else if (typeToShow == CardType.MANUAL) {
+            GetCardsUtil.findAllManualCards(receiver);
         } else {
-            findManualCards();
+            GetCardsUtil.findAllCards(receiver);
         }
     }
 
@@ -97,76 +98,16 @@ public class SelectCardActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-    private void findManualCards() {
-        ParseQuery<ParseObject> manualCardQuery = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS_NAME);
-        manualCardQuery.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        Log.i(LOG_TAG, "starting manual find");
-        manualCardQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                Log.i(LOG_TAG, "found manual objects " + (objects == null ? "null" : objects.size()));
-                if (typeToShow == null) {
-                    findAutoCards(objects);
-                } else {
-                    afterFind(objects, e); // if we don't need to look for auto cards, then just set the list view
-                }
-            }
-        });
-    }
-
-    private void findAutoCards(final List<ParseObject> manualObjects) {
-        ParseQuery<ParseObject> autoCardQuery = ParseQuery.getQuery(StringConstants.AUTO_CARD_CLASS_NAME);
-        autoCardQuery.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        Log.i(LOG_TAG, "starting auto card query");
-        autoCardQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                Log.i(LOG_TAG, "found auto objects " + (objects == null ? "null" : objects.size()));
-                Log.i(LOG_TAG, e == null ? "null" : e.toString());
-                if (typeToShow == null && manualObjects != null) {
-                    objects.addAll(manualObjects);
-                }
-                afterFind(objects, e);
-            }
-        });
-    }
-
-    private void afterFind(List<ParseObject> objects, ParseException e) {
-        if (e == null) {
-            ArrayList<Card> cards = new ArrayList<>(objects.size());
-            fillCards(cards, objects);
-            setListViewAdapter(cards);
-        } else {
-            Log.i(LOG_TAG, "ERROR", e);
-            Toast.makeText(this, R.string.error_msg, Toast.LENGTH_LONG).show();
-            Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-            setToListView();
-        }
-    }
-
-    private void setListViewAdapter(ArrayList<Card> cards) {
+    private void setListViewAdapter(List<Card> cards) {
         CardSelecterAdapter adapter = new CardSelecterAdapter(this, cards);
         listView.setAdapter(adapter);
         setToListView();
-    }
-
-    private void fillCards(ArrayList<Card> cards, List<ParseObject> objects) {
-        for (int i = 0; i < objects.size(); ++i) {
-            Card card = convertParseObjectToCard(objects.get(i));
-            cards.add(card);
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         update();
-    }
-
-    private Card convertParseObjectToCard(ParseObject obj) {
-        CardType cardType = ProjectUtils.convertToCardType(obj.getClassName());
-        String name = obj.getString(StringConstants.DATABASE_CARD_NAME_COLUMN);
-        return new Card(name, cardType);
     }
 
 }
