@@ -1,8 +1,8 @@
 package behrman.justin.financialmanager.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AbsListView;
@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
@@ -19,6 +20,8 @@ import behrman.justin.financialmanager.adapters.SelectableAdapter;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardReceiever;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
+import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.StringConstants;
 
 public class MonthlyCalculationsActivity extends AppCompatActivity {
 
@@ -38,24 +41,42 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_monthly_calculations);
         extractViews();
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        setViewData();
         initClickListener();
         update();
+    }
+
+    private void setViewData() {
+        int currentMonth = ProjectUtils.getCurrentMonth();
+        int currentYear = ProjectUtils.getCurrentYear();
+        monthSpinner.setSelection(currentMonth - 1);
+        yearField.setText(currentYear + "");
     }
 
     private void initClickListener() {
         actionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(LOG_TAG, "listing");
                 int len = listView.getCount();
                 SparseBooleanArray checked = listView.getCheckedItemPositions();
+                LinkedList<Card> selectedCards = new LinkedList<>();
                 for (int i = 0; i < len; i++) {
                     if (checked.get(i)) {
-                        Log.i(LOG_TAG, "card: " + cards.get(i));
+                        selectedCards.add(cards.get(i));
                     }
                 }
+                switchActivities(selectedCards);
             }
         });
+    }
+
+    private void switchActivities(LinkedList<Card> cards) {
+        Intent intent = new Intent(this, MonthlyCalculationResultsActivity.class);
+        intent.putExtra(StringConstants.MONTH_SPINNER_POSITION_KEY, monthSpinner.getSelectedItemPosition());
+        int year = Integer.parseInt(yearField.getText().toString());
+        intent.putExtra(StringConstants.YEAR_KEY, year);
+        intent.putExtra(StringConstants.SELECTED_CARDS_KEY, cards);
+        startActivity(intent);
     }
 
     private void update() {

@@ -49,7 +49,12 @@
             android:name=".activities.EditTransactionActivity"
             android:label="@string/edit_transaction_title" />
         <activity android:name=".activities.DeleteCardActivity" />
-        <activity android:name=".activities.MonthlyCalculationsActivity"></activity>
+        <activity
+            android:name=".activities.MonthlyCalculationsActivity"
+            android:label="@string/monthly_calculations_title" />
+        <activity
+            android:name=".activities.MonthlyCalculationResultsActivity"
+            android:label="@string/monthly_results_title"></activity>
     </application>
 
 </manifest>

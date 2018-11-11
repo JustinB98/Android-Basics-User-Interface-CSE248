@@ -47,11 +47,16 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_FUNCTION_DELETE_MANUAL_TRANSACTION = "deleteManualTransaction";
     public final static String PARSE_CLOUD_FUNCTION_DELETE_AUTO_CARD = "deleteAutoCard";
     public final static String PARSE_CLOUD_FUNCTION_DELETE_MANUAL_CARD = "deleteManualCard";
+    public final static String PARSE_CLOUD_FUNCTION_CALCULATE_MONTHLY = "calculateMonthly";
     // ---------------------- END PARSE CLOUD FUNCTIONS----------------------
 
     // ---------------------- START PARSE CLOUD PARAMETERS----------------------
     public final static String PARSE_CLOUD_PARAMETER_NEW_CARD_NAME = "newName";
     public final static String PARSE_CLOUD_PARAMETER_ORIGINAL_CARD_NAME = "originalName";
+    public final static String PARSE_CLOUD_PARAMETER_CARD_NAME_LIST = "cardNames";
+    public final static String PARSE_CLOUD_PARAMETER_CARD_TYPE_LIST = "cardTypes";
+    public final static String PARSE_CLOUD_PARAMETER_MONTH = "month";
+    public final static String PARSE_CLOUD_PARAMETER_YEAR = "year";
     // ---------------------- END PARSE CLOUD PARAMETERS----------------------
 
 
@@ -68,6 +73,9 @@ public final class StringConstants {
     public final static String DATE_KEY = "date";
     public final static String OBJECT_ID_KEY = "objectId";
     public final static String IS_MANUAL_CARD_KEY = "isManual";
+    public final static String MONTH_SPINNER_POSITION_KEY = "monthSpinnerPosition";
+    public final static String YEAR_KEY = "year";
+    public final static String SELECTED_CARDS_KEY = "selectedCards";
     // ---------------------- END KEYS ----------------------
 
     // ---------------------- START LITERALS ----------------------

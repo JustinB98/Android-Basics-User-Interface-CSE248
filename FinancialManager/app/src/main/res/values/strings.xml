@@ -55,6 +55,8 @@
     <string name="edit_card_title">Edit Card</string>
     <string name="edit_transaction_title">Edit Transaction</string>
     <string name="delete_card_title">Delete %1$s?</string>
+    <string name="monthly_calculations_title">Choose Month And Cards</string>
+    <string name="monthly_results_title">Monthly Results</string>
     <!-- END Titles -->
 
     <!-- START Login Screen -->
