@@ -9,28 +9,38 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class AutoCardTransactionsParser extends HashMap<Date, ArrayList<Transaction>>{
+public class AutoCardTransactionsParser {
 
     public final static String LOG_TAG = AutoCardTransactionsParser.class.getSimpleName() + "debug";
 
-    public AutoCardTransactionsParser(HashMap<String, Object> responseMap) {
-        super((int) responseMap.get(StringConstants.TRANSACTIONS_LENGTH_KEY));
+    private HashMap<Date, ArrayList<Transaction>> mapData;
+    private ArrayList<Transaction> listData;
+
+    // the length of the response map isn't exactly the size as the arraylist, so a general offset is good to have
+    private final int LIST_SIZE_OFFSET = 20;
+
+    public DataCollection parse(HashMap<String, Object> responseMap) {
+        int length = (int) responseMap.get(StringConstants.TRANSACTIONS_LENGTH_KEY);
+        mapData = new HashMap<>(length);
+        listData = new ArrayList<>(length + LIST_SIZE_OFFSET);
         ArrayList<HashMap<String, Object>> transactions = (ArrayList<HashMap<String, Object>>) responseMap.get(StringConstants.TRANSACTIONS_INTENT_KEY);
         parseData(transactions);
+        return new DataCollection(listData, mapData);
     }
 
     private void parseData(ArrayList<HashMap<String, Object>> transactions) {
         for (int i = 0; i < transactions.size(); ++i) {
             Transaction transactionObj = convertToTransaction(transactions.get(i));
+            listData.add(transactionObj);
             insertToMap(transactionObj);
         }
     }
 
     private void insertToMap(Transaction transaction) {
-        ArrayList<Transaction> transactionsForDate = get(transaction.getDate());
+        ArrayList<Transaction> transactionsForDate = mapData.get(transaction.getDate());
         if (transactionsForDate == null) {
             transactionsForDate = new ArrayList<>();
-            put(transaction.getDate(), transactionsForDate);
+            mapData.put(transaction.getDate(), transactionsForDate);
         }
         transactionsForDate.add(transaction);
     }
@@ -63,8 +73,8 @@ public class AutoCardTransactionsParser extends HashMap<Date, ArrayList<Transact
     // for debugging
     public void listTransactions() {
         StringBuilder sb = new StringBuilder();
-        for (Date date: keySet()) {
-            sb.append(get(date));
+        for (Date date: mapData.keySet()) {
+            sb.append(mapData.get(date));
         }
         Log.i(LOG_TAG, sb.toString());
 

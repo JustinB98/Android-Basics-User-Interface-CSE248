@@ -9,10 +9,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.TransactionForMonthAdapter;
@@ -52,13 +48,7 @@ public class ViewHistoryListViewSubActivity {
         Log.i(ViewHistoryActivity.LOG_TAG, "setting list view; loading: " + communicator.loadingProperty().getValue());
         if (!communicator.loadingProperty().getValue()) {
             Log.i(ViewHistoryActivity.LOG_TAG, "transactions: " + communicator.getTransactions());
-            ArrayList<Transaction> transactions = new ArrayList<>();
-            HashMap<Date, ArrayList<Transaction>> monthTransactions = communicator.getTransactions();
-            for (Date date : monthTransactions.keySet()) {
-                transactions.addAll(monthTransactions.get(date));
-            }
-            Collections.sort(transactions);
-            setListViewAdapter(transactions);
+            setListViewAdapter();
         } else {
             communicator.loadingProperty().addListener(new BooleanProperty.BooleanListener() {
                 @Override
@@ -70,7 +60,8 @@ public class ViewHistoryListViewSubActivity {
         }
     }
 
-    private void setListViewAdapter(List<Transaction> transactions) {
+    private void setListViewAdapter() {
+        ArrayList<Transaction> transactions = communicator.getTransactionAsList();
         if (transactions != null && transactions.size() > 0) {
             TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions, communicator.isManualCard(), communicator);
             listView.setAdapter(adapter);

@@ -8,6 +8,8 @@ public interface TransactionCommunicator {
 
     HashMap<Date, ArrayList<Transaction>> getTransactions();
 
+    ArrayList<Transaction> getTransactionAsList();
+
     /**
      * month is 1-12
      * @param year

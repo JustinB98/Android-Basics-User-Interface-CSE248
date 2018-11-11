@@ -12,6 +12,7 @@ import com.parse.ParseUser;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.model.AutoCardTransactionsParser;
+import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -44,9 +45,9 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
             @Override
             public void done(HashMap<String, Object> response, ParseException e) {
                 if (e == null) {
-                    AutoCardTransactionsParser transactions = new AutoCardTransactionsParser(response);
-                    Log.i(LOG_TAG, "transactions: " + transactions);
-                    ViewAutoHistoryActivity.super.setTransactionData(transactions);
+                    DataCollection data = new AutoCardTransactionsParser().parse(response);
+                    Log.i(LOG_TAG, "transactions: " + data);
+                    ViewAutoHistoryActivity.super.setTransactionData(data);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
                 }

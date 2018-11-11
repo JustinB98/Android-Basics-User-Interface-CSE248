@@ -9,6 +9,7 @@ import com.parse.ParseException;
 
 import java.util.HashMap;
 
+import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ManualCardTransactionParser;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -34,9 +35,10 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
             public void done(HashMap<String, Object> object, ParseException e) {
                 if (e == null) {
                     Log.i(LOG_TAG, "object: " + (object == null ? "null" : object.toString()));
-                    ManualCardTransactionParser cardTransactions = new ManualCardTransactionParser(object);
-                    Log.i(LOG_TAG, "cardTransactions: " + cardTransactions);
-                    ViewManualHistoryActivity.super.setTransactionData(cardTransactions);
+                    // ManualCardTransactionParser cardTransactions = new ManualCardTransactionParser(object);
+                    DataCollection data = new ManualCardTransactionParser().parse(object);
+                    // Log.i(LOG_TAG, "cardTransactions: " + cardTransactions);
+                    ViewManualHistoryActivity.super.setTransactionData(data);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
                 }

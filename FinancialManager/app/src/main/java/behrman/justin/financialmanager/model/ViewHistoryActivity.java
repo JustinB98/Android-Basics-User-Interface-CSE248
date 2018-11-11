@@ -29,7 +29,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     protected String cardName;
     private boolean isManualCard;
 
-    private HashMap<Date, ArrayList<Transaction>> cardTransactions;
+    private DataCollection transactionData;
 
     private ViewHistoryCalendarViewSubActivity calendarSubActivity;
     private ViewHistoryListViewSubActivity listViewSubActivity;
@@ -68,7 +68,11 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         communicator = new TransactionCommunicator() {
             @Override
             public HashMap<Date, ArrayList<Transaction>> getTransactions() {
-                return cardTransactions;
+                return transactionData.getDataMap();
+            }
+
+            public ArrayList<Transaction> getTransactionAsList() {
+                return transactionData.getDataList();
             }
 
             @Override
@@ -157,9 +161,9 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     public abstract void getTransactions(int year, int month);
 
-    protected void setTransactionData(HashMap<Date, ArrayList<Transaction>> cardTransactions) {
+    protected void setTransactionData(DataCollection data) {
         Log.i(LOG_TAG, "got some transactions");
-        this.cardTransactions = cardTransactions;
+        this.transactionData = data;
         loading.setValue(false);
     }
 
