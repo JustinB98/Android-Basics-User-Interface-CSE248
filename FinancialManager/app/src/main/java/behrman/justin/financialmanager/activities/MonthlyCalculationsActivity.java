@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -57,18 +58,42 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         actionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int len = listView.getCount();
-                SparseBooleanArray checked = listView.getCheckedItemPositions();
-                LinkedList<Card> selectedCards = new LinkedList<>();
-                for (int i = 0; i < len; i++) {
-                    if (checked.get(i)) {
-                        selectedCards.add(cards.get(i));
-                    }
-                }
-                switchActivities(selectedCards);
+                extractData();
             }
         });
     }
+
+    private void extractData() {
+        LinkedList<Card> selectedCards = getSelectedCards();
+        if (dataIsGood(selectedCards)) {
+            switchActivities(selectedCards);
+        }
+    }
+
+    private LinkedList<Card> getSelectedCards() {
+        int len = listView.getCount();
+        SparseBooleanArray checked = listView.getCheckedItemPositions();
+        LinkedList<Card> selectedCards = new LinkedList<>();
+        for (int i = 0; i < len; i++) {
+            if (checked.get(i)) {
+                selectedCards.add(cards.get(i));
+            }
+        }
+        return selectedCards;
+    }
+
+    private boolean dataIsGood(LinkedList<Card> selectedCards) {
+        if (ProjectUtils.isEmpty(yearField.getText())) {
+            Toast.makeText(this, "Year can't be empty", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (selectedCards.size() == 0) {
+            Toast.makeText(this, "Please selected at least one card", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     private void switchActivities(LinkedList<Card> cards) {
         Intent intent = new Intent(this, MonthlyCalculationResultsActivity.class);

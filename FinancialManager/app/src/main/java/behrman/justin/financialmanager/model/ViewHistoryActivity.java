@@ -40,7 +40,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private BooleanProperty loading;
 
-    private enum CurrentScreen { CALENDAR, LISTVIEW; };
+    private enum CurrentScreen { CALENDAR, LISTVIEW}
 
     private CurrentScreen currentScreen;
 

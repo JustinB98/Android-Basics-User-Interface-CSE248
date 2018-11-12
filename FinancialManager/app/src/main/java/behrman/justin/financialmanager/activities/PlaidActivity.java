@@ -58,7 +58,7 @@ public class PlaidActivity extends AppCompatActivity {
 
         // Modify Webview settings - all of these settings may not be applicable
         // or necesscary for your integration.
-        final WebView plaidLinkWebview = (WebView) findViewById(R.id.plaid_webview);
+        final WebView plaidLinkWebview = findViewById(R.id.plaid_webview);
         WebSettings webSettings = plaidLinkWebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);

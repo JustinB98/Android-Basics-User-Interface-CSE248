@@ -123,11 +123,11 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void extractViews() {
-        usernameField = (EditText) findViewById(R.id.username_input);
-        passwordField = (EditText) findViewById(R.id.password_input);
-        confirmPasswordField = (EditText) findViewById(R.id.confirm_password_input);
-        createAccountBtn = (Button) findViewById(R.id.create_account_btn);
-        progressBar = (ProgressBar) findViewById(R.id.signup_progress_bar);
+        usernameField = findViewById(R.id.username_input);
+        passwordField = findViewById(R.id.password_input);
+        confirmPasswordField = findViewById(R.id.confirm_password_input);
+        createAccountBtn = findViewById(R.id.create_account_btn);
+        progressBar = findViewById(R.id.signup_progress_bar);
     }
 
     @Override

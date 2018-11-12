@@ -44,8 +44,8 @@ public class SelectCardActivity extends AppCompatActivity {
     }
 
     private void extractViews() {
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        listView = (ListView) findViewById(R.id.list_view);
+        progressBar = findViewById(R.id.progress_bar);
+        listView = findViewById(R.id.list_view);
     }
 
     private void setListViewItemListener() {

@@ -54,11 +54,11 @@ public class SelectableAdapter extends ArrayAdapter<Card> {
     private void putCardIntoViews(int pos, View convertView) {
         Card currentCard = getItem(pos);
         // Log.i(LOG_TAG, "card: " + currentCard + ", item checked: " + listView.isItemChecked(pos));
-        TextView cardNameView = (TextView) convertView.findViewById(R.id.card_name_view);
+        TextView cardNameView = convertView.findViewById(R.id.card_name_view);
         cardNameView.setText(currentCard.getCardName());
-        TextView cardTypeView = (TextView) convertView.findViewById(R.id.card_type_view);
+        TextView cardTypeView = convertView.findViewById(R.id.card_type_view);
         cardTypeView.setText(currentCard.getCardType().toString());
-        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+        CheckBox checkBox = convertView.findViewById(R.id.checkbox);
         checkBox.setChecked(listView.isItemChecked(pos));
     }
 

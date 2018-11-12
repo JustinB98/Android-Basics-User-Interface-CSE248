@@ -96,9 +96,9 @@ public class AddManualCardActivity extends AppCompatActivity {
     }
 
     private void extractViews() {
-        cardNameField = (EditText) findViewById(R.id.card_name);
-        addCardBtn = (Button) findViewById(R.id.add_card_btn);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        cardNameField = findViewById(R.id.card_name);
+        addCardBtn = findViewById(R.id.add_card_btn);
+        progressBar = findViewById(R.id.progress_bar);
     }
 
 }

@@ -173,14 +173,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         initWritableViews();
-        loginBtn = (Button) findViewById(R.id.login_btn);
-        createAccountView = (TextView) findViewById(R.id.create_account);
-        progressBar = (ProgressBar) findViewById(R.id.login_progress);
+        loginBtn = findViewById(R.id.login_btn);
+        createAccountView = findViewById(R.id.create_account);
+        progressBar = findViewById(R.id.login_progress);
     }
 
     private void initWritableViews() {
-        usernameField = (EditText) findViewById(R.id.username_input);
-        passwordField = (EditText) findViewById(R.id.password_input);
+        usernameField = findViewById(R.id.username_input);
+        passwordField = findViewById(R.id.password_input);
     }
 
     @Override

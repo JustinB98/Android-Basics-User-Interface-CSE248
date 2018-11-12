@@ -153,11 +153,8 @@ public class ProjectUtils {
             return true;
         } else if (s1 == null || s2 == null) { // one is null and other is not?
             return false;
-        } else if (s1.trim().equalsIgnoreCase(s2.trim())) { // contents equal?
-            return true;
-        } else {
-            return false;
-        }
+        } else // contents equal?
+            return s1.trim().equalsIgnoreCase(s2.trim());
     }
 
     /**
@@ -211,6 +208,14 @@ public class ProjectUtils {
             list1.addAll(list2);
             return list1;
         }
+    }
+
+    public static boolean isEmpty(Editable e) {
+        return isEmpty(e.toString());
+    }
+
+    public static boolean isEmpty(String s) {
+        return s.trim().isEmpty();
     }
 
 }
