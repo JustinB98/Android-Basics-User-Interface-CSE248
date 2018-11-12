@@ -35,7 +35,6 @@ public class ManualCardTransactionParser {
             Transaction t = ParseUtils.getManualTransaction(transactions.get(i));
             insertToMap(t);
             listData.add(t);
-            listData.add(t);
         }
     }
 
@@ -47,8 +46,6 @@ public class ManualCardTransactionParser {
         }
         transactionsForDate.add(transaction);
     }
-
-
 
     // for debugging
     public void listTransactions() {
