@@ -37,7 +37,7 @@
                 tools:text="999999999999.99 USD" />
         </LinearLayout>
 
-        <ListView
+        <ExpandableListView
             android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

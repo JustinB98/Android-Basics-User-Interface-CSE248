@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.ParseUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class AutoCardTransactionsParser {
@@ -30,7 +30,7 @@ public class AutoCardTransactionsParser {
 
     private void parseData(ArrayList<HashMap<String, Object>> transactions) {
         for (int i = 0; i < transactions.size(); ++i) {
-            Transaction transactionObj = convertToTransaction(transactions.get(i));
+            Transaction transactionObj = ParseUtils.getAutoTransaction(transactions.get(i));
             listData.add(transactionObj);
             insertToMap(transactionObj);
         }
@@ -43,31 +43,6 @@ public class AutoCardTransactionsParser {
             mapData.put(transaction.getDate(), transactionsForDate);
         }
         transactionsForDate.add(transaction);
-    }
-
-    private Transaction convertToTransaction(HashMap<String, Object> transaction) {
-        String name = (String) transaction.get(StringConstants.PLAID_PLACE_NAME);
-        Date date = getTransactionDate(transaction.get(StringConstants.PLAID_DATE));
-        String currencyCode = (String) transaction.get(StringConstants.PLAID_CURRENCY_CODE);
-        double amount = getTransactionAmount(transaction.get(StringConstants.PLAID_AMOUNT));
-        return new Transaction(name, amount, date, currencyCode);
-    }
-
-    private Date getTransactionDate(Object date) {
-        String dateStr = (String) date;
-        return ProjectUtils.convertToDate(dateStr);
-    }
-
-    private double getTransactionAmount(Object amount) {
-        if (amount instanceof Integer) {
-            int a = (int) amount;
-            return a;
-        } else if (amount instanceof Double) {
-            return (double) amount;
-        } else {
-            Log.i(LOG_TAG, "unknown case, amount is not int or double");
-            return 0; // unknown case
-        }
     }
 
     // for debugging

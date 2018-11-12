@@ -81,12 +81,23 @@ public class ProjectUtils {
         return "\"" + name + "\":" + "\"" + obj + "\"";
     }
 
-    public static CardType convertToCardType(String cardType) {
-        if (cardType.equals(StringConstants.AUTO_CARD_CLASS_NAME)) {
+    public static CardType convertToCardTypeFromClass(String className) {
+        if (className.equals(StringConstants.AUTO_CARD_CLASS_NAME)) {
             return CardType.AUTO;
-        } else if (cardType.equals(StringConstants.MANUAL_CARD_CLASS_NAME)) {
+        } else if (className.equals(StringConstants.MANUAL_CARD_CLASS_NAME)) {
             return CardType.MANUAL;
         } else {
+            return null;
+        }
+    }
+
+    public static CardType convertToCardType(String cardType) {
+        if (cardType.equalsIgnoreCase(CardType.MANUAL.toString())) {
+            return CardType.MANUAL;
+        } else if (cardType.equalsIgnoreCase(CardType.AUTO.toString())) {
+            return CardType.AUTO;
+        } else {
+            Log.i(LOG_TAG, "unknown case: " + cardType + ", returning null");
             return null;
         }
     }

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,14 +17,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.adapters.CardsAndTransactionsAdapter;
 import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.model.MonthResultsData;
+import behrman.justin.financialmanager.utils.ParseUtils;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class MonthlyCalculationResultsActivity extends AppCompatActivity {
 
     public final static String LOG_TAG = MonthlyCalculationResultsActivity.class.getSimpleName() + "debug";
 
-    private ListView listView;
+    private ExpandableListView listView;
     private TextView dateView, numberView;
     private ProgressBar progressBar;
     private View container;
@@ -43,17 +47,35 @@ public class MonthlyCalculationResultsActivity extends AppCompatActivity {
     }
 
     private void update() {
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_CALCULATE_MONTHLY, params(), new FunctionCallback<Object>() {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_CALCULATE_MONTHLY, params(), new FunctionCallback<HashMap<String, Object>>() {
             @Override
-            public void done(Object object, ParseException e) {
+            public void done(HashMap<String, Object> object, ParseException e) {
                 Log.i(LOG_TAG, "returned with: " + object + ", e: " + e);
                 if (e == null) {
                     Log.i(LOG_TAG, "object: " + object);
+                    parseData(object);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
                 }
             }
         });
+    }
+
+    private void parseData(HashMap<String, Object> response) {
+        double total = ParseUtils.getTransactionAmount(response.get(StringConstants.TOTAL_KEY));
+        ArrayList<Object> transactionData = (ArrayList<Object>)response.get(StringConstants.TRANSACTION_DATA_KEY);
+        MonthResultsData data = new MonthResultsData(transactionData, cards.size());
+        Log.i(LOG_TAG, "children: " + data.getChildData());
+        Log.i(LOG_TAG, "group names: " + data.getGroupData());
+        displayData(total, data);
+    }
+
+    private void displayData(double total, MonthResultsData data) {
+        numberView.setText(ProjectUtils.formatNumber(total));
+        dateView.setText(month + "-" + year);
+        CardsAndTransactionsAdapter adapter = new CardsAndTransactionsAdapter(this, data.getGroupData(), data.getChildData());
+        listView.setAdapter(adapter);
+        setToReady();
     }
 
     private HashMap<String, Object> params() {

@@ -60,7 +60,7 @@ public class GetCardsUtil {
     }
 
     private static Card convertParseObjectToCard(ParseObject obj) {
-        CardType cardType = ProjectUtils.convertToCardType(obj.getClassName());
+        CardType cardType = ProjectUtils.convertToCardTypeFromClass(obj.getClassName());
         String name = obj.getString(StringConstants.DATABASE_CARD_NAME_COLUMN);
         return new Card(name, cardType);
     }

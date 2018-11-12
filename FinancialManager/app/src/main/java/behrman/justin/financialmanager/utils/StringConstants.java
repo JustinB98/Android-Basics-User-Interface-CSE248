@@ -82,4 +82,11 @@ public final class StringConstants {
     public final static String SUCCESS = "success";
     // ---------------------- END LITERALS ----------------------
 
+    // ---------------------- START MONTHLY CALCULATIONS KEYS ----------------------
+
+    public final static String TOTAL_KEY = "total";
+    public final static String TRANSACTION_DATA_KEY = "transactions";
+
+    // ---------------------- END MONTHLY CALCULATIONS KEYS ----------------------
+
 }

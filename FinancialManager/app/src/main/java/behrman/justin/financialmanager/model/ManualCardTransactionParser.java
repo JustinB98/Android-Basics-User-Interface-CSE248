@@ -6,10 +6,9 @@ import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
-import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.ParseUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ManualCardTransactionParser {
@@ -33,7 +32,7 @@ public class ManualCardTransactionParser {
 
     private void parseData(ArrayList<ParseObject> transactions) {
         for (int i = 0; i < transactions.size(); ++i) {
-            Transaction t = getTransaction(transactions.get(i));
+            Transaction t = ParseUtils.getManualTransaction(transactions.get(i));
             insertToMap(t);
             listData.add(t);
             listData.add(t);
@@ -49,41 +48,7 @@ public class ManualCardTransactionParser {
         transactionsForDate.add(transaction);
     }
 
-    private Transaction getTransaction(ParseObject object) {
-        String place = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_PLACE_COLUMN);
-        Date date = (Date) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_DATE_COLUMN);
-        date = reformatDate(date);
-        String currencyCode = (String) object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_CURRENCY_CODE_COLUMN);
-        double amount = getTransactionAmount(object.get(StringConstants.MANUAL_CARD_TRANSACTIONS_AMOUNT_COLUMN));
-        String objectId = object.getObjectId();
-        Log.i(LOG_TAG, "objectId: " + objectId);
-        return new Transaction(place, amount, date, currencyCode, objectId);
-    }
 
-    // need to reformat the date so the times aren't compared
-    // the date parameter has a time, this method gets rid of that and just
-    // has the year, month, and day
-    private Date reformatDate(Date date) {
-        String dateStr = ProjectUtils.convertDateToString(date);
-        String[] dateTokens = dateStr.split("-");
-        int year = Integer.parseInt(dateTokens[0]);
-        int month = Integer.parseInt(dateTokens[1]);
-        int day = Integer.parseInt(dateTokens[2]);
-        Log.i(LOG_TAG, year + "-" + month + "-" + day);
-        return new GregorianCalendar(year, month - 1, day).getTime();
-    }
-
-    private double getTransactionAmount(Object amount) {
-        if (amount instanceof Integer) {
-            int a = (int) amount;
-            return a;
-        } else if (amount instanceof Double) {
-            return (double) amount;
-        } else {
-            Log.i(LOG_TAG, "unknown case, amount is not int or double");
-            return 0; // unknown case
-        }
-    }
 
     // for debugging
     public void listTransactions() {
