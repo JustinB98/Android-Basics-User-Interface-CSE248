@@ -186,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        ProjectUtils.setContext(this);
         ParseUser currentUser = ParseUser.getCurrentUser();
         updateUIIfNeeded(currentUser);
         passwordField.setText("");

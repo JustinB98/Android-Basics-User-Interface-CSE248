@@ -73,7 +73,7 @@ public class EditTransactionActivity extends AppCompatActivity {
     private void setFieldsToTransactions() {
         placeField.setText(originalTransaction.getPlace());
         amountField.setText(originalTransaction.getAmount() + "");
-        currencySpinner.setSelection(ProjectUtils.convertCurrencyCodeStringToIndex(originalTransaction.getCurrencyCode()));
+        currencySpinner.setSelection(ProjectUtils.convertCurrencyCodeStringToIndex(this, originalTransaction.getCurrencyCode()));
         calendarView.setDate(originalTransaction.getDate().getTime());
     }
 

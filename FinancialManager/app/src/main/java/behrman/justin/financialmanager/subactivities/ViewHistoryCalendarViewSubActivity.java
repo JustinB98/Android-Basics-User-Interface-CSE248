@@ -87,7 +87,7 @@ public class ViewHistoryCalendarViewSubActivity {
 
     private void changeView(ArrayList<Transaction> transactions) {
         if (transactions == null) {
-            String fullDate = ProjectUtils.getFullDate(calendarView.getSelectedDate().getDate());
+            String fullDate = ProjectUtils.getFullDate(activity, calendarView.getSelectedDate().getDate());
             Toast.makeText(activity, activity.getString(R.string.no_transactions_for_date, fullDate), Toast.LENGTH_LONG).show();
         } else {
             switchToShowTransactionsActivity(transactions);

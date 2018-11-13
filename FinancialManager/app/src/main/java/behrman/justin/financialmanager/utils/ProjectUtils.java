@@ -26,8 +26,6 @@ public class ProjectUtils {
 
     public final static String LOG_TAG = ProjectUtils.class.getSimpleName();
 
-    private static Context context;
-
     private static ViewHistoryActivity viewHistoryActivityInstance;
 
     private ProjectUtils() {}
@@ -130,11 +128,11 @@ public class ProjectUtils {
         }
     }
 
-    public static String getFullDate(Date date) {
+    public static String getFullDate(Context context, Date date) {
         String formattedString = convertDateToString(date);
         String[] dateTokens = formattedString.split("-");
         int month = Integer.parseInt(dateTokens[1]);
-        String strMonth = getMonthName(month);
+        String strMonth = getMonthName(context, month);
         return strMonth + " " + dateTokens[2] + ", " + dateTokens[0];
     }
 
@@ -143,8 +141,13 @@ public class ProjectUtils {
      * @param month
      * @return
      */
-    public static String getMonthName(int month) {
+    public static String getMonthName(Context context, int month) {
         String[] months = context.getResources().getStringArray(R.array.full_months);
+        return months[month - 1];
+    }
+
+    public static String getAbbreviatedMonthName(Context context, int month) {
+        String[] months = context.getResources().getStringArray(R.array.abbreviated_months);
         return months[month - 1];
     }
 
@@ -162,7 +165,7 @@ public class ProjectUtils {
      * @param currencyCode
      * @return
      */
-    public static int convertCurrencyCodeStringToIndex(String currencyCode) {
+    public static int convertCurrencyCodeStringToIndex(Context context, String currencyCode) {
         String[] currencyCodes = context.getResources().getStringArray(R.array.currency_codes);
         for (int i = 0; i < currencyCodes.length; ++i) {
             if (currencyCode.equals(currencyCodes[i])) {
@@ -182,10 +185,6 @@ public class ProjectUtils {
 
     public static String normalizeString(String cs) {
         return cs.trim();
-    }
-
-    public static void setContext(Context context) {
-        ProjectUtils.context = context;
     }
 
     // TODO: 11/6/2018 i know this looks bad but trust me it really does help with neating up the code just a little bit. Might fix later

@@ -27,7 +27,7 @@ public class ViewTransactionsForDateActivity extends AppCompatActivity {
         listView = findViewById(R.id.transactions_list_view);
         transactions = (List<Transaction>) getIntent().getSerializableExtra(StringConstants.TRANSACTIONS_INTENT_KEY);
         Date date = (Date) getIntent().getSerializableExtra(StringConstants.DATE_KEY);
-        getSupportActionBar().setTitle(ProjectUtils.getFullDate(date));
+        getSupportActionBar().setTitle(ProjectUtils.getFullDate(this, date));
         isManual = getIntent().getBooleanExtra(StringConstants.IS_MANUAL_CARD_KEY, false);
         setUp();
     }

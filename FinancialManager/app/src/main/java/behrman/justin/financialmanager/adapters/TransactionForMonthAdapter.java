@@ -63,7 +63,7 @@ public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
         TextView currencyCodeView = convertView.findViewById(R.id.currency_code_view);
         currencyCodeView.setText(t.getCurrencyCode());
         TextView dateView = convertView.findViewById(R.id.date_view);
-        dateView.setText(ProjectUtils.getFullDate(t.getDate()));
+        dateView.setText(ProjectUtils.getFullDate(getContext(), t.getDate()));
     }
 
     private void initLongClick(View view, final int position) {
