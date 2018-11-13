@@ -76,6 +76,7 @@ public final class StringConstants {
     public final static String MONTH_SPINNER_POSITION_KEY = "monthSpinnerPosition";
     public final static String YEAR_KEY = "year";
     public final static String SELECTED_CARDS_KEY = "selectedCards";
+    public final static String AFTER_DELETE_KEY = "afterDelete";
     // ---------------------- END KEYS ----------------------
 
     // ---------------------- START LITERALS ----------------------

@@ -27,6 +27,7 @@ public class TransactionPopUpUtils {
 
     private Context context;
     private ItemGetter<Transaction> itemGetter;
+
     public TransactionPopUpUtils(Context context, ItemGetter<Transaction> itemGetter) {
         this.context = context;
         this.itemGetter = itemGetter;
@@ -88,7 +89,7 @@ public class TransactionPopUpUtils {
                     if (ProjectUtils.deepEquals(object, "success")) {
                         Toast.makeText(context, "Deleted...", Toast.LENGTH_SHORT).show();
                         itemGetter.removeItem(itemGetter.getItem(position));
-                        ProjectUtils.refreshViewHistoryScreen();
+                        ProjectUtils.setItemDeleted(true);
                     }
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());

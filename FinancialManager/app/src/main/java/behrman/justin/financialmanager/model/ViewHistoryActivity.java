@@ -49,7 +49,6 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        ProjectUtils.setViewHistoryActivity(this);
         Card card = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
         cardName = card.getCardName();
         getSupportActionBar().setTitle(getString(R.string.view_history_title, cardName));
@@ -102,9 +101,10 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     public void refresh() {
         // reget transactions
+        Log.i(LOG_TAG, "getting transactions for: " + calendarSubActivity.getSavedMonth() + ", " + calendarSubActivity.getSavedYear());
         loading.setValue(true);
-        setToRightView();
         getTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
+        setToRightView();
     }
 
     private void setToRightView() {
@@ -114,9 +114,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             //  instead of the list view
             switchToListView();
         } else if (currentScreen == CurrentScreen.CALENDAR) {
-            // no real reason for this because in the current date history activity it won't make a difference and will remain in the
-            // view current date history activity
-            // switchToCalendarView();
+            switchToCalendarView();
         } else {
             Log.i(LOG_TAG, "unknown state: " + currentScreen);
         }
@@ -147,13 +145,27 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     }
 
     private void switchToListView() {
+        checkIfRefreshNeeded();
         listViewSubActivity.setToView();
         listViewSubActivity.setListView();
         switchMenu(R.menu.calendar_view_menu);
         currentScreen = CurrentScreen.LISTVIEW;
     }
 
+    private void checkIfRefreshNeeded() {
+        // odds are this method won't be called from the refresh method
+        // so there's practically no change there will be two runs of the
+        // refresh method. This is really only called when the views are being
+        // switched from the menu item icons
+        if (ProjectUtils.itemDeleted()) {
+            // set the item deleted for FALSE FIRST otherwise there WILL be infinite recursion
+            ProjectUtils.setItemDeleted(false);
+            refresh();
+        }
+    }
+
     private void switchToCalendarView() {
+        checkIfRefreshNeeded();
         calendarSubActivity.setToView();
         switchMenu(R.menu.list_view_menu);
         currentScreen = CurrentScreen.CALENDAR;
@@ -170,17 +182,23 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.i(LOG_TAG, "onStart called");
         if (menuCreated && activityCreated) {
-            Log.i(LOG_TAG, "onStart() called: getting transactions for: " + calendarSubActivity.getSavedMonth() + ", " + calendarSubActivity.getSavedYear());
-            switchToCalendarView();
-            getTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
-            loading.setValue(true);
+            refresh();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(LOG_TAG, "onResume called");
+        if (menuCreated && activityCreated) {
+            refresh();
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        ProjectUtils.setViewHistoryActivity(null);
     }
 }

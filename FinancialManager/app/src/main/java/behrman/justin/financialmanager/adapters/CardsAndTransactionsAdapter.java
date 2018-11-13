@@ -1,7 +1,6 @@
 package behrman.justin.financialmanager.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.activities.MonthlyCalculationResultsActivity;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -73,9 +71,7 @@ public class CardsAndTransactionsAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         Card header = (Card)getGroup(groupPosition);
         if (convertView == null) {
-            Log.i(MonthlyCalculationResultsActivity.LOG_TAG, "CREATING");
             convertView = LayoutInflater.from(context).inflate(R.layout.header_list_item, parent, false);
-            Log.i(MonthlyCalculationResultsActivity.LOG_TAG, "CREATED");
         }
         TextView view = convertView.findViewById(R.id.card_view);
         view.setText(header.getCardName() + " - " + header.getCardType());

@@ -20,15 +20,22 @@ import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.CardType;
-import behrman.justin.financialmanager.model.ViewHistoryActivity;
 
 public class ProjectUtils {
 
     public final static String LOG_TAG = ProjectUtils.class.getSimpleName();
 
-    private static ViewHistoryActivity viewHistoryActivityInstance;
+    private static boolean ITEM_DELETED = false;
 
     private ProjectUtils() {}
+
+    public static void setItemDeleted(boolean itemDeleted) {
+        ITEM_DELETED = itemDeleted;
+    }
+
+    public static boolean itemDeleted() {
+        return ITEM_DELETED;
+    }
 
     /**
      *
@@ -185,17 +192,6 @@ public class ProjectUtils {
 
     public static String normalizeString(String cs) {
         return cs.trim();
-    }
-
-    // TODO: 11/6/2018 i know this looks bad but trust me it really does help with neating up the code just a little bit. Might fix later
-    public static void refreshViewHistoryScreen() {
-        if (viewHistoryActivityInstance != null) {
-            viewHistoryActivityInstance.refresh();
-        }
-    }
-
-    public static void setViewHistoryActivity(ViewHistoryActivity v) {
-        viewHistoryActivityInstance = v;
     }
 
     public static <T> List<T> combineLists(List<T> list1, List<T> list2) {

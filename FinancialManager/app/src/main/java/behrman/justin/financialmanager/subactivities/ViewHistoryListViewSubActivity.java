@@ -64,7 +64,7 @@ public class ViewHistoryListViewSubActivity {
         ArrayList<Transaction> transactions = communicator.getTransactionAsList();
         Log.i(ViewHistoryActivity.LOG_TAG, "transactions: " + transactions);
         if (transactions != null && transactions.size() > 0) {
-            TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions, communicator.isManualCard(), communicator);
+            TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions, communicator.isManualCard());
             listView.setAdapter(adapter);
             setToListView();
         } else {
