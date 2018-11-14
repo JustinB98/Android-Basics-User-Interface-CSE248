@@ -20,7 +20,6 @@ import behrman.justin.financialmanager.model.ViewHistoryActivity;
 public class ViewHistoryListViewSubActivity {
 
     private ListView listView;
-    private ProgressBar progressBar;
 
     private TextView noTransactionsView;
     private AppCompatActivity activity;
@@ -41,7 +40,6 @@ public class ViewHistoryListViewSubActivity {
     private void extractViews() {
         listView = root.findViewById(R.id.list_view);
         noTransactionsView = root.findViewById(R.id.no_transactions_view);
-        progressBar = root.findViewById(R.id.progress_bar);
     }
 
     public void setListView() {
@@ -53,10 +51,12 @@ public class ViewHistoryListViewSubActivity {
             communicator.loadingProperty().addListener(new BooleanProperty.BooleanListener() {
                 @Override
                 public void onChange(boolean newValue) {
+                    setToView();
                     setListView();
                     communicator.loadingProperty().removeListener();
                 }
             });
+            communicator.setToLoadingScreen();
         }
     }
 
@@ -81,9 +81,4 @@ public class ViewHistoryListViewSubActivity {
         listView.setVisibility(View.VISIBLE);
         noTransactionsView.setVisibility(View.GONE);
     }
-
-    public View getMainView() {
-        return listView;
-    }
-
 }

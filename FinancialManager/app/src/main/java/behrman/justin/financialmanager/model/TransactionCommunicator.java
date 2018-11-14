@@ -23,4 +23,6 @@ public interface TransactionCommunicator {
 
     void refresh();
 
+    void setToLoadingScreen();
+
 }

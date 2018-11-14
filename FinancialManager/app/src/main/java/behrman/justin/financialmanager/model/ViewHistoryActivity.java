@@ -22,8 +22,6 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     public final static String LOG_TAG = ViewHistoryActivity.class.getSimpleName() + "debug";
 
-    private ProgressBar progressBar;
-
     private Menu menu;
 
     protected String cardName;
@@ -40,7 +38,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private BooleanProperty loading;
 
-    private enum CurrentScreen { CALENDAR, LISTVIEW}
+    private enum CurrentScreen { CALENDAR, LISTVIEW }
 
     private CurrentScreen currentScreen;
 
@@ -49,18 +47,48 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        Card card = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
-        cardName = card.getCardName();
+        getPassedInValues();
         getSupportActionBar().setTitle(getString(R.string.view_history_title, cardName));
-        isManualCard = card.getCardType() == CardType.MANUAL;
         initCommunicator();
-        calendarSubActivity = new ViewHistoryCalendarViewSubActivity(this, communicator);
-        listViewSubActivity = new ViewHistoryListViewSubActivity(this, communicator);
+        initSubActivities();
         calendarSubActivity.setToView();
+        initLoadingBar();
         getTransactions(calendarSubActivity.getYearSelected(), calendarSubActivity.getMonthSelected());
         loading = new BooleanProperty(true);
         activityCreated = true;
-        registerForContextMenu(listViewSubActivity.getMainView());
+        initLoadingScreen();
+    }
+
+    private void initLoadingScreen() {
+        loadingScreen = getLayoutInflater().inflate(R.layout.loading_screen, null);
+    }
+
+    // https://stackoverflow.com/questions/26443490/appcompat-show-progress-in-action-bar-causes-npe
+    private void initLoadingBar() {
+        ProgressBar progressBar = new ProgressBar(this);
+        progressBar.setIndeterminate(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(progressBar);
+    }
+
+    private void getPassedInValues() {
+        Card card = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
+        cardName = card.getCardName();
+        isManualCard = card.getCardType() == CardType.MANUAL;
+    }
+
+    // https://stackoverflow.com/questions/26443490/appcompat-show-progress-in-action-bar-causes-npe
+    private void setLoadingVisibility(boolean visibility) {
+        getSupportActionBar().getCustomView().setVisibility(visibility ? View.VISIBLE : View.GONE);
+    }
+
+    private void setLoadingVisibility() {
+        setLoadingVisibility(loading.getValue());
+    }
+
+    private void initSubActivities() {
+        calendarSubActivity = new ViewHistoryCalendarViewSubActivity(this, communicator);
+        listViewSubActivity = new ViewHistoryListViewSubActivity(this, communicator);
     }
 
     private void initCommunicator() {
@@ -77,6 +105,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             @Override
             public void requestNewTransactions(int year, int month) {
                 loading.setValue(true);
+                setLoadingVisibility();
                 Log.i(LOG_TAG, "getting transactions for: " + month + ", " + year);
                 ViewHistoryActivity.this.getTransactions(year, month);
             }
@@ -96,6 +125,11 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
                 ViewHistoryActivity.this.refresh();
             }
 
+            @Override
+            public void setToLoadingScreen() {
+                setToLoading();
+            }
+
         };
     }
 
@@ -103,6 +137,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         // reget transactions
         Log.i(LOG_TAG, "getting transactions for: " + calendarSubActivity.getSavedMonth() + ", " + calendarSubActivity.getSavedYear());
         loading.setValue(true);
+        setLoadingVisibility();
         getTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
         setToRightView();
     }
@@ -118,6 +153,11 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         } else {
             Log.i(LOG_TAG, "unknown state: " + currentScreen);
         }
+    }
+
+    private void setToLoading() {
+        setContentView(loadingScreen);
+        setLoadingVisibility(false);
     }
 
     @Override
@@ -145,6 +185,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     }
 
     private void switchToListView() {
+        setLoadingVisibility();
         checkIfRefreshNeeded();
         listViewSubActivity.setToView();
         listViewSubActivity.setListView();
@@ -165,6 +206,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     }
 
     private void switchToCalendarView() {
+        setLoadingVisibility();
         checkIfRefreshNeeded();
         calendarSubActivity.setToView();
         switchMenu(R.menu.list_view_menu);
@@ -177,6 +219,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "got some transactions");
         this.transactionData = data;
         loading.setValue(false);
+        setLoadingVisibility();
     }
 
     @Override
