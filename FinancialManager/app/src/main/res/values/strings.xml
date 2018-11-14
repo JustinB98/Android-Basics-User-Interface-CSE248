@@ -125,6 +125,12 @@
     <string name="delete_card_btn_text">Yes I\'m sure\nDelete this Card</string>
     <!-- END Delete Card -->
 
+    <!-- START Monthly Calculations -->
+    <string name="year_is_empty_text">Year can\'t be empty</string>
+    <string name="no_cards_selected_text">Please selected at least one card</string>
+    <string name="transactions_still_loading">Getting values, please wait…</string>
+    <!-- END Monthly Calculations -->
+
     <!-- START Toast Messages -->
     <string name="sign_in_fail">Sign in Failed!</string>
     <string name="card_already_exists">Card Already Exists!</string>

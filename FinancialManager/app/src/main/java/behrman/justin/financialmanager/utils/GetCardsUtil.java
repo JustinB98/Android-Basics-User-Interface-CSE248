@@ -1,12 +1,14 @@
 package behrman.justin.financialmanager.utils;
 
-import com.parse.FindCallback;
+import android.util.Log;
+
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.model.Card;
@@ -17,53 +19,43 @@ public class GetCardsUtil {
 
     public final static String LOG_TAG = GetCardsUtil.class.getSimpleName() + "debug";
 
+    private final static HashMap<String, Object> EMPTY_MAP = new HashMap<>(0);
+
     public static void findAllCards(final CardReceiever onReceive) {
-        CardReceiever next = new CardReceiever() {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
             @Override
-            public void receiveCards(List<Card> cards) {
-                findAllCards0(cards, onReceive);
-            }
-        };
-        findAllAutoCards(next);
-    }
-
-    private static void findAllCards0(final List<Card> autoCards, final CardReceiever onReceive) {
-        CardReceiever next = new CardReceiever() {
-            @Override
-            public void receiveCards(List<Card> cards) {
-                List<Card> newList = ProjectUtils.combineLists(autoCards, cards);
-                onReceive.receiveCards(newList);
-            }
-        };
-        findAllManualCards(next);
-    }
-
-
-    public static void findAllManualCards(CardReceiever onReceive) {
-        findCards(StringConstants.MANUAL_CARD_CLASS_NAME, onReceive);
-    }
-
-    public static void findAllAutoCards(CardReceiever onReceive) {
-        findCards(StringConstants.AUTO_CARD_CLASS_NAME, onReceive);
-    }
-
-    private static void findCards(String className, final CardReceiever onReceive) {
-        ParseQuery<ParseObject> manualCardQuery = ParseQuery.getQuery(className);
-        manualCardQuery.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        manualCardQuery.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                List<Card> cardList = fillCards(objects);
-                onReceive.receiveCards(cardList);
+            public void done(ArrayList<ParseObject> object, ParseException e) {
+                afterFind(object, e, onReceive);
             }
         });
     }
 
-    private static Card convertParseObjectToCard(ParseObject obj) {
-        CardType cardType = ProjectUtils.convertToCardTypeFromClass(obj.getClassName());
-        String name = obj.getString(StringConstants.DATABASE_CARD_NAME_COLUMN);
-        return new Card(name, cardType);
+    public static void findAllManualCards(final CardReceiever onReceive) {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_MANUAL_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
+            @Override
+            public void done(ArrayList<ParseObject> object, ParseException e) {
+                afterFind(object, e, onReceive);
+            }
+        });
     }
+
+    public static void findAllAutoCards(final CardReceiever onReceive) {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_AUTO_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
+            @Override
+            public void done(ArrayList<ParseObject> object, ParseException e) {
+                afterFind(object, e, onReceive);
+            }
+        });
+    }
+
+    private static void afterFind(List<ParseObject> objects, ParseException e, CardReceiever onReceive) {
+        if (e == null) {
+            onReceive.receiveCards(fillCards(objects));
+        } else {
+            Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+        }
+    }
+
 
     private static ArrayList<Card> fillCards(List<ParseObject> objects) {
         ArrayList<Card> cards = new ArrayList<>(objects.size());
@@ -72,6 +64,12 @@ public class GetCardsUtil {
             cards.add(card);
         }
         return cards;
+    }
+
+    private static Card convertParseObjectToCard(ParseObject obj) {
+        CardType cardType = ProjectUtils.convertToCardTypeFromClass(obj.getClassName());
+        String name = obj.getString(StringConstants.DATABASE_CARD_NAME_COLUMN);
+        return new Card(name, cardType);
     }
 
 }

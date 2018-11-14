@@ -84,10 +84,10 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
 
     private boolean dataIsGood(LinkedList<Card> selectedCards) {
         if (ProjectUtils.isEmpty(yearField.getText())) {
-            Toast.makeText(this, "Year can't be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.year_is_empty_text, Toast.LENGTH_SHORT).show();
             return false;
         } else if (selectedCards.size() == 0) {
-            Toast.makeText(this, "Please selected at least one card", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_cards_selected_text, Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;

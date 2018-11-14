@@ -48,7 +48,8 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         getPassedInValues();
-        getSupportActionBar().setTitle(getString(R.string.view_history_title, cardName));
+        // getSupportActionBar().setTitle(getString(R.string.view_history_title, cardName));
+        getSupportActionBar().setTitle(cardName);
         initCommunicator();
         initSubActivities();
         calendarSubActivity.setToView();

@@ -78,7 +78,7 @@ public class ViewHistoryCalendarViewSubActivity {
             public void onClick(View v) {
                 CalendarDay selectedDay = calendarView.getSelectedDate();
                 if (communicator.loadingProperty().getValue()) {
-                    Toast.makeText(activity, "Getting values, one second", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.transactions_still_loading, Toast.LENGTH_SHORT).show();
                 } else if (selectedDay != null) {
                     ArrayList<Transaction> transactions = communicator.getTransactions().get(selectedDay.getDate());
                     changeView(transactions);

@@ -48,6 +48,9 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_FUNCTION_DELETE_AUTO_CARD = "deleteAutoCard";
     public final static String PARSE_CLOUD_FUNCTION_DELETE_MANUAL_CARD = "deleteManualCard";
     public final static String PARSE_CLOUD_FUNCTION_CALCULATE_MONTHLY = "calculateMonthly";
+    public final static String PARSE_CLOUD_FUNCTION_GET_ALL_CARDS = "getAllCards";
+    public final static String PARSE_CLOUD_FUNCTION_GET_ALL_MANUAL_CARDS = "getAllManualCards";
+    public final static String PARSE_CLOUD_FUNCTION_GET_ALL_AUTO_CARDS = "getAllAutoCards";
     // ---------------------- END PARSE CLOUD FUNCTIONS----------------------
 
     // ---------------------- START PARSE CLOUD PARAMETERS----------------------
@@ -76,7 +79,6 @@ public final class StringConstants {
     public final static String MONTH_SPINNER_POSITION_KEY = "monthSpinnerPosition";
     public final static String YEAR_KEY = "year";
     public final static String SELECTED_CARDS_KEY = "selectedCards";
-    public final static String AFTER_DELETE_KEY = "afterDelete";
     // ---------------------- END KEYS ----------------------
 
     // ---------------------- START LITERALS ----------------------
