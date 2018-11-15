@@ -26,6 +26,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.Transaction;
+import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -160,6 +161,7 @@ public class AddManualTransactionActivity extends AppCompatActivity {
                     }
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e, AddManualTransactionActivity.this);
                 }
             }
         });

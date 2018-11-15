@@ -14,6 +14,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.model.AutoCardTransactionsParser;
 import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
+import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewAutoHistoryActivity extends ViewHistoryActivity {
@@ -50,6 +51,7 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
                     ViewAutoHistoryActivity.super.setTransactionData(data);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
+                    ParseExceptionUtils.displayErrorMessage(e, ViewAutoHistoryActivity.this);
                 }
             }
         });

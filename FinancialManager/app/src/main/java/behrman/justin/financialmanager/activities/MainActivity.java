@@ -17,6 +17,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 import okhttp3.OkHttpClient;
@@ -166,7 +167,9 @@ public class MainActivity extends AppCompatActivity {
         if (e.getCode() == ParseException.OBJECT_NOT_FOUND) { // invalid username/password
             Toast.makeText(this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, R.string.other_login_error, Toast.LENGTH_SHORT).show();
+            // int errorId = ParseExceptionUtils.returnParseExceptionMessage(e);
+            // Toast.makeText(this, errorId, Toast.LENGTH_SHORT).show();
+            ParseExceptionUtils.displayErrorMessage(e, this);
         }
         Log.i(LOG_TAG, "sign in failed! message: " + e.toString() + ", code: " + e.getCode());
     }

@@ -20,6 +20,7 @@ import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardsAndTransactionsAdapter;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.MonthResultsData;
+import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ParseUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -56,6 +57,7 @@ public class MonthlyCalculationResultsActivity extends AppCompatActivity {
                     parseData(object);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e, MonthlyCalculationResultsActivity.this);
                 }
             }
         });
@@ -63,7 +65,7 @@ public class MonthlyCalculationResultsActivity extends AppCompatActivity {
 
     private void parseData(HashMap<String, Object> response) {
         double total = ParseUtils.getTransactionAmount(response.get(StringConstants.TOTAL_KEY));
-        ArrayList<Object> transactionData = (ArrayList<Object>)response.get(StringConstants.TRANSACTION_DATA_KEY);
+        ArrayList<Object> transactionData = (ArrayList<Object>) response.get(StringConstants.TRANSACTION_DATA_KEY);
         MonthResultsData data = new MonthResultsData(transactionData, cards.size());
         Log.i(LOG_TAG, "children: " + data.getChildData());
         Log.i(LOG_TAG, "group names: " + data.getGroupData());

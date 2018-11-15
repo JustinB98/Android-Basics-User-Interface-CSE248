@@ -12,6 +12,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ManualCardTransactionParser;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
+import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewManualHistoryActivity extends ViewHistoryActivity {
@@ -41,6 +42,7 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
                     ViewManualHistoryActivity.super.setTransactionData(data);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString());
+                    ParseExceptionUtils.displayErrorMessage(e, ViewManualHistoryActivity.this);
                 }
             }
         });

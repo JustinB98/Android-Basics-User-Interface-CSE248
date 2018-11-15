@@ -93,6 +93,7 @@ public class TransactionPopUpUtils {
                     }
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e, context);
                 }
             }
         });

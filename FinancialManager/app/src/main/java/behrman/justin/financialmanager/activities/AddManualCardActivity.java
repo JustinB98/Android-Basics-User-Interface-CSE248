@@ -17,6 +17,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -84,7 +85,11 @@ public class AddManualCardActivity extends AppCompatActivity {
             Toast.makeText(AddManualCardActivity.this, getString(R.string.added_card, cardName), Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
+            Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+            // int errorId = ParseExceptionUtils.returnParseExceptionMessage(e);
+            // Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(AddManualCardActivity.this, errorId, Toast.LENGTH_SHORT).show();
+            ParseExceptionUtils.displayErrorMessage(e, this);
         }
     }
 

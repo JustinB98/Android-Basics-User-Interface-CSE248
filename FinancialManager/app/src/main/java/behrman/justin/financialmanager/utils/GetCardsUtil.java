@@ -1,5 +1,6 @@
 package behrman.justin.financialmanager.utils;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.parse.FunctionCallback;
@@ -21,38 +22,39 @@ public class GetCardsUtil {
 
     private final static HashMap<String, Object> EMPTY_MAP = new HashMap<>(0);
 
-    public static void findAllCards(final CardReceiever onReceive) {
+    public static void findAllCards(final CardReceiever onReceive, final Context context) {
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
             @Override
             public void done(ArrayList<ParseObject> object, ParseException e) {
-                afterFind(object, e, onReceive);
+                afterFind(object, e, onReceive, context);
             }
         });
     }
 
-    public static void findAllManualCards(final CardReceiever onReceive) {
+    public static void findAllManualCards(final CardReceiever onReceive, final Context context) {
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_MANUAL_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
             @Override
             public void done(ArrayList<ParseObject> object, ParseException e) {
-                afterFind(object, e, onReceive);
+                afterFind(object, e, onReceive, context);
             }
         });
     }
 
-    public static void findAllAutoCards(final CardReceiever onReceive) {
+    public static void findAllAutoCards(final CardReceiever onReceive, final Context context) {
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_AUTO_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
             @Override
             public void done(ArrayList<ParseObject> object, ParseException e) {
-                afterFind(object, e, onReceive);
+                afterFind(object, e, onReceive, context);
             }
         });
     }
 
-    private static void afterFind(List<ParseObject> objects, ParseException e, CardReceiever onReceive) {
+    private static void afterFind(List<ParseObject> objects, ParseException e, CardReceiever onReceive, Context context) {
         if (e == null) {
             onReceive.receiveCards(fillCards(objects));
         } else {
             Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+            ParseExceptionUtils.displayErrorMessage(e, context);
         }
     }
 

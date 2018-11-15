@@ -157,4 +157,9 @@
     <string name="cancel_transaction_delete">Keep</string>
     <!-- END Menu Items -->
 
+    <!-- START Parse Exception -->
+    <string name="connection_failed">Couldn\'t connect to the server</string>
+    <string name="timeout_msg">Taking too long to get response</string>
+    <!-- END Parse Exception -->
+
 </resources>

@@ -15,6 +15,7 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 
 public class CreateAccountActivity extends AppCompatActivity {
@@ -72,24 +73,15 @@ public class CreateAccountActivity extends AppCompatActivity {
                     switchToMenuActivity();
                 } else {
                     Log.i(LOG_TAG, "createUserWithEmail:failure", e);
-                    showErrorMsg(e.getCode());
+                    // showErrorMsg(e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e, CreateAccountActivity.this);
                 }
             }
         });
     }
 
     private void showErrorMsg(int errorCode) {
-        int msgId;
-        switch(errorCode) {
-            case ParseException.EMAIL_TAKEN:
-            case ParseException.USERNAME_TAKEN: {
-                msgId = R.string.username_taken;
-                break;
-            }
-            default: {
-                msgId = R.string.server_issue;
-            }
-        }
+        int msgId = ParseExceptionUtils.returnParseExceptionMessage(errorCode);
         Toast.makeText(this, msgId, Toast.LENGTH_LONG).show();
     }
 

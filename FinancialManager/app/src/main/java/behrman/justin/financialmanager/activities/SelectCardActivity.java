@@ -80,11 +80,11 @@ public class SelectCardActivity extends AppCompatActivity {
             }
         };
         if (typeToShow == CardType.AUTO) {
-            GetCardsUtil.findAllAutoCards(receiver);
+            GetCardsUtil.findAllAutoCards(receiver, this);
         } else if (typeToShow == CardType.MANUAL) {
-            GetCardsUtil.findAllManualCards(receiver);
+            GetCardsUtil.findAllManualCards(receiver, this);
         } else {
-            GetCardsUtil.findAllCards(receiver);
+            GetCardsUtil.findAllCards(receiver, this);
         }
     }
 
