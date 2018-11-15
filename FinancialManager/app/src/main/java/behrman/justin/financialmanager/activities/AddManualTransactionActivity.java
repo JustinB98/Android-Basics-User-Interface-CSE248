@@ -5,10 +5,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -30,25 +33,67 @@ public class AddManualTransactionActivity extends AppCompatActivity {
 
     public final static String LOG_TAG = AddManualTransactionActivity.class.getSimpleName() + "debug";
 
-    private View transactionContainer;
     private Button addTransactionBtn;
     private EditText placeField, amountField;
     private Spinner currencySpinner;
     private CalendarView calendarView;
 
+    private ProgressBar progressBar;
+
     private int month, day, year;
 
+    private Menu menu;
+
+    private View root;
+
+    private boolean running = false;
     private Card originalCard;
+
+    private final int HEIGHT_ERROR = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_manual_transaction);
+        root = getLayoutInflater().inflate(R.layout.activity_add_manual_transaction, null);
+        setContentView(root);
         originalCard = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
         extractViews();
         initTodaysDate();
         initButton();
         initCalendarListener();
+        initSeeIfMenuIsNeeded();
+        Log.i(LOG_TAG, "oncreate");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        Log.i(LOG_TAG, "on create options menu");
+        initSeeIfMenuIsNeeded();
+        return true;
+    }
+
+    private void initSeeIfMenuIsNeeded() {
+        int rootHeight = root.getMeasuredHeight();
+        int buttonY = (int) addTransactionBtn.getY();
+        Log.i(LOG_TAG, "rootHeight: " + rootHeight + ", buttonY: " + buttonY);
+        Log.i(LOG_TAG, buttonY + HEIGHT_ERROR + " > " + rootHeight + " ?");
+        if (buttonY + HEIGHT_ERROR > rootHeight) {
+            Log.i(LOG_TAG, "menu item needed");
+            addMenuItem();
+        }
+    }
+
+    private void addMenuItem() {
+        if (menu != null) {
+            getMenuInflater().inflate(R.menu.add_item_menu, menu);
+        }
+    }
+
+    public void menuAction(MenuItem item) {
+        if (item.getItemId() == R.id.add_item) {
+            addTransaction();
+        }
     }
 
     private void initTodaysDate() {
@@ -72,11 +117,19 @@ public class AddManualTransactionActivity extends AppCompatActivity {
         addTransactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String place = ProjectUtils.normalizeString(placeField);
-                String amount = ProjectUtils.normalizeString(amountField);
-                addTransaction(place, amount);
+                addTransaction();
             }
         });
+    }
+
+    private void addTransaction() {
+        if (!running) {
+            running = true;
+            progressBar.setVisibility(View.VISIBLE);
+            String place = ProjectUtils.normalizeString(placeField);
+            String amount = ProjectUtils.normalizeString(amountField);
+            addTransaction(place, amount);
+        }
     }
 
     private void addTransaction(String place, String amount) {
@@ -85,6 +138,9 @@ public class AddManualTransactionActivity extends AppCompatActivity {
             Transaction transaction = getTransaction(place, amount);
             Log.i(LOG_TAG, "transaction: " + transaction);
             saveTransaction(transaction);
+        } else {
+            running = false;
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -94,6 +150,8 @@ public class AddManualTransactionActivity extends AppCompatActivity {
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_ADD_MANUAL_TRANSACTION, params, new FunctionCallback<String>() {
             @Override
             public void done(String object, ParseException e) {
+                running = false;
+                progressBar.setVisibility(View.GONE);
                 Log.i(LOG_TAG, "returned with " + object);
                 if (e == null) {
                     if (object.trim().toLowerCase().equals("success")) {
@@ -136,12 +194,12 @@ public class AddManualTransactionActivity extends AppCompatActivity {
     }
 
     private void extractViews() {
-        transactionContainer = findViewById(R.id.transaction_container);
-        addTransactionBtn = findViewById(R.id.add_manual_transaction_btn);
-        placeField = findViewById(R.id.place_input);
-        amountField = findViewById(R.id.amount_input);
-        currencySpinner = findViewById(R.id.currency_spinner);
-        calendarView = findViewById(R.id.calendar_input);
+        addTransactionBtn = root.findViewById(R.id.add_manual_transaction_btn);
+        placeField = root.findViewById(R.id.place_input);
+        amountField = root.findViewById(R.id.amount_input);
+        currencySpinner = root.findViewById(R.id.currency_spinner);
+        calendarView = root.findViewById(R.id.calendar_input);
+        progressBar = root.findViewById(R.id.progress_bar);
     }
 
 }

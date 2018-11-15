@@ -5,10 +5,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,16 +42,48 @@ public class EditTransactionActivity extends AppCompatActivity {
 
     private Transaction originalTransaction;
 
+    private ProgressBar progressBar;
+    private Menu menu;
+    private View root;
+    private boolean running = false;
+    private final int HEIGHT_ERROR = 40;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         originalTransaction = (Transaction) getIntent().getSerializableExtra(StringConstants.TRANSACTION_KEY);
-        setContentView(R.layout.activity_edit_transaction);
+        root = getLayoutInflater().inflate(R.layout.activity_edit_transaction, null);
+        setContentView(root);
         extractViews();
         initCalendarListener();
         setFieldsToTransactions();
         initTimeFields();
         initBtnClick();
+        initSeeIfMenuIsNeeded();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        initSeeIfMenuIsNeeded();
+        return true;
+    }
+
+    private void initSeeIfMenuIsNeeded() {
+        int rootHeight = root.getMeasuredHeight();
+        int buttonY = (int) addTransactionBtn.getY();
+        Log.i(LOG_TAG, "rootHeight: " + rootHeight + ", buttonY: " + buttonY);
+        Log.i(LOG_TAG, buttonY + HEIGHT_ERROR + " > " + rootHeight + " ?");
+        if (buttonY + HEIGHT_ERROR > rootHeight) {
+            Log.i(LOG_TAG, "menu item needed");
+            addMenuItem();
+        }
+    }
+
+    private void addMenuItem() {
+        if (menu != null) {
+            getMenuInflater().inflate(R.menu.add_item_menu, menu);
+        }
     }
 
     private void initTimeFields() {
@@ -81,11 +116,19 @@ public class EditTransactionActivity extends AppCompatActivity {
         addTransactionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String newPlace = ProjectUtils.normalizeString(placeField);
-                String newAmount = ProjectUtils.normalizeString(amountField);
-                editTransaction(newPlace, newAmount);
+                if (!running) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    running = true;
+                    editTransaction();
+                }
             }
         });
+    }
+
+    private void editTransaction() {
+        String newPlace = ProjectUtils.normalizeString(placeField);
+        String newAmount = ProjectUtils.normalizeString(amountField);
+        editTransaction(newPlace, newAmount);
     }
 
     private void editTransaction(String newPlace, String newAmount) {
@@ -98,6 +141,9 @@ public class EditTransactionActivity extends AppCompatActivity {
                 return;
             }
             sendToDatabase(newTransaction);
+        } else {
+            running = false;
+            progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -108,6 +154,8 @@ public class EditTransactionActivity extends AppCompatActivity {
             public void done(String object, ParseException e) {
                 Log.i(LOG_TAG, "returned with " + object);
                 if (e == null) {
+                    running = false;
+                    progressBar.setVisibility(View.GONE);
                     if (ProjectUtils.deepEquals(object, "success")) {
                         Toast.makeText(EditTransactionActivity.this, R.string.transaction_edited_successfully, Toast.LENGTH_SHORT).show();
                         finish();
@@ -154,6 +202,12 @@ public class EditTransactionActivity extends AppCompatActivity {
         amountField = findViewById(R.id.amount_input);
         currencySpinner = findViewById(R.id.currency_spinner);
         calendarView = findViewById(R.id.calendar_input);
+        progressBar = findViewById(R.id.progress_bar);
     }
 
+    public void menuAction(MenuItem item) {
+        if (item.getItemId() == R.id.add_item) {
+            editTransaction();
+        }
+    }
 }
