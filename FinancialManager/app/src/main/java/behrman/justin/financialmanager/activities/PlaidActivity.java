@@ -19,6 +19,7 @@ import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 /**
@@ -162,7 +163,7 @@ public class PlaidActivity extends AppCompatActivity {
             @Override
             public void done(String object, ParseException e) {
                 if (e == null) {
-                    if (object != null && object.trim().toLowerCase().equals("success")) {
+                    if (object != null && ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
                         finish();
                         switchToChangeName(suggestedName);
                     }

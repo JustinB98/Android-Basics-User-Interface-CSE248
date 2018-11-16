@@ -155,7 +155,7 @@ public class AddManualTransactionActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 Log.i(LOG_TAG, "returned with " + object);
                 if (e == null) {
-                    if (object.trim().toLowerCase().equals("success")) {
+                    if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
                         Toast.makeText(AddManualTransactionActivity.this, R.string.added_transaction_successfully, Toast.LENGTH_SHORT).show();
                         finish();
                     }

@@ -157,7 +157,7 @@ public class EditTransactionActivity extends AppCompatActivity {
                 if (e == null) {
                     running = false;
                     progressBar.setVisibility(View.GONE);
-                    if (ProjectUtils.deepEquals(object, "success")) {
+                    if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
                         Toast.makeText(EditTransactionActivity.this, R.string.transaction_edited_successfully, Toast.LENGTH_SHORT).show();
                         finish();
                     }

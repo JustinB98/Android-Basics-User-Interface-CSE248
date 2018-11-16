@@ -86,7 +86,7 @@ public class TransactionPopUpUtils {
             @Override
             public void done(String object, ParseException e) {
                 if (e == null) {
-                    if (ProjectUtils.deepEquals(object, "success")) {
+                    if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
                         Toast.makeText(context, "Deleted...", Toast.LENGTH_SHORT).show();
                         itemGetter.removeItem(itemGetter.getItem(position));
                         ProjectUtils.setItemDeleted(true);
