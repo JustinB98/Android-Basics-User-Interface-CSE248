@@ -52,6 +52,8 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_FUNCTION_GET_ALL_MANUAL_CARDS = "getAllManualCards";
     public final static String PARSE_CLOUD_FUNCTION_GET_ALL_AUTO_CARDS = "getAllAutoCards";
     public final static String PARSE_CLOUD_FUNCTION_RESET_PASSWORD = "resetPassword";
+    public final static String PARSE_CLOUD_FUNCTION_ADD_MANUAL_CARD = "addManualCard";
+    public final static String PARSE_CLOUD_FUNCTION_EDIT_CARD_NAME = "editCardName";
     // ---------------------- END PARSE CLOUD FUNCTIONS----------------------
 
     // ---------------------- START PARSE CLOUD PARAMETERS----------------------
@@ -61,7 +63,7 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_PARAMETER_CARD_TYPE_LIST = "cardTypes";
     public final static String PARSE_CLOUD_PARAMETER_MONTH = "month";
     public final static String PARSE_CLOUD_PARAMETER_YEAR = "year";
-    public final static String PARSE_CLOUD_PARAMTER_USERNAME = "username";
+    public final static String PARSE_CLOUD_PARAMETER_USERNAME = "username";
     // ---------------------- END PARSE CLOUD PARAMETERS----------------------
 
 
@@ -86,6 +88,7 @@ public final class StringConstants {
     // ---------------------- START LITERALS ----------------------
     public final static String SUCCESS = "success";
     public final static String INVALID = "invalid";
+    public final static String EXISTS = "exists";
     // ---------------------- END LITERALS ----------------------
 
     // ---------------------- START MONTHLY CALCULATIONS KEYS ----------------------

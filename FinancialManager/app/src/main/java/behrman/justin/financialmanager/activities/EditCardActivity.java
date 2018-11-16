@@ -9,18 +9,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.FunctionCallback;
-import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -61,16 +56,13 @@ public class EditCardActivity extends AppCompatActivity {
     private void sendEditNameRequest(final String cardName) {
         if (originalCard.getCardName().equals(cardName)) {
             finish();
+            return;
         }
-        ParseQuery<ParseObject> query = getQuery(cardName);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_EDIT_CARD_NAME, params(cardName), new FunctionCallback<String>() {
             @Override
-            public void done(ParseObject object, ParseException e) {
-                Log.i(LOG_TAG, "returned");
-                if (e == null) { // no errors, so there must be a result
-                    Toast.makeText(EditCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
-                } else if (e.getCode() == ParseException.OBJECT_NOT_FOUND) { // no object found, so it must be an free name
-                    saveIfNeeded(object, cardName);
+            public void done(String object, ParseException e) {
+                if (e == null) {
+                    onReturn(object);
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
                     ParseExceptionUtils.displayErrorMessage(e, EditCardActivity.this);
@@ -79,67 +71,21 @@ public class EditCardActivity extends AppCompatActivity {
         });
     }
 
-    private void saveIfNeeded(ParseObject object, String newCardName) {
-        if (object == null) {
-            String functionName = getFunctionName();
-            HashMap<String, Object> params = getParameters(newCardName);
-            ParseCloud.callFunctionInBackground(functionName, params, new FunctionCallback<String>() {
-                @Override
-                public void done(String object, ParseException e) {
-                    Log.i(LOG_TAG, "object returned: " + object);
-                    if (object.toLowerCase().equals("success")) {
-                        Toast.makeText(EditCardActivity.this, R.string.edited_card_successfully, Toast.LENGTH_SHORT).show();
-                        Log.i(LOG_TAG, "card successfully changed");
-                        finish();
-                    } else {
-                        Log.i(LOG_TAG, "there was an issue renaming the cards");
-                    }
-                }
-            });
+    private void onReturn(String result) {
+        if (ProjectUtils.deepEquals(result, StringConstants.SUCCESS)) {
+            Toast.makeText(EditCardActivity.this, R.string.edited_card_successfully, Toast.LENGTH_SHORT).show();
+            finish();
+        } else if (ProjectUtils.deepEquals(result, StringConstants.EXISTS)) {
+            Toast.makeText(EditCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private HashMap<String, Object> getParameters(String newCardName) {
-        HashMap<String, Object> params = new HashMap<>(2);
-        params.put(StringConstants.PARSE_CLOUD_PARAMETER_NEW_CARD_NAME, newCardName);
+    private HashMap<String, Object> params(String newCardName) {
+        HashMap<String, Object> params = new HashMap<>(3);
         params.put(StringConstants.PARSE_CLOUD_PARAMETER_ORIGINAL_CARD_NAME, originalCard.getCardName());
+        params.put(StringConstants.PARSE_CLOUD_PARAMETER_NEW_CARD_NAME, newCardName);
+        params.put(StringConstants.CARD_TYPE_KEY, originalCard.getCardType().toString());
         return params;
-    }
-
-    private String getFunctionName() {
-        if (originalCard.getCardType() == CardType.MANUAL) {
-            return StringConstants.PARSE_CLOUD_FUNCTION_RENAME_MANUAL_CARD;
-        } else if (originalCard.getCardType() == CardType.AUTO) {
-            return StringConstants.PARSE_CLOUD_FUNCTION_RENAME_AUTO_CARD;
-        } else {
-            Log.i(LOG_TAG, "unknown case: " + originalCard.getCardType());
-            return null;
-        }
-    }
-
-    private ParseQuery<ParseObject> getQuery(String newCardName) {
-        if (originalCard.getCardType() == CardType.MANUAL) {
-            return getManualQuery(newCardName);
-        } else if (originalCard.getCardType() == CardType.AUTO){
-            return getAutoQuery(newCardName);
-        } else {
-            Log.i(LOG_TAG, "unknown case: " + originalCard.getCardType());
-            return null;
-        }
-    }
-
-    private ParseQuery<ParseObject> getManualQuery(String newCardName) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS_NAME);
-        query.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        query.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, newCardName);
-        return query;
-    }
-
-    private ParseQuery<ParseObject> getAutoQuery(String newCardName) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(StringConstants.AUTO_CARD_CLASS_NAME);
-        query.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        query.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, newCardName);
-        return query;
     }
 
     private void extractViews() {

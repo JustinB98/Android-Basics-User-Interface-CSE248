@@ -9,12 +9,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.parse.CountCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
+
+import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
@@ -41,71 +40,48 @@ public class AddManualCardActivity extends AppCompatActivity {
         addCardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendData();
+                saveCard();
             }
         });
     }
 
-    private void sendData() {
+    private void saveCard() {
         String cardName = ProjectUtils.normalizeString(cardNameField);
         if (!cardName.isEmpty()) {
-            ProjectUtils.hideKeyboard(AddManualCardActivity.this);
-            addCardBtn.setEnabled(false);
             progressBar.setVisibility(View.VISIBLE);
-            sendData(cardName);
+            addCardBtn.setEnabled(false);
+            ProjectUtils.hideKeyboard(this);
+            saveCard(cardName);
         } else {
             Toast.makeText(this, R.string.empty_card_name, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void sendData(final String cardName) {
-        ParseQuery<ParseObject> cardInformation = ParseQuery.getQuery(StringConstants.MANUAL_CARD_CLASS_NAME);
-        cardInformation.whereEqualTo(StringConstants.DATABASE_CARD_NAME_COLUMN, cardName);
-        cardInformation.whereEqualTo(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        cardInformation.countInBackground(new CountCallback() {
+    private void saveCard(final String cardName) {
+        HashMap<String, Object> params = new HashMap<>(1);
+        params.put(StringConstants.CARD_NAME_KEY, cardName);
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_ADD_MANUAL_CARD, params, new FunctionCallback<String>() {
             @Override
-            public void done(int count, ParseException e) {
-                Log.i(LOG_TAG, e == null ? "null" : e.toString());
-                afterFind(count, cardName);
+            public void done(String object, ParseException e) {
                 progressBar.setVisibility(View.GONE);
                 addCardBtn.setEnabled(true);
+                if (e == null) {
+                    afterReturn(object, cardName);
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e, AddManualCardActivity.this);
+                }
             }
         });
     }
 
-    private void afterFind(int count, final String cardName) {
-        if (count == 0) {
-            Log.i(LOG_TAG, "creating a card object");
-            ParseObject card = createCardObject(cardName);
-            card.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    afterSave(e, cardName);
-                }
-            });
-        } else {
-            Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void afterSave(ParseException e, String cardName) {
-        if (e == null) {
+    private void afterReturn(String result, String cardName) {
+        if (ProjectUtils.deepEquals(result, StringConstants.SUCCESS)) {
             Toast.makeText(AddManualCardActivity.this, getString(R.string.added_card, cardName), Toast.LENGTH_SHORT).show();
             finish();
-        } else {
-            Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-            // int errorId = ParseExceptionUtils.returnParseExceptionMessage(e);
-            // Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
-            // Toast.makeText(AddManualCardActivity.this, errorId, Toast.LENGTH_SHORT).show();
-            ParseExceptionUtils.displayErrorMessage(e, this);
+        } else if (ProjectUtils.deepEquals(result, StringConstants.EXISTS)) {
+            Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private ParseObject createCardObject(String cardName) {
-        ParseObject card = new ParseObject(StringConstants.MANUAL_CARD_CLASS_NAME);
-        card.put(StringConstants.DATABASE_CARD_NAME_COLUMN, cardName);
-        card.put(StringConstants.DATABASE_CARD_OWNER_COLUMN, ParseUser.getCurrentUser());
-        return card;
     }
 
     private void extractViews() {

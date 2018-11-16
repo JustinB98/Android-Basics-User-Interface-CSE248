@@ -57,6 +57,7 @@
     <string name="delete_card_title">Delete %1$s?</string>
     <string name="monthly_calculations_title">Choose Month And Cards</string>
     <string name="monthly_results_title">Monthly Results</string>
+    <string name="reset_password_title">Reset Password</string>
     <!-- END Titles -->
 
     <!-- START Login Screen -->

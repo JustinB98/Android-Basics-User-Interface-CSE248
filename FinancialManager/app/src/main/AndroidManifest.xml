@@ -55,7 +55,7 @@
         <activity
             android:name=".activities.MonthlyCalculationResultsActivity"
             android:label="@string/monthly_results_title" />
-        <activity android:name=".activities.ForgotPasswordActivity"></activity>
+        <activity android:name=".activities.ForgotPasswordActivity" android:label="@string/reset_password_title"></activity>
     </application>
 
 </manifest>

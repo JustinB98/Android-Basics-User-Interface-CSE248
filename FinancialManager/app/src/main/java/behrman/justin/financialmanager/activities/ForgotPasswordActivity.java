@@ -59,7 +59,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void sendRequest(String email) {
         HashMap<String, Object> params = new HashMap<>(1);
-        params.put(StringConstants.PARSE_CLOUD_PARAMTER_USERNAME, email);
+        params.put(StringConstants.PARSE_CLOUD_PARAMETER_USERNAME, email);
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_RESET_PASSWORD, params, new FunctionCallback<String>() {
             @Override
             public void done(String object, ParseException e) {
