@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText usernameField, passwordField;
     private Button loginBtn;
-    private TextView createAccountView;
+    private TextView createAccountView, forgotPasswordView;
     private ProgressBar progressBar;
 
     private boolean loggingIn;
@@ -105,6 +105,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        forgotPasswordView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToForgotPasswordActivity();
+            }
+        });
+    }
+
+    private void switchToForgotPasswordActivity() {
+        Intent intent = new Intent(this, ForgotPasswordActivity.class);
+        startActivity(intent);
     }
 
     private void switchToCreateAccountIntent() {
@@ -179,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.login_btn);
         createAccountView = findViewById(R.id.create_account);
         progressBar = findViewById(R.id.login_progress);
+        forgotPasswordView = findViewById(R.id.forgot_password);
     }
 
     private void initWritableViews() {

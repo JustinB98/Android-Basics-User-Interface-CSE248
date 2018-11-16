@@ -48,7 +48,12 @@ public class EditCardActivity extends AppCompatActivity {
         editCardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendEditNameRequest(ProjectUtils.normalizeString(cardNameField));
+                String cardName = ProjectUtils.normalizeString(cardNameField);
+                if (!cardName.isEmpty()) {
+                    sendEditNameRequest(cardName);
+                } else {
+                    Toast.makeText(EditCardActivity.this, R.string.empty_card_name, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

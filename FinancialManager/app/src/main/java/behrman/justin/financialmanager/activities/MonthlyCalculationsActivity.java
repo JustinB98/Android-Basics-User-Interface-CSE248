@@ -115,7 +115,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
             }
         };
-        GetCardsUtil.findAllCards(cardReceiever);
+        GetCardsUtil.findAllCards(cardReceiever, this);
     }
 
     private void setToLoadView() {

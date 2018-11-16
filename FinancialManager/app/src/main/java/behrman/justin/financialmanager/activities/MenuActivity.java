@@ -4,11 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.parse.LogOutCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import java.io.Serializable;
 
@@ -17,6 +23,7 @@ import behrman.justin.financialmanager.cardConverters.CardTypeClassConverterView
 import behrman.justin.financialmanager.cardConverters.CardTypeIndependentConverterImpl;
 import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.model.CardTypeClassConverter;
+import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class MenuActivity extends AppCompatActivity implements Serializable {
@@ -66,6 +73,28 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         for (int i = 0; i < btnHolder.getChildCount(); ++i) {
             View view = btnHolder.getChildAt(i);
             view.setLayoutParams(params);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.log_out_menu, menu);
+        return true;
+    }
+
+    public void menuAction(MenuItem item) {
+        if (item.getItemId() == R.id.log_out_menu_item) {
+            ParseUser.logOutInBackground(new LogOutCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        finish();
+                    } else {
+                        Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                        ParseExceptionUtils.displayErrorMessage(e, MenuActivity.this);
+                    }
+                }
+            });
         }
     }
 

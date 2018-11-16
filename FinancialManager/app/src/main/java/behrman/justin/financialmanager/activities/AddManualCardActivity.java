@@ -41,13 +41,21 @@ public class AddManualCardActivity extends AppCompatActivity {
         addCardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProjectUtils.hideKeyboard(AddManualCardActivity.this);
-                addCardBtn.setEnabled(false);
-                progressBar.setVisibility(View.VISIBLE);
-                String cardName = ProjectUtils.normalizeString(cardNameField);
-                sendData(cardName);
+                sendData();
             }
         });
+    }
+
+    private void sendData() {
+        String cardName = ProjectUtils.normalizeString(cardNameField);
+        if (!cardName.isEmpty()) {
+            ProjectUtils.hideKeyboard(AddManualCardActivity.this);
+            addCardBtn.setEnabled(false);
+            progressBar.setVisibility(View.VISIBLE);
+            sendData(cardName);
+        } else {
+            Toast.makeText(this, R.string.empty_card_name, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void sendData(final String cardName) {

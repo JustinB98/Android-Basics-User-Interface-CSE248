@@ -57,7 +57,7 @@ public class TransactionForSingleDayAdapter extends ArrayAdapter<Transaction> {
         TextView placeView = convertView.findViewById(R.id.place_view);
         placeView.setText(t.getPlace());
         TextView amountView = convertView.findViewById(R.id.amount_view);
-        amountView.setText(ProjectUtils.formatNumber(t.getAmount()).substring(1)); // want to get rid of $
+        amountView.setText(ProjectUtils.formatNumber(t.getAmount()).replace("$", "")); // want to get rid of $
         TextView currencyCodeView = convertView.findViewById(R.id.currency_code_view);
         currencyCodeView.setText(t.getCurrencyCode());
     }

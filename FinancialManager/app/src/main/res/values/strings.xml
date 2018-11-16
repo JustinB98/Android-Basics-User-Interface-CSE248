@@ -70,7 +70,14 @@
     <string name="login_failed">Invalid Credentials</string>
     <string name="username_taken">Email already exists!</string>
     <string name="other_login_error">Something went wrong? Can\'t connect to server?</string>
+    <string name="forgot_password">Forgot Password</string>
     <!-- END Login Screen -->
+
+    <!-- START Reset Password -->
+    <string name="forgot_password_text">Please enter in your email so we can send you a link to reset your password</string>
+    <string name="email_edit_text_hint">Email</string>
+    <string name="forgot_password_btn">Reset Password</string>
+    <!-- END Reset Password -->
 
     <!-- START Create Account Screen -->
     <string name="confirm_password">Confirm Password:</string>
@@ -94,6 +101,7 @@
     <string name="add_manual_transaction">Add Manual transaction</string>
     <string name="rename_card">Rename Card</string>
     <string name="delete_card_option">Delete a Card</string>
+    <string name="log_out">Logout</string>
     <!-- END Menu Screen -->
 
     <!-- START Add Manual/Edit Card Screen -->
@@ -144,6 +152,7 @@
     <string name="no_transactions_for_date">There\'s no transactions for %1$s</string>
     <string name="card_name_not_confirmed">That isn\'t the name of the card…</string>
     <string name="deleted_card">Deleted card…</string>
+    <string name="empty_card_name">Card Name can\'t be empty!</string>
     <!-- END Toast Messages -->
 
     <!-- START Menu Items -->
