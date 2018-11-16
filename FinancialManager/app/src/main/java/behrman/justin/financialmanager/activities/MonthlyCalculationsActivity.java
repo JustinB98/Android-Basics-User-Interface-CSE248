@@ -86,7 +86,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         if (ProjectUtils.isEmpty(yearField.getText())) {
             Toast.makeText(this, R.string.year_is_empty_text, Toast.LENGTH_SHORT).show();
             return false;
-        } else if (selectedCards.size() == 0) {
+        } else if (selectedCards.isEmpty()) {
             Toast.makeText(this, R.string.no_cards_selected_text, Toast.LENGTH_SHORT).show();
             return false;
         } else {

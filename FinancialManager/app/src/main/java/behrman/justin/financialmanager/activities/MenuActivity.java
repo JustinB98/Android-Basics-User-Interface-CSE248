@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
@@ -33,6 +34,8 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView, deleteCardView, monthlyCalculationView;
 
     private ViewGroup rootView;
+
+    private boolean signingOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,28 +79,6 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.log_out_menu, menu);
-        return true;
-    }
-
-    public void menuAction(MenuItem item) {
-        if (item.getItemId() == R.id.log_out_menu_item) {
-            ParseUser.logOutInBackground(new LogOutCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        finish();
-                    } else {
-                        Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                        ParseExceptionUtils.displayErrorMessage(e, MenuActivity.this);
-                    }
-                }
-            });
-        }
-    }
-
     private int getNewHeight(int height, int count) {
         int i;
         Log.i(LOG_TAG, "height: " + height + ", count: " + count);
@@ -107,6 +88,34 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
             }
         }
         return i;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.log_out_menu, menu);
+        return true;
+    }
+
+    public void menuAction(MenuItem item) {
+        if (item.getItemId() == R.id.log_out_menu_item && !signingOut) {
+            signingOut = true;
+            logout();
+        }
+    }
+
+    private void logout() {
+        ParseUser.logOutInBackground(new LogOutCallback() {
+            @Override
+            public void done(ParseException e) {
+                signingOut = false;
+                if (e == null) {
+                    finish();
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e, MenuActivity.this);
+                }
+            }
+        });
     }
 
     private void initClickListeners() {
@@ -127,11 +136,15 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         addManualTransactionView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, SelectCardActivity.class);
-                CardTypeIndependentConverterImpl cardConverter = new CardTypeIndependentConverterImpl(AddManualTransactionActivity.class);
-                intent.putExtra(StringConstants.NEXT_CLASS_KEY, cardConverter);
-                intent.putExtra(StringConstants.CARD_TYPE_KEY, CardType.MANUAL);
-                startActivity(intent);
+                if (!signingOut) {
+                    Intent intent = new Intent(MenuActivity.this, SelectCardActivity.class);
+                    CardTypeIndependentConverterImpl cardConverter = new CardTypeIndependentConverterImpl(AddManualTransactionActivity.class);
+                    intent.putExtra(StringConstants.NEXT_CLASS_KEY, cardConverter);
+                    intent.putExtra(StringConstants.CARD_TYPE_KEY, CardType.MANUAL);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MenuActivity.this, R.string.cant_do_that_while_logging_out, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -141,9 +154,13 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, SelectCardActivity.class);
-                intent.putExtra(StringConstants.NEXT_CLASS_KEY, converter);
-                startActivity(intent);
+                if (!signingOut) {
+                    Intent intent = new Intent(MenuActivity.this, SelectCardActivity.class);
+                    intent.putExtra(StringConstants.NEXT_CLASS_KEY, converter);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MenuActivity.this, R.string.cant_do_that_while_logging_out, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -151,7 +168,11 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     private void initSingleClickListener(TextView view, final Class<?> classToOpen) {
         view.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(MenuActivity.this, classToOpen));
+                if (!signingOut) {
+                    startActivity(new Intent(MenuActivity.this, classToOpen));
+                } else {
+                    Toast.makeText(MenuActivity.this, R.string.cant_do_that_while_logging_out, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

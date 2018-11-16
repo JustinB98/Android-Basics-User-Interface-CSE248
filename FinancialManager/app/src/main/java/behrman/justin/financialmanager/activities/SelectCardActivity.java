@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class SelectCardActivity extends AppCompatActivity {
 
     private ListView listView;
     private ProgressBar progressBar;
+    private TextView noCardsFoundView;
 
     private CardTypeClassConverter classConverter;
 
@@ -46,6 +48,7 @@ public class SelectCardActivity extends AppCompatActivity {
     private void extractViews() {
         progressBar = findViewById(R.id.progress_bar);
         listView = findViewById(R.id.list_view);
+        noCardsFoundView = findViewById(R.id.no_cards_found_view);
     }
 
     private void setListViewItemListener() {
@@ -91,17 +94,25 @@ public class SelectCardActivity extends AppCompatActivity {
     private void setToLoadView() {
         listView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+        noCardsFoundView.setVisibility(View.GONE);
     }
 
     private void setToListView() {
         listView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+        noCardsFoundView.setVisibility(View.GONE);
     }
 
     private void setListViewAdapter(List<Card> cards) {
-        CardSelecterAdapter adapter = new CardSelecterAdapter(this, cards);
-        listView.setAdapter(adapter);
-        setToListView();
+        if (!cards.isEmpty()) {
+            CardSelecterAdapter adapter = new CardSelecterAdapter(this, cards);
+            listView.setAdapter(adapter);
+            setToListView();
+        } else {
+            noCardsFoundView.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
