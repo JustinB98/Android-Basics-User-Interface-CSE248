@@ -92,7 +92,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.log_out_menu, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
@@ -100,7 +100,14 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         if (item.getItemId() == R.id.log_out_menu_item && !signingOut) {
             signingOut = true;
             logout();
+        } else if (item.getItemId() == R.id.settings_item) {
+            switchToSettings();
         }
+    }
+
+    private void switchToSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     private void logout() {

@@ -42,6 +42,10 @@
         <item>Dec</item>
     </string-array>
 
+    <string-array name="setting_strings">
+        <item>Delete Account</item>
+    </string-array>
+
     <!-- END Arrays -->
 
     <!-- START Titles -->
@@ -58,11 +62,13 @@
     <string name="monthly_calculations_title">Choose Month And Cards</string>
     <string name="monthly_results_title">Monthly Results</string>
     <string name="reset_password_title">Reset Password</string>
+    <string name="settings_title">Settings</string>
+    <string name="delete_user">Delete Account</string>
     <!-- END Titles -->
 
     <!-- START Login Screen -->
-    <string name="username">Username:</string>
-    <string name="password">Password:</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="username_hint">Enter email</string>
     <string name="password_hint">Enter password</string>
     <string name="login_btn_text">Login</string>
@@ -178,5 +184,14 @@
     <string name="connection_failed">Couldn\'t connect to the server</string>
     <string name="timeout_msg">Taking too long to get response</string>
     <!-- END Parse Exception -->
+
+    <!-- START Delete User -->
+    <string name="delete_user_header_text">Are you absolutely sure you want to delete your account?!?!</string>
+    <string name="delete_user_sub_header_text">There\'s no going back!</string>
+    <string name="delete_user_instructions">Please enter your username and password to be sure</string>
+    <string name="delete">Delete</string>
+    <string name="username_doesnt_match_with_account">That\'s not this account\'s username</string>
+    <string name="account_deleted">Account was deleted… goodbye</string>
+    <!-- END Delete User -->
 
 </resources>
