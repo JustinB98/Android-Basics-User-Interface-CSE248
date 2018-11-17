@@ -209,7 +209,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     @Override
     public void onBackPressed() {
         // TODO: 10/19/2018 find out when to log out user, if logged out here, then they will be logged out for the rest of the application, also sign them out
-        // ParseUser.logOutInBackground();
+        ParseUser.logOutInBackground();
         super.onBackPressed();
     }
 }

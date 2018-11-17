@@ -60,6 +60,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         ParseUser user = new ParseUser();
         user.setUsername(email);
         user.setPassword(password);
+        user.setEmail(email);
         ProjectUtils.hideKeyboard(this);
         progressBar.setVisibility(View.VISIBLE);
         createAccountBtn.setEnabled(false);
@@ -78,11 +79,6 @@ public class CreateAccountActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void showErrorMsg(int errorCode) {
-        int msgId = ParseExceptionUtils.returnParseExceptionMessage(errorCode);
-        Toast.makeText(this, msgId, Toast.LENGTH_LONG).show();
     }
 
     private boolean fieldsAreValid(String username, String password) {
