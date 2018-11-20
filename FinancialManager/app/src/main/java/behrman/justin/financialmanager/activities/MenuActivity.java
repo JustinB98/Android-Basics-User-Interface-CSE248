@@ -2,6 +2,7 @@ package behrman.justin.financialmanager.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -9,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.cardConverters.CardTypeClassConverterViewHistoryImpl;
@@ -62,12 +66,64 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
                         ViewGroup btnHolder = (ViewGroup) rootView.getChildAt(i);
                         setChildView(btnHolder, singleHeight, width);
                     }
+                    initAnimations();
                     // Destroy the onGlobalLayout afterwards, otherwise it keeps changing
                     // the sizes non-stop, even though it's already done
                     rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
             });
         }
+    }
+
+    private void initAnimations() {
+        ArrayList<View> children = new ArrayList<>(rootView.getChildCount() * 2);
+        for (int i = 0; i < rootView.getChildCount(); ++i) {
+            ViewGroup row = (ViewGroup) rootView.getChildAt(i);
+            for (int j = 0; j < row.getChildCount(); ++j) {
+                View view = row.getChildAt(j);
+                Log.i("errorlog", "setting scale to 0");
+                view.setScaleX(0);
+                view.setScaleY(0);
+                children.add(view);
+            }
+        }
+        startAnimations(children, 0);
+    }
+
+    private Animation getAnimation(final View view) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.bouncer);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                view.setScaleX(1);
+                view.setScaleY(1);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Log.i("errorlog", "setting view back to scale");
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        return animation;
+    }
+
+    private void startAnimations(final ArrayList<View> children, final int index) {
+        if (index >= children.size()) {
+            return;
+        }
+        View view = children.get(index);
+        Animation bounceAnim = getAnimation(view);
+        view.startAnimation(bounceAnim);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startAnimations(children, index + 1);
+            }
+        }, 150);
     }
 
     private void setChildView(ViewGroup btnHolder, int singleHeight, int fullWidth) {
