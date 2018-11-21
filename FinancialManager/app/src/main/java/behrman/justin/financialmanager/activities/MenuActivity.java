@@ -35,11 +35,13 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
 
     private final static String LOG_TAG = MenuActivity.class.getSimpleName() + "debug";
 
-    private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView, deleteCardView, monthlyCalculationView;
+    private TextView addManualCardView, addAutoCardView, editCardView, checkHistoryView, addManualTransactionView, deleteCardView, monthlyCalculationView, queryTransactionsView;
 
     private ViewGroup rootView;
 
     private boolean signingOut;
+
+    private final int ANIMATION_DELAY = 150;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,8 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
                 public void onGlobalLayout(){
                     int width = rootView.getMeasuredWidth();
                     int height = rootView.getMeasuredHeight();
-                    int singleHeight = getNewHeight(height, rootView.getChildCount());
+                    // int singleHeight = getNewHeight(height, rootView.getChildCount());
+                    int singleHeight = height / rootView.getChildCount();
                     for (int i = 0; i < rootView.getChildCount(); ++i) {
                         // getting linear layout
                         ViewGroup btnHolder = (ViewGroup) rootView.getChildAt(i);
@@ -81,7 +84,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
             ViewGroup row = (ViewGroup) rootView.getChildAt(i);
             for (int j = 0; j < row.getChildCount(); ++j) {
                 View view = row.getChildAt(j);
-                Log.i("errorlog", "setting scale to 0");
+                // want to initially hide the views
                 view.setScaleX(0);
                 view.setScaleY(0);
                 children.add(view);
@@ -95,14 +98,15 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                // before the animation starts, put the scales back to normal, so
+                // they can resize properly. If these weren't here, then the text view will
+                // just pop up
                 view.setScaleX(1);
                 view.setScaleY(1);
             }
 
             @Override
-            public void onAnimationEnd(Animation animation) {
-                Log.i("errorlog", "setting view back to scale");
-            }
+            public void onAnimationEnd(Animation animation) {}
 
             @Override
             public void onAnimationRepeat(Animation animation) {}
@@ -123,7 +127,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
             public void run() {
                 startAnimations(children, index + 1);
             }
-        }, 150);
+        }, ANIMATION_DELAY);
     }
 
     private void setChildView(ViewGroup btnHolder, int singleHeight, int fullWidth) {
@@ -133,17 +137,6 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
             View view = btnHolder.getChildAt(i);
             view.setLayoutParams(params);
         }
-    }
-
-    private int getNewHeight(int height, int count) {
-        int i;
-        Log.i(LOG_TAG, "height: " + height + ", count: " + count);
-        for (i = height; i >= 0; --i) {
-            if (i % count == 0) {
-                return i / count;
-            }
-        }
-        return i;
     }
 
     @Override
@@ -248,6 +241,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         addManualTransactionView = findViewById(R.id.add_manual_transaction_btn);
         deleteCardView = findViewById(R.id.delete_card_btn);
         monthlyCalculationView = findViewById(R.id.monthly_calculations_view);
+        queryTransactionsView = findViewById(R.id.query_transactions_view);
     }
 
     @Override

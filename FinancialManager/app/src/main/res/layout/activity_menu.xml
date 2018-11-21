@@ -46,15 +46,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
+
         <TextView
             android:id="@+id/add_manual_transaction_btn"
             style="@style/menu_item"
-            android:text="@string/add_manual_transaction"/>
+            android:text="@string/add_manual_transaction" />
 
         <TextView
             android:id="@+id/delete_card_btn"
             style="@style/menu_item"
-            android:text="@string/delete_card_option"/>
+            android:text="@string/delete_card_option" />
     </LinearLayout>
 
     <LinearLayout
@@ -65,7 +66,12 @@
         <TextView
             android:id="@+id/monthly_calculations_view"
             style="@style/menu_item"
-            android:text="Calculate Monthly Payment" />
+            android:text="@string/calculate_monthly_payment" />
+
+        <TextView
+            android:id="@+id/query_transactions_view"
+            style="@style/menu_item"
+            android:text="@string/query_transactions" />
 
     </LinearLayout>
 

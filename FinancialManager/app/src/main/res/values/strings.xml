@@ -111,6 +111,8 @@
     <string name="delete_card_option">Delete a Card</string>
     <string name="log_out">Logout</string>
     <string name="cant_do_that_while_logging_out">Sorry, you\'re logging out, you can\'t do that</string>
+    <string name="calculate_monthly_payment">Calculate Monthly Payment</string>
+    <string name="query_transactions">Query Transactions</string>
     <!-- END Menu Screen -->
 
     <!-- START Add Manual/Edit Card Screen -->

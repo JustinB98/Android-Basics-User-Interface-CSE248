@@ -1,5 +1,6 @@
 package behrman.justin.financialmanager.model;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.activities.AddManualTransactionActivity;
 import behrman.justin.financialmanager.subactivities.ViewHistoryCalendarViewSubActivity;
 import behrman.justin.financialmanager.subactivities.ViewHistoryListViewSubActivity;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -171,6 +173,9 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private void switchMenu(int resId) {
         menu.clear();
+        if (isManualCard) {
+            getMenuInflater().inflate(R.menu.add_item_menu, menu);
+        }
         getMenuInflater().inflate(resId, menu);
     }
 
@@ -182,7 +187,16 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             case R.id.calendar_menu_item:
                 switchToCalendarView();
                 break;
+            case R.id.add_item:
+                switchToAddTransactionActivity();
+                break;
         }
+    }
+
+    private void switchToAddTransactionActivity() {
+        Intent intent = new Intent(ViewHistoryActivity.this, AddManualTransactionActivity.class);
+        intent.putExtra(StringConstants.CARD_KEY, new Card(cardName, CardType.MANUAL));
+        startActivity(intent);
     }
 
     private void switchToListView() {
