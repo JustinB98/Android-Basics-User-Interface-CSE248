@@ -2,25 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <CheckBoxPreference
-        android:key="checkbox"
-        android:summary="Tap to check if on or off"
-        android:title="Checkbox Preference" />
-    <EditTextPreference
-        android:dialogTitle="Enter a text"
-        android:key="text"
-        android:summary="Click to show a text entry dialog"
-        android:title="EditText Preference" />
-    <ListPreference
-        android:dialogTitle="Select duration"
-        android:entries="@array/abbreviated_months"
-        android:entryValues="@array/full_months"
-        android:key="list"
-        android:summary="Click to show a list to choose from"
-        android:title="List Preference" />
+    <Preference
+        android:key="deleteAccount"
+        android:summary="@string/delete_account_summary"
+        android:title="@string/delete_account_title" />
+
     <SwitchPreference
-        android:key="switch"
-        android:title="Switch Preference"
-        android:summary="Click to switch" />
+        android:key="showAnimations"
+        android:summary="@string/show_animations_summary"
+        android:title="@string/show_animations_title" />
 
 </PreferenceScreen>

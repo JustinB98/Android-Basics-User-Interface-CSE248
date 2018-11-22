@@ -42,10 +42,6 @@
         <item>Dec</item>
     </string-array>
 
-    <string-array name="setting_strings">
-        <item>Delete Account</item>
-    </string-array>
-
     <!-- END Arrays -->
 
     <!-- START Titles -->
@@ -196,4 +192,10 @@
     <string name="account_deleted">Account was deleted… goodbye</string>
     <!-- END Delete User -->
 
+    <!-- START Settings -->
+    <string name="delete_account_title">Delete Account</string>
+    <string name="delete_account_summary">Delete your info for good</string>
+    <string name="show_animations_title">Toggle Animations</string>
+    <string name="show_animations_summary">Don\'t like animations?</string>
+    <!-- END Settings -->
 </resources>

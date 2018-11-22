@@ -2,6 +2,8 @@ package behrman.justin.financialmanager.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.util.Log;
@@ -211,6 +213,12 @@ public class ProjectUtils {
 
     public static boolean isEmpty(String s) {
         return s.trim().isEmpty();
+    }
+
+    public static boolean showAnimations(Context context) {
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean showAnimations = shared.getBoolean("showAnimations", false);
+        return showAnimations;
     }
 
 }

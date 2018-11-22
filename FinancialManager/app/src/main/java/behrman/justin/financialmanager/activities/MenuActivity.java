@@ -29,6 +29,7 @@ import behrman.justin.financialmanager.cardConverters.CardTypeIndependentConvert
 import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.model.CardTypeClassConverter;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class MenuActivity extends AppCompatActivity implements Serializable {
@@ -79,6 +80,9 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     }
 
     private void initAnimations() {
+        if (!ProjectUtils.showAnimations(this)) {
+            return;
+        }
         ArrayList<View> children = new ArrayList<>(rootView.getChildCount() * 2);
         for (int i = 0; i < rootView.getChildCount(); ++i) {
             ViewGroup row = (ViewGroup) rootView.getChildAt(i);
