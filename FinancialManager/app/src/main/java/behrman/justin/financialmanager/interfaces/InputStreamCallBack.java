@@ -1,4 +1,4 @@
-package behrman.justin.financialmanager.model;
+package behrman.justin.financialmanager.interfaces;
 
 import java.io.InputStream;
 

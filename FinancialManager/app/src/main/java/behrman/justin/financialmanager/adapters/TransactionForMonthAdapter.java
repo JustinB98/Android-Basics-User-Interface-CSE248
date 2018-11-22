@@ -12,7 +12,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.model.ItemGetter;
+import behrman.justin.financialmanager.interfaces.ItemGetter;
+import behrman.justin.financialmanager.interfaces.OnTotalChange;
 import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.TransactionPopUpUtils;
@@ -24,7 +25,7 @@ public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
 
     private TransactionPopUpUtils popUpUtils;
 
-    public TransactionForMonthAdapter(Context context, List<Transaction> transactions, boolean isManual) {
+    public TransactionForMonthAdapter(Context context, List<Transaction> transactions, boolean isManual, final OnTotalChange onRemove) {
         super(context, 0, transactions);
         this.isManual = isManual;
         popUpUtils = new TransactionPopUpUtils(context, new ItemGetter<Transaction>() {
@@ -36,6 +37,7 @@ public class TransactionForMonthAdapter extends ArrayAdapter<Transaction> {
             @Override
             public void removeItem(Transaction object) {
                 TransactionForMonthAdapter.this.remove(object);
+                onRemove.onTotalChange(object.getAmount());
             }
 
         });

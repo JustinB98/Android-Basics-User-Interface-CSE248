@@ -19,7 +19,7 @@ import java.util.List;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.SelectableAdapter;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.model.CardReceiever;
+import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;

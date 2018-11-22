@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -13,9 +12,11 @@ import java.util.ArrayList;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.TransactionForMonthAdapter;
 import behrman.justin.financialmanager.model.BooleanProperty;
+import behrman.justin.financialmanager.interfaces.OnTotalChange;
 import behrman.justin.financialmanager.model.Transaction;
-import behrman.justin.financialmanager.model.TransactionCommunicator;
+import behrman.justin.financialmanager.interfaces.TransactionCommunicator;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 
 public class ViewHistoryListViewSubActivity {
 
@@ -25,6 +26,10 @@ public class ViewHistoryListViewSubActivity {
     private AppCompatActivity activity;
     private View root;
     private TransactionCommunicator communicator;
+    private View container;
+    private TextView totalView;
+
+    private double total;
 
     public ViewHistoryListViewSubActivity(AppCompatActivity activity, TransactionCommunicator communicator) {
         root = LayoutInflater.from(activity).inflate(R.layout.view_all_transactions_for_month, null);
@@ -40,12 +45,16 @@ public class ViewHistoryListViewSubActivity {
     private void extractViews() {
         listView = root.findViewById(R.id.list_view);
         noTransactionsView = root.findViewById(R.id.no_transactions_view);
+        container = root.findViewById(R.id.container);
+        totalView = root.findViewById(R.id.total_view);
     }
 
     public void setListView() {
         Log.i(ViewHistoryActivity.LOG_TAG, "setting list view; loading: " + communicator.loadingProperty().getValue());
         if (!communicator.loadingProperty().getValue()) {
             Log.i(ViewHistoryActivity.LOG_TAG, "transactions: " + communicator.getTransactions());
+            total = communicator.getTotal();
+            totalView.setText(ProjectUtils.formatNumber(total));
             setListViewAdapter();
         } else {
             communicator.loadingProperty().addListener(new BooleanProperty.BooleanListener() {
@@ -64,7 +73,7 @@ public class ViewHistoryListViewSubActivity {
         ArrayList<Transaction> transactions = communicator.getTransactionAsList();
         Log.i(ViewHistoryActivity.LOG_TAG, "transactions: " + transactions);
         if (transactions != null && transactions.size() > 0) {
-            TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions, communicator.isManualCard());
+            TransactionForMonthAdapter adapter = new TransactionForMonthAdapter(activity, transactions, communicator.isManualCard(), onRemove());
             listView.setAdapter(adapter);
             setToListView();
         } else {
@@ -72,13 +81,23 @@ public class ViewHistoryListViewSubActivity {
         }
     }
 
+    private OnTotalChange onRemove() {
+        return new OnTotalChange() {
+            @Override
+            public void onTotalChange(double removedTotal) {
+                total -= removedTotal;
+                totalView.setText(ProjectUtils.formatNumber(total));
+            }
+        };
+    }
+
     private void setToTextView() {
-        listView.setVisibility(View.GONE);
+        container.setVisibility(View.GONE);
         noTransactionsView.setVisibility(View.VISIBLE);
     }
 
     private void setToListView() {
-        listView.setVisibility(View.VISIBLE);
+        container.setVisibility(View.VISIBLE);
         noTransactionsView.setVisibility(View.GONE);
     }
 }

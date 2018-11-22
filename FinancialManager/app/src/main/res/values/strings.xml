@@ -134,6 +134,7 @@
     <!-- START View History -->
     <string name="view_history_text">Go</string>
     <string name="no_transactions_found">No Transactions For this Month</string>
+    <string name="total_text">Total:</string>
     <!-- END View History -->
 
     <!-- START Delete Card -->

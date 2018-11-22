@@ -17,11 +17,14 @@ public class DataCollection {
      */
     private HashMap<Date, ArrayList<Transaction>> dataMap;
 
-    public DataCollection(ArrayList<Transaction> dataList, HashMap<Date, ArrayList<Transaction>> dataMap) {
+    private double total;
+
+    public DataCollection(ArrayList<Transaction> dataList, HashMap<Date, ArrayList<Transaction>> dataMap, double total) {
         // sort the data first
         Collections.sort(dataList);
         this.dataList = dataList;
         this.dataMap = dataMap;
+        this.total = total;
     }
 
     public ArrayList<Transaction> getDataList() {
@@ -31,4 +34,9 @@ public class DataCollection {
     public HashMap<Date, ArrayList<Transaction>> getDataMap() {
         return dataMap;
     }
+
+    public double getTotal() {
+        return total;
+    }
+
 }

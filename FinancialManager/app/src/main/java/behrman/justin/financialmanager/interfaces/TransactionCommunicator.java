@@ -1,8 +1,11 @@
-package behrman.justin.financialmanager.model;
+package behrman.justin.financialmanager.interfaces;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import behrman.justin.financialmanager.model.BooleanProperty;
+import behrman.justin.financialmanager.model.Transaction;
 
 public interface TransactionCommunicator {
 
@@ -17,6 +20,8 @@ public interface TransactionCommunicator {
      */
     void requestNewTransactions(int year, int month);
 
+    void regetTransactions();
+
     boolean isManualCard();
 
     BooleanProperty loadingProperty();
@@ -24,5 +29,7 @@ public interface TransactionCommunicator {
     void refresh();
 
     void setToLoadingScreen();
+
+    double getTotal();
 
 }

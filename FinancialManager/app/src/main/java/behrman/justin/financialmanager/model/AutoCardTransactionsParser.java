@@ -15,6 +15,7 @@ public class AutoCardTransactionsParser {
 
     private HashMap<Date, ArrayList<Transaction>> mapData;
     private ArrayList<Transaction> listData;
+    private double total;
 
     // the length of the response map isn't exactly the size as the arraylist, so a general offset is good to have
     private final int LIST_SIZE_OFFSET = 20;
@@ -25,7 +26,7 @@ public class AutoCardTransactionsParser {
         listData = new ArrayList<>(length + LIST_SIZE_OFFSET);
         ArrayList<HashMap<String, Object>> transactions = (ArrayList<HashMap<String, Object>>) responseMap.get(StringConstants.TRANSACTIONS_INTENT_KEY);
         parseData(transactions);
-        return new DataCollection(listData, mapData);
+        return new DataCollection(listData, mapData, total);
     }
 
     private void parseData(ArrayList<HashMap<String, Object>> transactions) {
@@ -33,6 +34,7 @@ public class AutoCardTransactionsParser {
             Transaction transactionObj = ParseUtils.getAutoTransaction(transactions.get(i));
             listData.add(transactionObj);
             insertToMap(transactionObj);
+            total += transactionObj.getAmount();
         }
     }
 

@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.EditTransactionActivity;
-import behrman.justin.financialmanager.model.ItemGetter;
+import behrman.justin.financialmanager.interfaces.ItemGetter;
 import behrman.justin.financialmanager.model.Transaction;
 
 public class TransactionPopUpUtils {

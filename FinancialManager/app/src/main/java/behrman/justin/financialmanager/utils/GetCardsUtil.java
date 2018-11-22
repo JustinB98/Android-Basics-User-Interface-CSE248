@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.model.CardReceiever;
+import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.model.CardType;
 
 public class GetCardsUtil {

@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.AddManualTransactionActivity;
+import behrman.justin.financialmanager.interfaces.TransactionCommunicator;
 import behrman.justin.financialmanager.subactivities.ViewHistoryCalendarViewSubActivity;
 import behrman.justin.financialmanager.subactivities.ViewHistoryListViewSubActivity;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -131,6 +132,16 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             @Override
             public void setToLoadingScreen() {
                 setToLoading();
+            }
+
+            @Override
+            public double getTotal() {
+                return transactionData.getTotal();
+            }
+
+            @Override
+            public void regetTransactions() {
+                requestNewTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
             }
 
         };

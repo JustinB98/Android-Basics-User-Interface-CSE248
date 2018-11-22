@@ -27,7 +27,7 @@ import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.cardConverters.CardTypeClassConverterViewHistoryImpl;
 import behrman.justin.financialmanager.cardConverters.CardTypeIndependentConverterImpl;
 import behrman.justin.financialmanager.model.CardType;
-import behrman.justin.financialmanager.model.CardTypeClassConverter;
+import behrman.justin.financialmanager.interfaces.CardTypeClassConverter;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;

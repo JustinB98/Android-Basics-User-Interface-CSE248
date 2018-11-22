@@ -14,7 +14,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-import behrman.justin.financialmanager.model.InputStreamCallBack;
+import behrman.justin.financialmanager.interfaces.InputStreamCallBack;
 
 public class NetworkUtils {
 
