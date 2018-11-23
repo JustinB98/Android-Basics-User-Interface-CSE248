@@ -41,7 +41,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monthly_calculations);
         extractViews();
-        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE); // APPARENTLY IMPORTANT DON'T REMOVE
         setViewData();
         initClickListener();
         update();

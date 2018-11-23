@@ -209,6 +209,10 @@
     <string name="max_year">Max Year</string>
     <string name="to">to</string>
     <string name="query_transactions_btn_text">Go</string>
+    <string name="min_year_larger_than_max_year">Min year can\'t be larger than max year</string>
+    <string name="min_month_larger_than_max_month">Min month can\'t be larger than max month</string>
+    <string name="min_amount_larger_than_max_amount">Min amount can\'t be larger than max amount</string>
+    <string name="no_year_inputs">Please enter a value for both years</string>
     <!-- END Query Transactions -->
 
 </resources>

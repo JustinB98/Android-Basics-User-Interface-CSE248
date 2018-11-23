@@ -221,4 +221,28 @@ public class ProjectUtils {
         return showAnimations;
     }
 
+    public static int parseOrDefault(String num, int defaultValue) {
+        if (num.trim().isEmpty()) {
+            return defaultValue;
+        } else {
+            return Integer.parseInt(num);
+        }
+    }
+
+    public static int parseOrDefault(EditText editText, int defaultValue) {
+        return parseOrDefault(editText.getText().toString(), defaultValue);
+    }
+
+    public static double parseOrDefault(String num, double defaultValue) {
+        if (num.trim().isEmpty()) {
+            return defaultValue;
+        } else {
+            return Double.parseDouble(num);
+        }
+    }
+
+    public static double parseOrDefault(EditText editText, double defaultValue) {
+        return parseOrDefault(editText.getText().toString(), defaultValue);
+    }
+
 }

@@ -93,10 +93,19 @@ public final class StringConstants {
     // ---------------------- END LITERALS ----------------------
 
     // ---------------------- START MONTHLY CALCULATIONS KEYS ----------------------
-
     public final static String TOTAL_KEY = "total";
     public final static String TRANSACTION_DATA_KEY = "transactions";
-
     // ---------------------- END MONTHLY CALCULATIONS KEYS ----------------------
+
+    // ---------------------- START QUERY TRANSACTIONS KEYS ----------------------
+    public final static String PLACE_KEY = "place";
+    public final static String MIN_AMOUNT_KEY = "minAmount";
+    public final static String MAX_AMOUNT_KEY = "maxAmount";
+    public final static String MIN_MONTH_KEY = "minMonth";
+    public final static String MAX_MONTH_KEY = "maxMonth";
+    public final static String MIN_YEAR_KEY = "minYear";
+    public final static String MAX_YEAR_KEY = "maxYear";
+    public final static String CARDS_KEY = "cards";
+    // ---------------------- END QUERY TRANSACTIONS KEYS ----------------------
 
 }
