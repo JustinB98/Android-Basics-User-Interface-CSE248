@@ -181,6 +181,8 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
     private void initClickListeners() {
         initSingleClickListener(addManualCardView, AddManualCardActivity.class);
         initSingleClickListener(addAutoCardView, PlaidActivity.class);
+        initSingleClickListener(queryTransactionsView, QueryTransactionActivity.class);
+        initSingleClickListener(monthlyCalculationView, MonthlyCalculationsActivity.class);
         setUpSelectCardsBtns();
     }
 
@@ -189,7 +191,6 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         initTypeDependentClickListener(editCardView, new CardTypeIndependentConverterImpl(EditCardActivity.class));
         initTypeDependentClickListener(deleteCardView, new CardTypeIndependentConverterImpl(DeleteCardActivity.class));
         initAddManualTransactionBtn();
-        initSingleClickListener(monthlyCalculationView, MonthlyCalculationsActivity.class);
     }
 
     private void initAddManualTransactionBtn() {
