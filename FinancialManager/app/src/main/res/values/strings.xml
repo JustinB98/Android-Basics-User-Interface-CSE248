@@ -61,6 +61,7 @@
     <string name="settings_title">Settings</string>
     <string name="delete_user">Delete Account</string>
     <string name="query_transactions_title">Query Transactions</string>
+    <string name="query_transactions_result_title">Query Transactions Results</string>
     <!-- END Titles -->
 
     <!-- START Login Screen -->

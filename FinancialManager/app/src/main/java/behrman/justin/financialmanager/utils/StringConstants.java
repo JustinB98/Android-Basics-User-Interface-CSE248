@@ -55,6 +55,7 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_FUNCTION_ADD_MANUAL_CARD = "addManualCard";
     public final static String PARSE_CLOUD_FUNCTION_EDIT_CARD_NAME = "editCardName";
     public final static String PARSE_CLOUD_FUNCTION_DELETE_USER = "deleteUser";
+    public final static String PARSE_CLOUD_FUNCTION_QUERY_TRANSACTIONS = "queryTransactions";
     // ---------------------- END PARSE CLOUD FUNCTIONS----------------------
 
     // ---------------------- START PARSE CLOUD PARAMETERS----------------------

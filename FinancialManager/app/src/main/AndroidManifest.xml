@@ -60,7 +60,10 @@
             android:label="@string/reset_password_title" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.DeleteUserActivity" />
-        <activity android:name=".activities.QueryTransactionActivity" android:label="@string/query_transactions_title"></activity>
+        <activity
+            android:name=".activities.QueryTransactionActivity"
+            android:label="@string/query_transactions_title" />
+        <activity android:name=".activities.QueryTransactionsResultActivity" android:label="@string/query_transactions_result_title"></activity>
     </application>
 
 </manifest>

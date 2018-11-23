@@ -72,16 +72,17 @@ public class QueryTransactionActivity extends AppCompatActivity {
 
     private void checkForGoodInput0() {
         LinkedList<Card> selectedCards = getSelectedCards();
-        if (selectedCards.isEmpty()) {
+        if (!selectedCards.isEmpty()) {
             switchToResultsActivity(selectedCards);
         } else {
-            Toast.makeText(this, "good input!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.no_cards_selected_text, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void switchToResultsActivity(LinkedList<Card> selectedCards) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, QueryTransactionsResultActivity.class);
         insertDataToIntent(intent, selectedCards);
+        startActivity(intent);
     }
 
     private void insertDataToIntent(Intent intent, LinkedList<Card> selectedCards) {

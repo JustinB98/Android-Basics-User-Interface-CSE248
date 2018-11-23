@@ -71,11 +71,10 @@ public class Transaction /* extends ParseObject */ implements Serializable, Comp
 
     public void deepCopy(Transaction t) {
         mPlace = t.mPlace;
-
         mAmount = t.mAmount;
         mDate = t.mDate;
-        mCurrencyCode = mCurrencyCode;
-        mObjectId = mObjectId;
+        mCurrencyCode = t.mCurrencyCode;
+        mObjectId = t.mObjectId;
     }
 
     @Override
@@ -85,7 +84,7 @@ public class Transaction /* extends ParseObject */ implements Serializable, Comp
 
     @Override
     public String toString() {
-        return "place: " + mPlace + ", Amount: " + mAmount + ", Date: " + mDate + ", currencyCode: " + mCurrencyCode;
+        return "Transaction:{ place: " + mPlace + ", Amount: " + mAmount + ", Date: " + mDate + ", currencyCode: " + mCurrencyCode + " }";
     }
 
 }
