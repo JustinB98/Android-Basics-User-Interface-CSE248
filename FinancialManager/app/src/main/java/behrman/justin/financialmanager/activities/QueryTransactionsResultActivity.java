@@ -3,6 +3,9 @@ package behrman.justin.financialmanager.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ExpandableListView;
+import android.widget.ProgressBar;
 
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -13,8 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.adapters.CardsAndTransactionsAdapter;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.model.CardsWIthTransactionsParser;
+import behrman.justin.financialmanager.model.CardsWithTransactionsParser;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -27,11 +31,16 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
     private int minMonth, minYear, maxMonth, maxYear;
     private List<Card> cards;
 
+    private ExpandableListView listView;
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query_transactions_result);
+        extractViews();
         extractPassedInValues();
+        setToLoading();
         sendRequestToServer();
     }
 
@@ -41,15 +50,28 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
             public void done(ArrayList<Object> object, ParseException e) {
                 if (e == null) {
                     Log.i(LOG_TAG, "returned: " + object);
-                    CardsWIthTransactionsParser data = new CardsWIthTransactionsParser(object, cards.size());
+                    CardsWithTransactionsParser data = new CardsWithTransactionsParser(object, cards.size());
                     Log.i(LOG_TAG, "cards: " + data.getGroupData());
                     Log.i(LOG_TAG, "transaction data: " + data.getChildData());
+                    CardsAndTransactionsAdapter adapter = new CardsAndTransactionsAdapter(QueryTransactionsResultActivity.this, data.getGroupData(), data.getChildData());
+                    listView.setAdapter(adapter);
+                    setToReady();
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
                     ParseExceptionUtils.displayErrorMessage(e, QueryTransactionsResultActivity.this);
                 }
             }
         });
+    }
+
+    private void setToLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.GONE);
+    }
+
+    private void setToReady() {
+        progressBar.setVisibility(View.GONE);
+        listView.setVisibility(View.VISIBLE);
     }
 
     private HashMap<String, Object> params() {
@@ -63,13 +85,13 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
         params.put(StringConstants.MAX_YEAR_KEY, maxYear);
         ArrayList<String> cardNames = new ArrayList<>(cards.size());
         ArrayList<String> cardTypes = new ArrayList<>(cards.size());
-        seperateCardFields(cardNames, cardTypes);
+        separateCardFields(cardNames, cardTypes);
         params.put(StringConstants.PARSE_CLOUD_PARAMETER_CARD_NAME_LIST, cardNames);
         params.put(StringConstants.PARSE_CLOUD_PARAMETER_CARD_TYPE_LIST, cardTypes);
         return params;
     }
 
-    private void seperateCardFields(ArrayList<String> cardNames, ArrayList<String> cardTypes) {
+    private void separateCardFields(ArrayList<String> cardNames, ArrayList<String> cardTypes) {
         for (Card c : cards) {
             cardNames.add(c.getCardName());
             cardTypes.add(c.getCardType().toString());
@@ -85,6 +107,11 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
         maxMonth = getIntent().getIntExtra(StringConstants.MAX_MONTH_KEY, -1);
         maxYear = getIntent().getIntExtra(StringConstants.MAX_YEAR_KEY, -1);
         cards = (List<Card>) getIntent().getSerializableExtra(StringConstants.CARDS_KEY);
+    }
+
+    private void extractViews() {
+        listView = findViewById(R.id.list_view);
+        progressBar = findViewById(R.id.progress_bar);
     }
 
 }

@@ -13,14 +13,14 @@ import behrman.justin.financialmanager.utils.ParseUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class CardsWIthTransactionsParser {
+public class CardsWithTransactionsParser {
 
-    public final static String LOG_TAG = CardsWIthTransactionsParser.class.getSimpleName() + "debug";
+    public final static String LOG_TAG = CardsWithTransactionsParser.class.getSimpleName() + "debug";
 
     private HashMap<Card, List<Transaction>> childData;
     private ArrayList<Card> groupData;
 
-    public CardsWIthTransactionsParser(ArrayList<Object> responseTransactions, int length) {
+    public CardsWithTransactionsParser(ArrayList<Object> responseTransactions, int length) {
         childData = new HashMap<>(length);
         groupData = new ArrayList<>(length);
         parseData(responseTransactions);

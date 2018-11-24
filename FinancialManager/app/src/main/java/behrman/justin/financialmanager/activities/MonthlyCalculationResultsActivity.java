@@ -19,7 +19,7 @@ import java.util.List;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardsAndTransactionsAdapter;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.model.CardsWIthTransactionsParser;
+import behrman.justin.financialmanager.model.CardsWithTransactionsParser;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ParseUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -66,13 +66,13 @@ public class MonthlyCalculationResultsActivity extends AppCompatActivity {
     private void parseData(HashMap<String, Object> response) {
         double total = ParseUtils.getTransactionAmount(response.get(StringConstants.TOTAL_KEY));
         ArrayList<Object> transactionData = (ArrayList<Object>) response.get(StringConstants.TRANSACTION_DATA_KEY);
-        CardsWIthTransactionsParser data = new CardsWIthTransactionsParser(transactionData, cards.size());
+        CardsWithTransactionsParser data = new CardsWithTransactionsParser(transactionData, cards.size());
         Log.i(LOG_TAG, "children: " + data.getChildData());
         Log.i(LOG_TAG, "group names: " + data.getGroupData());
         displayData(total, data);
     }
 
-    private void displayData(double total, CardsWIthTransactionsParser data) {
+    private void displayData(double total, CardsWithTransactionsParser data) {
         numberView.setText(ProjectUtils.formatNumber(total));
         dateView.setText(month + "-" + year);
         CardsAndTransactionsAdapter adapter = new CardsAndTransactionsAdapter(this, data.getGroupData(), data.getChildData());
