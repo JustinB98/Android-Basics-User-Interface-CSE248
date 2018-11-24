@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,11 +22,13 @@ public class CardsAndTransactionsAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<Card> listDataHeader;
     private HashMap<Card, List<Transaction>> listHashMap;
+    private ArrayList<Double> totals;
 
-    public CardsAndTransactionsAdapter(Context context, List<Card> listDataHeader, HashMap<Card, List<Transaction>> listHashMap) {
+    public CardsAndTransactionsAdapter(Context context, List<Card> listDataHeader, HashMap<Card, List<Transaction>> listHashMap, ArrayList<Double> totals) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listHashMap = listHashMap;
+        this.totals = totals;
     }
 
     @Override
@@ -70,11 +73,14 @@ public class CardsAndTransactionsAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         Card header = (Card)getGroup(groupPosition);
+        double total = totals.get(groupPosition);
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.header_list_item, parent, false);
         }
-        TextView view = convertView.findViewById(R.id.card_view);
-        view.setText(header.getCardName() + " - " + header.getCardType());
+        TextView cardView = convertView.findViewById(R.id.card_view);
+        cardView.setText(header.getCardName() + " - " + header.getCardType());
+        TextView totalView = convertView.findViewById(R.id.total_view);
+        totalView.setText(ProjectUtils.formatNumber(total).replace("$", ""));
         /*
         TextView cardNameView = convertView.findViewById(R.id.card_name_view);
         cardNameView.setText(header.getCardName());

@@ -53,7 +53,7 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
                     CardsWithTransactionsParser data = new CardsWithTransactionsParser(object, cards.size());
                     Log.i(LOG_TAG, "cards: " + data.getGroupData());
                     Log.i(LOG_TAG, "transaction data: " + data.getChildData());
-                    CardsAndTransactionsAdapter adapter = new CardsAndTransactionsAdapter(QueryTransactionsResultActivity.this, data.getGroupData(), data.getChildData());
+                    CardsAndTransactionsAdapter adapter = new CardsAndTransactionsAdapter(QueryTransactionsResultActivity.this, data.getGroupData(), data.getChildData(), data.getTotals());
                     listView.setAdapter(adapter);
                     setToReady();
                 } else {

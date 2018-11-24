@@ -2,16 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/light_grey"
+    android:gravity="center_vertical"
+    android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
+    android:paddingEnd="8dp">
 
     <TextView
         android:id="@+id/card_view"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_weight="1"
         android:gravity="center_vertical"
         android:textSize="16sp"
-        android:layout_width="match_parent"
-        tools:text="TEST VERY LONG CARD NAME - MANUAL"
-        android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft"
-        android:layout_height="64dp" />
+        tools:text="TEST VERY LONG CARD NAME - MANUAL" />
+
+    <TextView
+        android:id="@+id/total_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="9999999999999999999999.99" />
 
     <!--
     <TextView

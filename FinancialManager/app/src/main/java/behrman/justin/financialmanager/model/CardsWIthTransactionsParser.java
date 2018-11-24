@@ -19,10 +19,12 @@ public class CardsWithTransactionsParser {
 
     private HashMap<Card, List<Transaction>> childData;
     private ArrayList<Card> groupData;
+    private ArrayList<Double> totals;
 
     public CardsWithTransactionsParser(ArrayList<Object> responseTransactions, int length) {
         childData = new HashMap<>(length);
         groupData = new ArrayList<>(length);
+        totals = new ArrayList<>(length);
         parseData(responseTransactions);
     }
 
@@ -32,6 +34,10 @@ public class CardsWithTransactionsParser {
 
     public ArrayList<Card> getGroupData() {
         return groupData;
+    }
+
+    public ArrayList<Double> getTotals() {
+        return totals;
     }
 
 
@@ -57,22 +63,28 @@ public class CardsWithTransactionsParser {
     private void parseManualTransactions(Card card, HashMap<String, Object> cardData) {
         ArrayList<ParseObject> transactionData = (ArrayList<ParseObject>) cardData.get(StringConstants.TRANSACTION_DATA_KEY);
         ArrayList<Transaction> formattedData = new ArrayList<>(transactionData.size());
+        double total = 0;
         for (int i = 0; i < transactionData.size(); ++i) {
             Transaction t = ParseUtils.getManualTransaction(transactionData.get(i));
             formattedData.add(t);
+            total += t.getAmount();
         }
         Collections.sort(formattedData);
+        totals.add(total);
         childData.put(card, formattedData);
     }
 
     private void parseAutoTransactions(Card card, HashMap<String, Object> cardData) {
         ArrayList<HashMap<String, Object>> transactionData = (ArrayList<HashMap<String, Object>>) cardData.get(StringConstants.TRANSACTION_DATA_KEY);
         ArrayList<Transaction> formattedData = new ArrayList<>(transactionData.size());
+        double total = 0;
         for (int i = 0; i < transactionData.size(); ++i) {
             Transaction t = ParseUtils.getAutoTransaction(transactionData.get(i));
             formattedData.add(t);
+            total += t.getAmount();
         }
         Collections.sort(formattedData);
+        totals.add(total);
         childData.put(card, formattedData);
     }
 

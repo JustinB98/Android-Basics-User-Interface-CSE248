@@ -75,7 +75,7 @@ public class MonthlyCalculationResultsActivity extends AppCompatActivity {
     private void displayData(double total, CardsWithTransactionsParser data) {
         numberView.setText(ProjectUtils.formatNumber(total));
         dateView.setText(month + "-" + year);
-        CardsAndTransactionsAdapter adapter = new CardsAndTransactionsAdapter(this, data.getGroupData(), data.getChildData());
+        CardsAndTransactionsAdapter adapter = new CardsAndTransactionsAdapter(this, data.getGroupData(), data.getChildData(), data.getTotals());
         listView.setAdapter(adapter);
         setToReady();
     }
