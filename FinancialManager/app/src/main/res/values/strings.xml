@@ -204,8 +204,8 @@
 
     <!-- START Query Transactions -->
     <string name="place_hint">Enter place keyword</string>
-    <string name="min">Min</string>
-    <string name="max">Max</string>
+    <string name="min">Min.</string>
+    <string name="max">Max.</string>
     <string name="min_year">Min Year</string>
     <string name="max_year">Max Year</string>
     <string name="to">to</string>

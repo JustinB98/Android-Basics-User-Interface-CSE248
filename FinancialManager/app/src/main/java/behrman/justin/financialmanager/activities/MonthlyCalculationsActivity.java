@@ -11,15 +11,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.adapters.SelectableAdapter;
-import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.adapters.SelectableCardAdapter;
 import behrman.justin.financialmanager.interfaces.CardReceiever;
+import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -33,6 +34,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
     private EditText yearField;
     private Spinner monthSpinner;
     private ListView listView;
+    private TextView noCardsFoundView;
 
     private List<Card> cards;
 
@@ -109,13 +111,34 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         CardReceiever cardReceiever = new CardReceiever() {
             @Override
             public void receiveCards(List<Card> cards) {
-                MonthlyCalculationsActivity.this.cards = cards;
-                setToReadyView();
-                SelectableAdapter adapter = new SelectableAdapter(MonthlyCalculationsActivity.this, cards, listView);
-                listView.setAdapter(adapter);
+                onReceiveCards(cards);
             }
         };
         GetCardsUtil.findAllCards(cardReceiever, this);
+    }
+
+    private void onReceiveCards(List<Card> cards) {
+        this.cards = cards;
+        if (!cards.isEmpty()) {
+            setUpAdapter();
+        } else {
+            setToNoCardsFoundView();
+        }
+    }
+
+    private void setUpAdapter() {
+        setToReadyView();
+        SelectableCardAdapter adapter = new SelectableCardAdapter(MonthlyCalculationsActivity.this, cards, listView);
+        listView.setAdapter(adapter);
+    }
+
+    private void setToNoCardsFoundView() {
+        progressBar.setVisibility(View.GONE);
+        actionBtn.setVisibility(View.GONE);
+        yearField.setVisibility(View.GONE);
+        monthSpinner.setVisibility(View.GONE);
+        listView.setVisibility(View.GONE);
+        noCardsFoundView.setVisibility(View.VISIBLE);
     }
 
     private void setToLoadView() {
@@ -124,6 +147,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         yearField.setVisibility(View.GONE);
         monthSpinner.setVisibility(View.GONE);
         listView.setVisibility(View.GONE);
+        noCardsFoundView.setVisibility(View.GONE);
     }
 
     private void setToReadyView() {
@@ -132,6 +156,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         yearField.setVisibility(View.VISIBLE);
         monthSpinner.setVisibility(View.VISIBLE);
         listView.setVisibility(View.VISIBLE);
+        noCardsFoundView.setVisibility(View.GONE);
     }
 
     private void extractViews() {
@@ -140,6 +165,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         yearField = findViewById(R.id.year_field);
         monthSpinner = findViewById(R.id.month_spinner);
         listView = findViewById(R.id.list_view);
+        noCardsFoundView = findViewById(R.id.no_cards_found_view);
     }
 
 }

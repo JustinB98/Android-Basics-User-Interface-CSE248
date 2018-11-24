@@ -60,4 +60,15 @@
         android:layout_centerVertical="true"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/no_cards_found_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/no_cards_found"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:visibility="gone" />
+
 </RelativeLayout>

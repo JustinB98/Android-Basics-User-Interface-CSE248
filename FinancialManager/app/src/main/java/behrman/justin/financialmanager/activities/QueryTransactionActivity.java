@@ -11,13 +11,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.adapters.SelectableAdapter;
+import behrman.justin.financialmanager.adapters.SelectableCardAdapter;
 import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
@@ -32,6 +33,7 @@ public class QueryTransactionActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private View container;
     private Button queryTransactionsBtn;
+    private TextView noCardsFoundView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +50,29 @@ public class QueryTransactionActivity extends AppCompatActivity {
         GetCardsUtil.findAllCards(new CardReceiever() {
             @Override
             public void receiveCards(List<Card> cards) {
-                SelectableAdapter adapter = new SelectableAdapter(QueryTransactionActivity.this, cards, listView);
-                listView.setAdapter(adapter);
-                setToView();
+                onReceiveCards(cards);
             }
         }, QueryTransactionActivity.this);
+    }
+
+    private void onReceiveCards(List<Card> cards) {
+        if (!cards.isEmpty()) {
+            setUpAdapter(cards);
+        } else {
+            setToNoCardsView();
+        }
+    }
+
+    private void setToNoCardsView() {
+        container.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        noCardsFoundView.setVisibility(View.VISIBLE);
+    }
+
+    private void setUpAdapter(List<Card> cards) {
+        SelectableCardAdapter adapter = new SelectableCardAdapter(QueryTransactionActivity.this, cards, listView);
+        listView.setAdapter(adapter);
+        setToView();
     }
 
     private void initClick() {
@@ -150,11 +170,13 @@ public class QueryTransactionActivity extends AppCompatActivity {
     private void setToLoading() {
         container.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
+        noCardsFoundView.setVisibility(View.GONE);
     }
 
     private void setToView() {
         container.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+        noCardsFoundView.setVisibility(View.GONE);
     }
 
     private void extractViews() {
@@ -169,6 +191,7 @@ public class QueryTransactionActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
         container = findViewById(R.id.container);
         queryTransactionsBtn = findViewById(R.id.query_transactions_btn);
+        noCardsFoundView = findViewById(R.id.no_cards_found_view);
     }
 
 }

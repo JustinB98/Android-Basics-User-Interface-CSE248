@@ -17,13 +17,13 @@ import java.util.List;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 
-public class SelectableAdapter extends ArrayAdapter<Card> {
+public class SelectableCardAdapter extends ArrayAdapter<Card> {
 
-    public final static String LOG_TAG = SelectableAdapter.class.getSimpleName() + "debug";
+    public final static String LOG_TAG = SelectableCardAdapter.class.getSimpleName() + "debug";
 
     private ListView listView;
 
-    public SelectableAdapter(Context context, List<Card> cards, ListView listView) {
+    public SelectableCardAdapter(Context context, List<Card> cards, ListView listView) {
         super(context, 0, cards);
         this.listView = listView;
     }

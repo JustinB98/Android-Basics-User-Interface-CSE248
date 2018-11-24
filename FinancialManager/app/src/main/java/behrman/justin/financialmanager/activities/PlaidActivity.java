@@ -1,9 +1,12 @@
 package behrman.justin.financialmanager.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -36,7 +39,10 @@ public class PlaidActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plaid);
-        getSupportActionBar().hide();
+        // getSupportActionBar().hide();
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        getSupportActionBar().setTitle(Html.fromHtml("<font color=\"black\">" + getString(R.string.add_auto_card_title) + "</font>"));
+        Log.i("errorlog", getSupportActionBar().getTitle() + "");
         // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // setSupportActionBar(toolbar);
 
@@ -164,7 +170,7 @@ public class PlaidActivity extends AppCompatActivity {
             public void done(String object, ParseException e) {
                 if (e == null) {
                     if (object != null && ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
-                        finish();
+                        finish(); // finish plaid activity so when the edit name activity ends, the user returns to the main menu
                         switchToChangeName(suggestedName);
                     }
                 } else {
