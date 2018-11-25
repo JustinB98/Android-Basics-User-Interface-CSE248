@@ -57,7 +57,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void signUp0(String email, String password) {
+    private void signUp0(final String email, final String password) {
         final ParseUser user = new ParseUser();
         user.setUsername(email);
         user.setPassword(password);
@@ -74,7 +74,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                     Log.i(LOG_TAG, "createUserWithEmail:success");
                     finish();
                     // switchToMenuActivity();
-                    switchToVerifyEmailActivity(user);
+                    // user.setPassword(password);
+                    switchToVerifyEmailActivity(email, password);
                 } else {
                     Log.i(LOG_TAG, "createUserWithEmail:failure", e);
                     // showErrorMsg(e.getCode());
@@ -85,9 +86,10 @@ public class CreateAccountActivity extends AppCompatActivity {
         });
     }
 
-    private void switchToVerifyEmailActivity(ParseUser user) {
+    private void switchToVerifyEmailActivity(String email, String password) {
         Intent intent = new Intent(this, VerifyEmailActivity.class);
-        intent.putExtra(StringConstants.USER_KEY, user);
+        intent.putExtra(StringConstants.EMAIL_KEY, email);
+        intent.putExtra(StringConstants.PASSWORD_KEY, password);
         startActivity(intent);
     }
 

@@ -27,6 +27,7 @@ public final class StringConstants {
     public final static String MANUAL_CARD_TRANSACTIONS_CARD_NAME_COLUMN = "cardName";
     public final static String MANUAL_CARD_TRANSACTIONS_YEAR_COLUMN = "year";
     public final static String MANUAL_CARD_TRANSACTIONS_MONTH_COLUMN = "month";
+    public final static String USER_EMAIL_COLUMN = "email";
     // ---------------------- END PARSE CLOUD PARAMETERS----------------------
 
     // ---------------------- START PLAID KEYS ----------------------
@@ -56,6 +57,7 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_FUNCTION_EDIT_CARD_NAME = "editCardName";
     public final static String PARSE_CLOUD_FUNCTION_DELETE_USER = "deleteUser";
     public final static String PARSE_CLOUD_FUNCTION_QUERY_TRANSACTIONS = "queryTransactions";
+    public final static String PARSE_CLOUD_FUNCTION_RESEND_VERIFICATION_EMAIL = "resendVerificationEmail";
     // ---------------------- END PARSE CLOUD FUNCTIONS----------------------
 
     // ---------------------- START PARSE CLOUD PARAMETERS----------------------
@@ -66,6 +68,8 @@ public final class StringConstants {
     public final static String PARSE_CLOUD_PARAMETER_MONTH = "month";
     public final static String PARSE_CLOUD_PARAMETER_YEAR = "year";
     public final static String PARSE_CLOUD_PARAMETER_USERNAME = "username";
+    public final static String PARSE_CLOUD_PARAMETER_ORIGINAL_EMAIL = "originalEmail";
+    public final static String PARSE_CLOUD_PARAMETER_NEW_EMAIL = "newEmail";
     // ---------------------- END PARSE CLOUD PARAMETERS----------------------
 
 
@@ -85,6 +89,8 @@ public final class StringConstants {
     public final static String YEAR_KEY = "year";
     public final static String SELECTED_CARDS_KEY = "selectedCards";
     public final static String USER_KEY = "user";
+    public final static String EMAIL_KEY = "email";
+    public final static String PASSWORD_KEY = "password";
     // ---------------------- END KEYS ----------------------
 
     // ---------------------- START LITERALS ----------------------

@@ -148,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void sendCredentials(String username, String password) {
+    private void sendCredentials(final String username, final String password) {
         progressBar.setVisibility(View.VISIBLE);
         loginBtn.setEnabled(false);
         ProjectUtils.hideKeyboard(this);
-        final ParseUser user = new ParseUser();
+        ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setEmail(username);
         user.setPassword(password);
@@ -168,20 +168,20 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
                     ParseUser.logOutInBackground();
-                    showErrorMsg(e, user);
+                    showErrorMsg(e, username, password);
                 }
             }
         });
 
     }
 
-    private void showErrorMsg(ParseException e, ParseUser user) {
+    private void showErrorMsg(ParseException e, String email, String password) {
         // Toast.makeText(this, R.string.sign_in_fail, Toast.LENGTH_LONG).show();
         if (e.getCode() == ParseException.OBJECT_NOT_FOUND) { // invalid username/password
             Toast.makeText(this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
         } else if (StringConstants.VERIFICATION_PARSE_MESSAGE.equals(e.getMessage())) {
             // Toast.makeText(this, R.string.email_not_verified, Toast.LENGTH_SHORT).show();
-            switchToVerifyEmailActivity(user);
+            switchToVerifyEmailActivity(email, password);
         } else {
             // int errorId = ParseExceptionUtils.returnParseExceptionMessage(e);
             // Toast.makeText(this, errorId, Toast.LENGTH_SHORT).show();
@@ -190,9 +190,10 @@ public class MainActivity extends AppCompatActivity {
         Log.i(LOG_TAG, "sign in failed! message: " + e.toString() + ", code: " + e.getCode());
     }
 
-    private void switchToVerifyEmailActivity(ParseUser user) {
+    private void switchToVerifyEmailActivity(String email, String password) {
         Intent intent = new Intent(this, VerifyEmailActivity.class);
-        intent.putExtra(StringConstants.USER_KEY, user);
+        intent.putExtra(StringConstants.EMAIL_KEY, email);
+        intent.putExtra(StringConstants.PASSWORD_KEY , password);
         startActivity(intent);
     }
 

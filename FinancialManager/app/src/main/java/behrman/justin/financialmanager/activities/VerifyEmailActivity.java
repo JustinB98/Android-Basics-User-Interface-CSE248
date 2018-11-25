@@ -10,11 +10,16 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.LogInCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
+
+import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
@@ -23,47 +28,57 @@ import behrman.justin.financialmanager.utils.StringConstants;
 
 public class VerifyEmailActivity extends AppCompatActivity {
 
-    private final static String LOG_TAG = VerifyEmailActivity.class.getSimpleName() + "debug";
+    public final static String LOG_TAG = VerifyEmailActivity.class.getSimpleName() + "debug";
 
     private EditText emailField;
     private Button verifiedBtn, resendEmailBtn;
     private ProgressBar progressBar;
 
     private ParseUser user;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_email);
-        user = getIntent().getParcelableExtra(StringConstants.USER_KEY); // generics are nice
+        ParseUser.logOutInBackground();
+        // user = getIntent().getParcelableExtra(StringConstants.USER_KEY); // generics are nice
+        email = getIntent().getStringExtra(StringConstants.EMAIL_KEY);
+        password = getIntent().getStringExtra(StringConstants.PASSWORD_KEY);
+        getUser();
         extractViews();
         initButtons();
-        emailField.setText(user.getEmail());
+        emailField.setText(email);
+    }
+
+    private void getUser() {
+        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
+        query.whereEqualTo(StringConstants.USER_EMAIL_COLUMN, email);
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
+                if (e == null) {
+                    user = object;
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e.getCode(), VerifyEmailActivity.this);
+                }
+            }
+        });
     }
 
     private void initButtons() {
         verifiedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.fetchInBackground(new GetCallback<ParseObject>() {
-                    @Override
-                    public void done(ParseObject object, ParseException e) {
-                        checkIfVerified();
-                    }
-                });
-
+                checkIfVerified(true);
             }
         });
         resendEmailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.fetchInBackground(new GetCallback<ParseObject>() {
-                    @Override
-                    public void done(ParseObject object, ParseException e) {
-                        resendEmail();
-                    }
-                });
-
+                resendEmail();
             }
         });
     }
@@ -77,22 +92,32 @@ public class VerifyEmailActivity extends AppCompatActivity {
         }
     }
 
-    private void resendEmail0(String email) {
+    private void resendEmail0(final String email) {
         setToLoading();
-        user.setUsername(email);
-        user.setEmail(email);
-        user.saveInBackground(new SaveCallback() {
+        HashMap<String, Object> params = new HashMap<>(1);
+        params.put(StringConstants.PARSE_CLOUD_PARAMETER_ORIGINAL_EMAIL, this.email);
+        params.put(StringConstants.PARSE_CLOUD_PARAMETER_NEW_EMAIL, email);
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_RESEND_VERIFICATION_EMAIL, params, new FunctionCallback<String>() {
             @Override
-            public void done(ParseException e) {
+            public void done(String object, ParseException e) {
                 setToReady();
                 if (e == null) {
-                    Toast.makeText(VerifyEmailActivity.this, R.string.resent_verification_email, Toast.LENGTH_SHORT).show();
+                    Log.i(LOG_TAG, "object: " + object);
+                    onReturn(object, email);
                 } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e.getCode(), VerifyEmailActivity.this);
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code " + e.getCode());
                 }
             }
         });
+    }
+
+    private void onReturn(String result, String email) {
+        if (ProjectUtils.deepEquals(result, StringConstants.SUCCESS)) {
+            this.email = email;
+            Toast.makeText(this, R.string.resent_verification_email, Toast.LENGTH_SHORT).show();
+        } else if (ProjectUtils.deepEquals(result, StringConstants.EXISTS)) {
+            Toast.makeText(this, R.string.username_taken, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setToLoading() {
@@ -107,17 +132,57 @@ public class VerifyEmailActivity extends AppCompatActivity {
         verifiedBtn.setEnabled(true);
     }
 
-    private void checkIfVerified() {
+    private void checkIfVerified(final boolean displayMessage) {
+        user.fetchInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    checkIfVerified0(displayMessage);
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e.getCode(), VerifyEmailActivity.this);
+                }
+            }
+        });
+    }
+
+    private void checkIfVerified0(boolean displayMessage) {
         if (user.getBoolean("emailVerified")) {
             Toast.makeText(this, R.string.welcome_to_the_app_msg, Toast.LENGTH_SHORT).show();
-            switchToMenuActivity();
+            signInUserIfNeeded();
+            // switchToMenuActivity();
         } else {
-            Toast.makeText(this, R.string.email_still_not_verified, Toast.LENGTH_SHORT).show();
+            if (displayMessage) {
+                Toast.makeText(this, R.string.email_still_not_verified, Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    private void signInUserIfNeeded() {
+        if (ParseUser.getCurrentUser() != null) {
+            switchToMenuActivity();
+        } else { // need to sign in
+            signInUser();
+        }
+    }
+
+    private void signInUser() {
+        ParseUser.logInInBackground(email, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e == null) {
+                    switchToMenuActivity();
+                } else {
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e.getCode(), VerifyEmailActivity.this);
+                }
+            }
+        });
     }
 
     private void switchToMenuActivity() {
         Intent intent = new Intent(this, MenuActivity.class);
+        finish(); // don't want the user coming back to this activity
         startActivity(intent);
     }
 
@@ -128,4 +193,11 @@ public class VerifyEmailActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (user != null) {
+            checkIfVerified(false);
+        }
+    }
 }
