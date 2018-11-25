@@ -72,7 +72,6 @@ public final class StringConstants {
     // ---------------------- START KEYS ----------------------
     // for the class to open after another class (ie Select Card to View Card History)
     public final static String NEXT_CLASS_KEY = "nextClass";
-
     public final static String CARD_NAME_KEY = "cardName";
     public final static String TRANSACTIONS_LENGTH_KEY = "length";
     public final static String TRANSACTIONS_INTENT_KEY = "transactions";
@@ -85,6 +84,7 @@ public final class StringConstants {
     public final static String MONTH_SPINNER_POSITION_KEY = "monthSpinnerPosition";
     public final static String YEAR_KEY = "year";
     public final static String SELECTED_CARDS_KEY = "selectedCards";
+    public final static String USER_KEY = "user";
     // ---------------------- END KEYS ----------------------
 
     // ---------------------- START LITERALS ----------------------
@@ -109,4 +109,7 @@ public final class StringConstants {
     public final static String CARDS_KEY = "cards";
     // ---------------------- END QUERY TRANSACTIONS KEYS ----------------------
 
+    // ---------------------- START OTHER ----------------------
+    public final static String VERIFICATION_PARSE_MESSAGE = "User email is not verified.";
+    // ---------------------- END OTHER ----------------------
 }

@@ -63,7 +63,10 @@
         <activity
             android:name=".activities.QueryTransactionActivity"
             android:label="@string/query_transactions_title" />
-        <activity android:name=".activities.QueryTransactionsResultActivity" android:label="@string/query_transactions_result_title"></activity>
+        <activity
+            android:name=".activities.QueryTransactionsResultActivity"
+            android:label="@string/query_transactions_result_title" />
+        <activity android:name=".activities.VerifyEmailActivity" android:label="@string/verify_email_title"></activity>
     </application>
 
 </manifest>

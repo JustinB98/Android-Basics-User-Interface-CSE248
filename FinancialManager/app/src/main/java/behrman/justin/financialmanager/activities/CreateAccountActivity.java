@@ -17,10 +17,11 @@ import com.parse.SignUpCallback;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
+import behrman.justin.financialmanager.utils.StringConstants;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
-    public final static String LOG_TAG = CreateAccountActivity.class.getSimpleName();
+    public final static String LOG_TAG = CreateAccountActivity.class.getSimpleName() + "debug";
 
     private EditText usernameField, passwordField, confirmPasswordField;
     private Button createAccountBtn;
@@ -44,7 +45,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void signUp() {
-        String username = usernameField.getText().toString();
+        String username = usernameField.getText().toString().toLowerCase();
         String password = passwordField.getText().toString();
         if (fieldsAreValid(username, password)) {
             signUp0(username, password);
@@ -57,7 +58,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     private void signUp0(String email, String password) {
-        ParseUser user = new ParseUser();
+        final ParseUser user = new ParseUser();
         user.setUsername(email);
         user.setPassword(password);
         user.setEmail(email);
@@ -71,14 +72,23 @@ public class CreateAccountActivity extends AppCompatActivity {
                 createAccountBtn.setEnabled(true);
                 if (e == null) {
                     Log.i(LOG_TAG, "createUserWithEmail:success");
-                    switchToMenuActivity();
+                    finish();
+                    // switchToMenuActivity();
+                    switchToVerifyEmailActivity(user);
                 } else {
                     Log.i(LOG_TAG, "createUserWithEmail:failure", e);
                     // showErrorMsg(e.getCode());
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
                     ParseExceptionUtils.displayErrorMessage(e, CreateAccountActivity.this);
                 }
             }
         });
+    }
+
+    private void switchToVerifyEmailActivity(ParseUser user) {
+        Intent intent = new Intent(this, VerifyEmailActivity.class);
+        intent.putExtra(StringConstants.USER_KEY, user);
+        startActivity(intent);
     }
 
     private boolean fieldsAreValid(String username, String password) {

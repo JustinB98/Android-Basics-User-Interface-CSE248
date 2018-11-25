@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login() {
-        String username = usernameField.getText().toString();
+        String username = usernameField.getText().toString().toLowerCase();
         String password = passwordField.getText().toString();
         authenticate(username, password);
     }
@@ -152,37 +152,48 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         loginBtn.setEnabled(false);
         ProjectUtils.hideKeyboard(this);
-        ParseUser user = new ParseUser();
+        final ParseUser user = new ParseUser();
         user.setUsername(username);
         user.setEmail(username);
         user.setPassword(password);
         loggingIn = true;
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
-            public void done(ParseUser user, ParseException e) {
+            public void done(ParseUser loggedInUser, ParseException e) {
                 progressBar.setVisibility(View.GONE);
                 loginBtn.setEnabled(true);
                 loggingIn = false;
                 if (e == null) {
                     goToMainMenu();
                 } else {
-                    showErrorMsg(e);
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                    ParseUser.logOutInBackground();
+                    showErrorMsg(e, user);
                 }
             }
         });
 
     }
 
-    private void showErrorMsg(ParseException e) {
+    private void showErrorMsg(ParseException e, ParseUser user) {
         // Toast.makeText(this, R.string.sign_in_fail, Toast.LENGTH_LONG).show();
         if (e.getCode() == ParseException.OBJECT_NOT_FOUND) { // invalid username/password
             Toast.makeText(this, R.string.invalid_credentials, Toast.LENGTH_SHORT).show();
+        } else if (StringConstants.VERIFICATION_PARSE_MESSAGE.equals(e.getMessage())) {
+            // Toast.makeText(this, R.string.email_not_verified, Toast.LENGTH_SHORT).show();
+            switchToVerifyEmailActivity(user);
         } else {
             // int errorId = ParseExceptionUtils.returnParseExceptionMessage(e);
             // Toast.makeText(this, errorId, Toast.LENGTH_SHORT).show();
             ParseExceptionUtils.displayErrorMessage(e, this);
         }
         Log.i(LOG_TAG, "sign in failed! message: " + e.toString() + ", code: " + e.getCode());
+    }
+
+    private void switchToVerifyEmailActivity(ParseUser user) {
+        Intent intent = new Intent(this, VerifyEmailActivity.class);
+        intent.putExtra(StringConstants.USER_KEY, user);
+        startActivity(intent);
     }
 
     private void initViews() {
@@ -212,7 +223,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUIIfNeeded(ParseUser currentUser) {
         if (currentUser != null) {
-            goToMainMenu();
+            if (currentUser.isAuthenticated()) {
+                goToMainMenu();
+            } else {
+                ParseUser.logOutInBackground();
+            }
         }
     }
 

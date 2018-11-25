@@ -62,6 +62,7 @@
     <string name="delete_user">Delete Account</string>
     <string name="query_transactions_title">Query Transactions</string>
     <string name="query_transactions_result_title">Query Transactions Results</string>
+    <string name="verify_email_title">Verify Your Email</string>
     <!-- END Titles -->
 
     <!-- START Login Screen -->
@@ -76,6 +77,7 @@
     <string name="username_taken">Email already exists!</string>
     <string name="other_login_error">Something went wrong? Can\'t connect to server?</string>
     <string name="forgot_password">Forgot Password</string>
+    <string name="email_not_verified">Please verify this email!</string>
     <!-- END Login Screen -->
 
     <!-- START Reset Password -->
@@ -98,6 +100,13 @@
     <string name="server_issue">Couldn\'t connect to server…</string>
     <string name="passwords_not_equal">Passwords Are Not Equal</string>
     <!-- END Create Account Screen -->
+
+    <!-- START Verify Email -->
+    <string name="welcome_to_the_app_msg">Welcome!</string>
+    <string name="email_empty">Email can\'t be empty</string>
+    <string name="resent_verification_email">Resent Verification Email</string>
+    <string name="email_still_not_verified">It seems you still aren\'t verified</string>
+    <!-- END Verify Email-->
 
     <!-- START Menu Screen -->
     <string name="add_manual_card">Add Manual Card</string>
