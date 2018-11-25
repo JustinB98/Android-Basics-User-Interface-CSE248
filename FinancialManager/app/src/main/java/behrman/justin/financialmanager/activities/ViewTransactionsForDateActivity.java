@@ -45,7 +45,8 @@ public class ViewTransactionsForDateActivity extends AppCompatActivity {
         return new OnTotalChange() {
             @Override
             public void onTotalChange(double removedTotal) {
-                totalView.setText(ProjectUtils.formatNumber(total - removedTotal));
+                total -= removedTotal;
+                totalView.setText(ProjectUtils.formatNumber(total));
             }
         };
     }
