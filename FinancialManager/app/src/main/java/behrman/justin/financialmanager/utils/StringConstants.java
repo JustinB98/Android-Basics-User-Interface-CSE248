@@ -91,6 +91,8 @@ public final class StringConstants {
     public final static String USER_KEY = "user";
     public final static String EMAIL_KEY = "email";
     public final static String PASSWORD_KEY = "password";
+    public final static String RES_ID_KEY = "resId";
+    public final static String TITLE_KEY = "title";
     // ---------------------- END KEYS ----------------------
 
     // ---------------------- START LITERALS ----------------------

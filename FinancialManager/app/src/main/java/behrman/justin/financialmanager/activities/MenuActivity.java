@@ -155,7 +155,14 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
             logout();
         } else if (item.getItemId() == R.id.settings_item) {
             switchToSettings();
+        } else if (item.getItemId() == R.id.info_item) {
+            switchToFAQ();
         }
+    }
+
+    private void switchToFAQ() {
+        Intent intent = new Intent(this, InfoActivity.class);
+        startActivity(intent);
     }
 
     private void switchToSettings() {

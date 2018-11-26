@@ -5,15 +5,22 @@
     <item
         android:id="@+id/log_out_menu_item"
         android:icon="@drawable/log_out_icon"
+        android:onClick="menuAction"
         android:title="@string/log_out"
-        app:showAsAction="ifRoom"
-        android:onClick="menuAction" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/settings_item"
         android:icon="@drawable/settings_icon"
+        android:onClick="menuAction"
         android:title="@string/settings_title"
-        app:showAsAction="ifRoom"
-        android:onClick="menuAction" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/info_item"
+        android:icon="@drawable/info_icon"
+        android:onClick="menuAction"
+        android:title="@string/info_item"
+        app:showAsAction="ifRoom" />
 
 </menu>

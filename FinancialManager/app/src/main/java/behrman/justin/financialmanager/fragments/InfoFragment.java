@@ -7,29 +7,38 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.activities.DeleteUserActivity;
+import behrman.justin.financialmanager.activities.BoringActivity;
+import behrman.justin.financialmanager.utils.StringConstants;
 
-public class SettingsFragment extends PreferenceFragmentCompat {
-
+public class InfoFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle bundle, String rootKey) {
-        setPreferencesFromResource(R.xml.preferences, rootKey);
+        setPreferencesFromResource(R.xml.help_screen, rootKey);
     }
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
-        checkPreference(preference.getKey());
+        checkForClicks(preference.getKey());
         return super.onPreferenceTreeClick(preference);
     }
 
-    private void checkPreference(String key) {
-        if ("deleteAccount".equals(key)) {
-            openDeleteAccountActivity();
+    private void checkForClicks(String key) {
+        switch (key) {
+
         }
     }
 
-    private void openDeleteAccountActivity() {
-        Intent intent = new Intent(getContext(), DeleteUserActivity.class);
+    private void openBoringActivity(int layoutResId, int titleId) {
+        Intent intent = new Intent(getContext(), BoringActivity.class);
+        intent.putExtra(StringConstants.RES_ID_KEY, layoutResId);
+        intent.putExtra(StringConstants.TITLE_KEY, titleId);
+        startActivity(intent);
+    }
+
+    private void openBoringActivity(int layoutResId, String title) {
+        Intent intent = new Intent(getContext(), BoringActivity.class);
+        intent.putExtra(StringConstants.RES_ID_KEY, layoutResId);
+        intent.putExtra(StringConstants.TITLE_KEY, title);
         startActivity(intent);
     }
 
@@ -43,5 +52,4 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 preferenceScreen.getPreference(i).setIconSpaceReserved(false);
         }
     }
-
 }
