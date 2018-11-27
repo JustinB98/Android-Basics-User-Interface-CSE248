@@ -206,6 +206,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
 
     private void switchToAddTransactionActivity() {
         Intent intent = new Intent(ViewHistoryActivity.this, AddManualTransactionActivity.class);
+        intent.putExtra(StringConstants.SELECTED_DATE_KEY, calendarSubActivity.getSelectedDate());
         intent.putExtra(StringConstants.CARD_KEY, new Card(cardName, CardType.MANUAL));
         startActivity(intent);
     }

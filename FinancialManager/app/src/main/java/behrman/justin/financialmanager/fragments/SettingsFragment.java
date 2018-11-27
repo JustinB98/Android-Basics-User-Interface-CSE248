@@ -23,7 +23,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void checkPreference(String key) {
-        if ("deleteAccount".equals(key)) {
+        if (key.equals(getString(R.string.delete_account_key))) {
             openDeleteAccountActivity();
         }
     }

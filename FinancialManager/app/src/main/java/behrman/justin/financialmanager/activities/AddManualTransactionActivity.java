@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -52,18 +53,20 @@ public class AddManualTransactionActivity extends AppCompatActivity {
 
     private final int HEIGHT_ERROR = 40;
 
+    private CalendarDay passedInDay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         root = getLayoutInflater().inflate(R.layout.activity_add_manual_transaction, null);
         setContentView(root);
         originalCard = (Card) getIntent().getSerializableExtra(StringConstants.CARD_KEY);
+        passedInDay = getIntent().getParcelableExtra(StringConstants.SELECTED_DATE_KEY);
         extractViews();
-        initTodaysDate();
+        initSelectedDate();
         initButton();
         initCalendarListener();
         initSeeIfMenuIsNeeded();
-        Log.i(LOG_TAG, "oncreate");
     }
 
     @Override
@@ -97,10 +100,15 @@ public class AddManualTransactionActivity extends AppCompatActivity {
         }
     }
 
-    private void initTodaysDate() {
-        year = ProjectUtils.getCurrentYear();
-        month = ProjectUtils.getCurrentMonth() - 1; // method returns 1-12 but api uses 0-11
-        day = ProjectUtils.getCurrentDay();
+    // defaults to the current day
+    private void initSelectedDate() {
+        if (passedInDay == null) {
+            passedInDay = CalendarDay.today();
+        }
+        year = passedInDay.getYear();
+        month = passedInDay.getMonth(); // returns 0-11 which works with the api
+        day = passedInDay.getDay();
+        calendarView.setDate(passedInDay.getDate().getTime());
     }
 
     private void initCalendarListener() {

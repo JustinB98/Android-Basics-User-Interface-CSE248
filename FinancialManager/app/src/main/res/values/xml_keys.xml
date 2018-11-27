@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="plaid_info_key">plaidInfo</string>
+    <string name="auto_vs_manual_key">autoVsManual</string>
+    <string name="delete_account_key">deleteAccount</string>
+    <string name="show_animation_key">showAnimations</string>
+
+</resources>

@@ -21,13 +21,10 @@ public class InfoFragment extends PreferenceFragmentCompat {
     }
 
     private void checkForClicks(String key) {
-        switch (key) {
-            case "autoVsManual":
-                BoringActivity.startActivity(getContext(), R.layout.auto_vs_manual, R.string.auto_vs_manual_title);
-                break;
-            case "plaidInfo":
-                BoringActivity.startActivity(getContext(), R.layout.plaid_info, R.string.plaid_info_title);
-                break;
+        if (key.equals(getString(R.string.auto_vs_manual_key))) {
+            BoringActivity.startActivity(getContext(), R.layout.auto_vs_manual, R.string.auto_vs_manual_title);
+        } else if (key.equals(getString(R.string.plaid_info_key))) {
+            BoringActivity.startActivity(getContext(), R.layout.plaid_info, R.string.plaid_info_title);
         }
     }
     // https://stackoverflow.com/questions/18509369/android-how-to-get-remove-margin-padding-in-preference-screen/18509566

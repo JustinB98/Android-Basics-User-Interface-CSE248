@@ -93,6 +93,7 @@ public final class StringConstants {
     public final static String PASSWORD_KEY = "password";
     public final static String RES_ID_KEY = "resId";
     public final static String TITLE_KEY = "title";
+    public final static String SELECTED_DATE_KEY = "selectedDate";
     // ---------------------- END KEYS ----------------------
 
     // ---------------------- START LITERALS ----------------------

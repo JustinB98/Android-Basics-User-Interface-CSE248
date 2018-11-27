@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.ViewTransactionsForDateActivity;
-import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.interfaces.TransactionCommunicator;
+import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -131,6 +131,10 @@ public class ViewHistoryCalendarViewSubActivity {
         } else {
             return calendarView.getSelectedDate().getDay();
         }
+    }
+
+    public CalendarDay getSelectedDate() {
+        return calendarView.getSelectedDate();
     }
 
     public int getSavedMonth() {
