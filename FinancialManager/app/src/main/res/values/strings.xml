@@ -64,6 +64,8 @@
     <string name="query_transactions_result_title">Query Transactions Results</string>
     <string name="verify_email_title">Verify Your Email</string>
     <string name="faq_title">FAQ</string>
+    <string name="auto_vs_manual_title">Auto vs Manual</string>
+    <string name="plaid_info_title">Plaid Info</string>
     <!-- END Titles -->
 
     <!-- START Login Screen -->
@@ -226,5 +228,18 @@
     <string name="min_amount_larger_than_max_amount">Min amount can\'t be larger than max amount</string>
     <string name="no_year_inputs">Please enter a value for both years</string>
     <!-- END Query Transactions -->
+
+    <!-- START Help Strings -->
+    <string name="answer">A: </string>
+    <string name="difference_between_auto_and_manual">Q: What\'s the difference between an auto card and a manual card?</string>
+    <string name="what_is_an_auto_card">An Auto Card gets your transactions by going to your bank. To add one, you need to give your username and password from the bank of your choice.</string>
+    <string name="what_is_a_manual_card">A Manual Card is for when you don\'t feel comfortable giving your bank information. This will require you to manually enter in your transaction details.</string>
+    <string name="plaid_question">Q: What is \"Plaid\"?</string>
+    <string name="what_is_plaid">Plaid is the company that uses your information to get your transaction data from your card.</string>
+    <string name="plaid_safety">We take no responsibility for what plaid does with your data</string>
+    <string name="auto_card_link_message">What is an auto card?</string>
+    <string name="this_is_done_through">This is done through</string>
+    <string name="plaid">plaid</string>
+    <!-- END Help Strings -->
 
 </resources>

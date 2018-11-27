@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="8dp">
@@ -13,33 +13,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:text="Q: What's the difference between an auto card and a manual card?"
+            android:text="@string/difference_between_auto_and_manual"
             android:textAlignment="textStart"
             android:textSize="24sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5px"
-            android:background="@android:color/black" />
+        <View style="@style/line" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A: "
+            android:text="@string/answer"
             android:textSize="24sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="8dp"
-            android:text="An Auto Card gets your transactions by going to your bank. To add one, you need to give your username and password from the bank of your choice."
+            android:text="@string/what_is_an_auto_card"
             android:textAlignment="textStart"
             android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/this_is_done_through"
+                android:paddingEnd="4dp"
+                android:textAlignment="textStart"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/link_to_plaid_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="@string/plaid"
+                android:textColor="@color/link_color"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="A Manual Card is for when you don't feel comfortable giving your bank information. This will require you to manually enter in your transaction details."
+            android:text="@string/what_is_a_manual_card"
             android:textAlignment="textStart"
             android:textSize="24sp" />
     </LinearLayout>
