@@ -20,12 +20,13 @@ import java.util.List;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.SelectableCardAdapter;
 import behrman.justin.financialmanager.interfaces.CardReceiever;
+import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class MonthlyCalculationsActivity extends AppCompatActivity {
+public class MonthlyCalculationsActivity extends AppCompatActivity implements Retriable {
 
     public final static String LOG_TAG = MonthlyCalculationsActivity.class.getSimpleName() + "debug";
 
@@ -38,10 +39,13 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
 
     private List<Card> cards;
 
+    private View root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monthly_calculations);
+        root = getLayoutInflater().inflate(R.layout.activity_monthly_calculations, null);
+        setContentView(root);
         extractViews();
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE); // APPARENTLY IMPORTANT DON'T REMOVE
         setViewData();
@@ -114,7 +118,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
                 onReceiveCards(cards);
             }
         };
-        GetCardsUtil.findAllCards(cardReceiever, this);
+        GetCardsUtil.findAllCards(cardReceiever, this, this);
     }
 
     private void onReceiveCards(List<Card> cards) {
@@ -166,6 +170,12 @@ public class MonthlyCalculationsActivity extends AppCompatActivity {
         monthSpinner = findViewById(R.id.month_spinner);
         listView = findViewById(R.id.list_view);
         noCardsFoundView = findViewById(R.id.no_cards_found_view);
+    }
+
+    @Override
+    public void retry() {
+        setContentView(root);
+        update();
     }
 
 }

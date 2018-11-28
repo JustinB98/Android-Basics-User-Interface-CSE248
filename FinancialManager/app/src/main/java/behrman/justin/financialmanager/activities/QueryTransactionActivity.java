@@ -20,12 +20,13 @@ import java.util.List;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.SelectableCardAdapter;
 import behrman.justin.financialmanager.interfaces.CardReceiever;
+import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class QueryTransactionActivity extends AppCompatActivity {
+public class QueryTransactionActivity extends AppCompatActivity implements Retriable {
 
     private EditText placeField, minAmountField, maxAmountField, minYearField, maxYearField;
     private Spinner minMonthSpinner, maxMonthSpinner;
@@ -35,24 +36,27 @@ public class QueryTransactionActivity extends AppCompatActivity {
     private Button queryTransactionsBtn;
     private TextView noCardsFoundView;
 
+    private View root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_query_transaction);
+        root = getLayoutInflater().inflate(R.layout.activity_query_transaction, null);
+        setContentView(root);
         extractViews();
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE); // IMPORTANT DON'T REMOVE
-        setToLoading();
         initClick();
         initGetCards();
     }
 
     private void initGetCards() {
+        setToLoading();
         GetCardsUtil.findAllCards(new CardReceiever() {
             @Override
             public void receiveCards(List<Card> cards) {
                 onReceiveCards(cards);
             }
-        }, QueryTransactionActivity.this);
+        }, QueryTransactionActivity.this, this);
     }
 
     private void onReceiveCards(List<Card> cards) {
@@ -192,6 +196,12 @@ public class QueryTransactionActivity extends AppCompatActivity {
         container = findViewById(R.id.container);
         queryTransactionsBtn = findViewById(R.id.query_transactions_btn);
         noCardsFoundView = findViewById(R.id.no_cards_found_view);
+    }
+
+    @Override
+    public void retry() {
+        setContentView(root);
+        initGetCards();
     }
 
 }

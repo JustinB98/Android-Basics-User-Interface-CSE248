@@ -1,6 +1,6 @@
 package behrman.justin.financialmanager.utils;
 
-import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.parse.FunctionCallback;
@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.interfaces.CardReceiever;
+import behrman.justin.financialmanager.interfaces.Retriable;
+import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.model.RetryHandler;
 
 public class GetCardsUtil {
 
@@ -22,39 +24,40 @@ public class GetCardsUtil {
 
     private final static HashMap<String, Object> EMPTY_MAP = new HashMap<>(0);
 
-    public static void findAllCards(final CardReceiever onReceive, final Context context) {
+    public static void findAllCards(final CardReceiever onReceive, final AppCompatActivity context, final Retriable retriable) {
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
             @Override
             public void done(ArrayList<ParseObject> object, ParseException e) {
-                afterFind(object, e, onReceive, context);
+                afterFind(object, e, onReceive, context, retriable);
             }
         });
     }
 
-    public static void findAllManualCards(final CardReceiever onReceive, final Context context) {
+    public static void findAllManualCards(final CardReceiever onReceive, final AppCompatActivity context, final Retriable retriable) {
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_MANUAL_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
             @Override
             public void done(ArrayList<ParseObject> object, ParseException e) {
-                afterFind(object, e, onReceive, context);
+                afterFind(object, e, onReceive, context, retriable);
             }
         });
     }
 
-    public static void findAllAutoCards(final CardReceiever onReceive, final Context context) {
+    public static void findAllAutoCards(final CardReceiever onReceive, final AppCompatActivity context, final Retriable retriable) {
         ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_AUTO_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
             @Override
             public void done(ArrayList<ParseObject> object, ParseException e) {
-                afterFind(object, e, onReceive, context);
+                afterFind(object, e, onReceive, context, retriable);
             }
         });
     }
 
-    private static void afterFind(List<ParseObject> objects, ParseException e, CardReceiever onReceive, Context context) {
+    private static void afterFind(List<ParseObject> objects, ParseException e, CardReceiever onReceive, AppCompatActivity activity, Retriable retriable) {
         if (e == null) {
             onReceive.receiveCards(fillCards(objects));
         } else {
             Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-            ParseExceptionUtils.displayErrorMessage(e, context);
+            // ParseExceptionUtils.displayErrorMessage(e, activity);
+            RetryHandler.setToRetryScreen(retriable, activity, e.getCode());
         }
     }
 

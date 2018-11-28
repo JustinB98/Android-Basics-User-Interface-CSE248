@@ -242,4 +242,10 @@
     <string name="plaid">plaid</string>
     <!-- END Help Strings -->
 
+    <!-- START Retry -->
+    <string name="couldnt_connect_to_server">Couldn\'t connect to the server</string>
+    <string name="retry_btn">Retry</string>
+    <string name="error_code_display">Error code: %1$d</string>
+    <!-- END Retry -->
+
 </resources>

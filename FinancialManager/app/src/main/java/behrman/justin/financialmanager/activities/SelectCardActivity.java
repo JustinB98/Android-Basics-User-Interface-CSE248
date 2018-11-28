@@ -14,6 +14,7 @@ import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardSelecterAdapter;
+import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.model.CardType;
@@ -21,7 +22,7 @@ import behrman.justin.financialmanager.interfaces.CardTypeClassConverter;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class SelectCardActivity extends AppCompatActivity {
+public class SelectCardActivity extends AppCompatActivity implements Retriable {
 
     private String LOG_TAG = SelectCardActivity.class.getSimpleName() + "debug";
 
@@ -34,10 +35,13 @@ public class SelectCardActivity extends AppCompatActivity {
     // if null show all cards
     private CardType typeToShow;
 
+    private View root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_card);
+        root = getLayoutInflater().inflate(R.layout.activity_select_card, null);
+        setContentView(root);
         classConverter = (CardTypeClassConverter) getIntent().getSerializableExtra(StringConstants.NEXT_CLASS_KEY);
         typeToShow = (CardType) getIntent().getSerializableExtra(StringConstants.CARD_TYPE_KEY);
         extractViews();
@@ -83,11 +87,11 @@ public class SelectCardActivity extends AppCompatActivity {
             }
         };
         if (typeToShow == CardType.AUTO) {
-            GetCardsUtil.findAllAutoCards(receiver, this);
+            GetCardsUtil.findAllAutoCards(receiver, this, this);
         } else if (typeToShow == CardType.MANUAL) {
-            GetCardsUtil.findAllManualCards(receiver, this);
+            GetCardsUtil.findAllManualCards(receiver, this, this);
         } else {
-            GetCardsUtil.findAllCards(receiver, this);
+            GetCardsUtil.findAllCards(receiver, this, this);
         }
     }
 
@@ -118,6 +122,12 @@ public class SelectCardActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        update();
+    }
+
+    @Override
+    public void retry() {
+        setContentView(root);
         update();
     }
 
