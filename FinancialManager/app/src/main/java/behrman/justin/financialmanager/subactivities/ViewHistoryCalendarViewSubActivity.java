@@ -137,6 +137,17 @@ public class ViewHistoryCalendarViewSubActivity {
         return calendarView.getSelectedDate();
     }
 
+    // instead of returning the selected date, this method will return
+    // the current month and year the calendar view is selected. The default day is -1
+    public CalendarDay getSmartSelectedDate() {
+        CalendarDay selectedDay = calendarView.getSelectedDate();
+        if (selectedDay == null) {
+            // saved month is 1-12, but api uses 0-11
+            selectedDay = CalendarDay.from(savedYear, savedMonth - 1, -1);
+        }
+        return selectedDay;
+    }
+
     public int getSavedMonth() {
         return savedMonth;
     }

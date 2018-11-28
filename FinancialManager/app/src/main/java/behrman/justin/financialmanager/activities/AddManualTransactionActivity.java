@@ -102,13 +102,30 @@ public class AddManualTransactionActivity extends AppCompatActivity {
 
     // defaults to the current day
     private void initSelectedDate() {
-        if (passedInDay == null) {
+        if (passedInDay == null || shouldChangePassedInDate()) {
             passedInDay = CalendarDay.today();
         }
+        checkForInvalidDay();
         year = passedInDay.getYear();
         month = passedInDay.getMonth(); // returns 0-11 which works with the api
         day = passedInDay.getDay();
         calendarView.setDate(passedInDay.getDate().getTime());
+    }
+
+    private void checkForInvalidDay() {
+        int day = passedInDay.getDay();
+        if (day == -1) {
+            passedInDay = CalendarDay.from(passedInDay.getYear(), passedInDay.getMonth(), 1);
+        }
+    }
+
+    // if we're in the same month and year, and it's the first, which means no date is selected, then change the date
+    // if the selected day is the first of the month, then don't change the date
+    private boolean shouldChangePassedInDate() {
+        int month = ProjectUtils.getCurrentMonth() - 1; // need 0-11
+        int year = ProjectUtils.getCurrentYear();
+        boolean isSameMonthAndYear = passedInDay.getMonth() == month && passedInDay.getYear() == year;
+        return isSameMonthAndYear && passedInDay.getDay() == -1;
     }
 
     private void initCalendarListener() {
