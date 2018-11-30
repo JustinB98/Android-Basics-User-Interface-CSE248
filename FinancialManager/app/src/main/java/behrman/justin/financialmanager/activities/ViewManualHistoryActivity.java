@@ -3,16 +3,12 @@ package behrman.justin.financialmanager.activities;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ManualCardTransactionParser;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewManualHistoryActivity extends ViewHistoryActivity {
@@ -31,21 +27,18 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
 
     private void getData(int year, int month) {
         HashMap<String, Object> params = getParameters(year, month);
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_MANUAL_TRANSACTIONS, params, new FunctionCallback<HashMap<String, Object>>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_GET_MANUAL_TRANSACTIONS, params, new ParseFunctionsUtils.DataCallback<HashMap<String, Object>>() {
             @Override
-            public void done(HashMap<String, Object> object, ParseException e) {
-                if (e == null) {
-                    Log.i(LOG_TAG, "object: " + (object == null ? "null" : object.toString()));
+            public void done(HashMap<String, Object> object) {
+                Log.i(LOG_TAG, "object: " + (object == null ? "null" : object.toString()));
+                if (object != null) {
                     // ManualCardTransactionParser cardTransactions = new ManualCardTransactionParser(object);
                     DataCollection data = new ManualCardTransactionParser().parse(object);
                     // Log.i(LOG_TAG, "cardTransactions: " + cardTransactions);
                     ViewManualHistoryActivity.super.setTransactionData(data);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString());
-                    ParseExceptionUtils.displayErrorMessage(e, ViewManualHistoryActivity.this);
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private HashMap<String, Object> getParameters(int year, int month) {

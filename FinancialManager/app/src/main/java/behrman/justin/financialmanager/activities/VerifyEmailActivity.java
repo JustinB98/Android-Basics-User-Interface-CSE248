@@ -10,10 +10,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -23,6 +21,7 @@ import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -97,18 +96,16 @@ public class VerifyEmailActivity extends AppCompatActivity {
         HashMap<String, Object> params = new HashMap<>(1);
         params.put(StringConstants.PARSE_CLOUD_PARAMETER_ORIGINAL_EMAIL, this.email);
         params.put(StringConstants.PARSE_CLOUD_PARAMETER_NEW_EMAIL, email);
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_RESEND_VERIFICATION_EMAIL, params, new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_RESEND_VERIFICATION_EMAIL, params, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
+            public void done(String object) {
                 setToReady();
-                if (e == null) {
+                if (object != null) {
                     Log.i(LOG_TAG, "object: " + object);
                     onReturn(object, email);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code " + e.getCode());
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private void onReturn(String result, String email) {

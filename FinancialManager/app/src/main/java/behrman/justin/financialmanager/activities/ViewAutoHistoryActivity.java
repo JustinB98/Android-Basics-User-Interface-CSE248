@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.HashMap;
@@ -14,7 +11,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.model.AutoCardTransactionsParser;
 import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewAutoHistoryActivity extends ViewHistoryActivity {
@@ -42,19 +39,16 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
     }
 
     private void sendRequest(HashMap<String, Object> request) {
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_AUTO_TRANSACTIONS, request, new FunctionCallback<HashMap<String, Object>>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_GET_AUTO_TRANSACTIONS, request, new ParseFunctionsUtils.DataCallback<HashMap<String, Object>>() {
             @Override
-            public void done(HashMap<String, Object> response, ParseException e) {
-                if (e == null) {
+            public void done(HashMap<String, Object> response) {
+                if (response != null) {
                     DataCollection data = new AutoCardTransactionsParser().parse(response);
                     Log.i(LOG_TAG, "transactions: " + data);
                     ViewAutoHistoryActivity.super.setTransactionData(data);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString());
-                    ParseExceptionUtils.displayErrorMessage(e, ViewAutoHistoryActivity.this);
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private HashMap<String, Object> generateRequestHashMap(String userId, int year, int month) {

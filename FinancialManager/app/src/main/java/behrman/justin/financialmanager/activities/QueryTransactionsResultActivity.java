@@ -7,22 +7,19 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardsAndTransactionsAdapter;
+import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardsWithTransactionsParser;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class QueryTransactionsResultActivity extends AppCompatActivity {
+public class QueryTransactionsResultActivity extends AppCompatActivity implements Retriable {
 
     private final static String LOG_TAG = QueryTransactionsResultActivity.class.getSimpleName() + "debug";
 
@@ -34,10 +31,13 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
     private ExpandableListView listView;
     private ProgressBar progressBar;
 
+    private View root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_query_transactions_result);
+        root = getLayoutInflater().inflate(R.layout.activity_query_transactions_result, null);
+        setContentView(root);
         extractViews();
         extractPassedInValues();
         setToLoading();
@@ -45,10 +45,10 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
     }
 
     private void sendRequestToServer() {
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_QUERY_TRANSACTIONS, params(), new FunctionCallback<ArrayList<Object>>() {
+        ParseFunctionsUtils.callFunctionInBackgroundShowErrorScreen(StringConstants.PARSE_CLOUD_FUNCTION_QUERY_TRANSACTIONS, params(), new ParseFunctionsUtils.DataCallback<ArrayList<Object>>() {
             @Override
-            public void done(ArrayList<Object> object, ParseException e) {
-                if (e == null) {
+            public void done(ArrayList<Object> object) {
+                if (object != null) {
                     Log.i(LOG_TAG, "returned: " + object);
                     CardsWithTransactionsParser data = new CardsWithTransactionsParser(object, cards.size());
                     Log.i(LOG_TAG, "cards: " + data.getGroupData());
@@ -56,12 +56,9 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
                     CardsAndTransactionsAdapter adapter = new CardsAndTransactionsAdapter(QueryTransactionsResultActivity.this, data.getGroupData(), data.getChildData(), data.getTotals());
                     listView.setAdapter(adapter);
                     setToReady();
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, QueryTransactionsResultActivity.this);
                 }
             }
-        });
+        }, this, this, LOG_TAG);
     }
 
     private void setToLoading() {
@@ -114,4 +111,9 @@ public class QueryTransactionsResultActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_bar);
     }
 
+    @Override
+    public void retry() {
+        setContentView(root);
+        sendRequestToServer();
+    }
 }

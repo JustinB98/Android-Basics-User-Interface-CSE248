@@ -60,10 +60,12 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
     }
 
     private void onReceiveCards(List<Card> cards) {
-        if (!cards.isEmpty()) {
-            setUpAdapter(cards);
-        } else {
-            setToNoCardsView();
+        if (cards != null) {
+            if (!cards.isEmpty()) {
+                setUpAdapter(cards);
+            } else {
+                setToNoCardsView();
+            }
         }
     }
 

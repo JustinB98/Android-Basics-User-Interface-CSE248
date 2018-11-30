@@ -12,16 +12,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -88,22 +84,18 @@ public class DeleteCardActivity extends AppCompatActivity {
 
     private void deleteCard1(String functionName) {
         setForLoading();
-        ParseCloud.callFunctionInBackground(functionName, getParams(), new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(functionName, getParams(), new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
-                Log.i(LOG_TAG, "returned with object: " + object + ", e: " + e);
+            public void done(String object) {
+                Log.i(LOG_TAG, "returned with object: " + object);
                 setForView();
-                if (e == null) {
-                    if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
-                        Toast.makeText(DeleteCardActivity.this, R.string.deleted_card, Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, DeleteCardActivity.this);
+                if (object != null && ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
+                    Toast.makeText(DeleteCardActivity.this, R.string.deleted_card, Toast.LENGTH_SHORT).show();
+                    finish();
                 }
+
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private void setForLoading() {

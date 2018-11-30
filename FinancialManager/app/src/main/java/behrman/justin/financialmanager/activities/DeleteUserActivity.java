@@ -12,16 +12,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
 import com.parse.LogOutCallback;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -64,20 +62,17 @@ public class DeleteUserActivity extends AppCompatActivity {
 
     private void deleteUser0() {
         HashMap<String, Object> emptyParams = new HashMap<>(0);
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_DELETE_USER, emptyParams, new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_DELETE_USER, emptyParams, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
+            public void done(String object) {
                 Log.i(LOG_TAG, "returned with " + object);
                 progressBar.setVisibility(View.GONE);
                 deleteUserBtn.setEnabled(true);
-                if (e == null) {
+                if (object != null) {
                     onReturn(object);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, DeleteUserActivity.this);
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private void onReturn(String result) {

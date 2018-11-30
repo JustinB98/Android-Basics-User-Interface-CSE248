@@ -113,7 +113,8 @@ public class CreateAccountActivity extends AppCompatActivity {
      }
 
     private boolean isValidEmail(String email) {
-        return email.matches("[\\w.]+@\\w+\\.(net|com|edu)");
+        // return email.matches("[\\w.]+@\\w+\\.(net|com|edu)");
+        return email.matches("[\\w.]+@[\\w.]+(net|com|edu)");
     }
 
     // https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a

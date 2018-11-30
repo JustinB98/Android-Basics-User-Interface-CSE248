@@ -10,10 +10,6 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
@@ -82,20 +78,15 @@ public class TransactionPopUpUtils {
     private void deleteItem(final int position) {
         HashMap<String, Object> params = new HashMap<>(1);
         params.put(StringConstants.OBJECT_ID_KEY, itemGetter.getItem(position).getObjectId());
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_DELETE_MANUAL_TRANSACTION, params, new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_DELETE_MANUAL_TRANSACTION, params, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
-                if (e == null) {
-                    if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
-                        Toast.makeText(context, "Deleted...", Toast.LENGTH_SHORT).show();
-                        itemGetter.removeItem(itemGetter.getItem(position));
-                        ProjectUtils.setItemDeleted(true);
-                    }
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, context);
+            public void done(String object) {
+                if (object != null && ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
+                    Toast.makeText(context, "Deleted...", Toast.LENGTH_SHORT).show();
+                    itemGetter.removeItem(itemGetter.getItem(position));
+                    ProjectUtils.setItemDeleted(true);
                 }
             }
-        });
+        }, context, LOG_TAG);
     }
 }

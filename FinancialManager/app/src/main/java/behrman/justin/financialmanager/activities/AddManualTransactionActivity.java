@@ -15,9 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.Date;
@@ -27,7 +24,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.Transaction;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -173,23 +170,20 @@ public class AddManualTransactionActivity extends AppCompatActivity {
     private void saveTransaction(Transaction transaction) {
         HashMap<String, Object> params = getParams(transaction);
         Log.i(LOG_TAG, "calling function with " + params);
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_ADD_MANUAL_TRANSACTION, params, new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_ADD_MANUAL_TRANSACTION, params, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
+            public void done(String object) {
                 running = false;
                 progressBar.setVisibility(View.GONE);
                 Log.i(LOG_TAG, "returned with " + object);
-                if (e == null) {
+                if (object != null) {
                     if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
                         Toast.makeText(AddManualTransactionActivity.this, R.string.added_transaction_successfully, Toast.LENGTH_SHORT).show();
                         finish();
                     }
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, AddManualTransactionActivity.this);
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private HashMap<String, Object> getParams(Transaction t) {

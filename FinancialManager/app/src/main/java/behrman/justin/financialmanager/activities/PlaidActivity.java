@@ -12,16 +12,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -165,20 +161,15 @@ public class PlaidActivity extends AppCompatActivity {
     }
 
     private void saveCardToDataBase(HashMap<String, Object> params, final String suggestedName) {
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_ADD_AUTO_CARD, params, new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_ADD_AUTO_CARD, params, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
-                if (e == null) {
+            public void done(String object) {
                     if (object != null && ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
                         finish(); // finish plaid activity so when the edit name activity ends, the user returns to the main menu
                         switchToChangeName(suggestedName);
                     }
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, PlaidActivity.this);
-                }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private void switchToChangeName(String name) {

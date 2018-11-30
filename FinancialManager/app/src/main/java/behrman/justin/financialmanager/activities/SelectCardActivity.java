@@ -14,11 +14,11 @@ import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardSelecterAdapter;
+import behrman.justin.financialmanager.interfaces.CardReceiever;
+import behrman.justin.financialmanager.interfaces.CardTypeClassConverter;
 import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.model.CardType;
-import behrman.justin.financialmanager.interfaces.CardTypeClassConverter;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -108,14 +108,16 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
     }
 
     private void setListViewAdapter(List<Card> cards) {
-        if (!cards.isEmpty()) {
-            CardSelecterAdapter adapter = new CardSelecterAdapter(this, cards);
-            listView.setAdapter(adapter);
-            setToListView();
-        } else {
-            noCardsFoundView.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+        if (cards != null) {
+            if (cards.isEmpty()) {
+                noCardsFoundView.setVisibility(View.VISIBLE);
+                listView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+            } else {
+                CardSelecterAdapter adapter = new CardSelecterAdapter(this, cards);
+                listView.setAdapter(adapter);
+                setToListView();
+            }
         }
     }
 

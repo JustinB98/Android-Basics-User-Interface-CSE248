@@ -2,21 +2,16 @@ package behrman.justin.financialmanager.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -58,17 +53,14 @@ public class EditCardActivity extends AppCompatActivity {
             finish();
             return;
         }
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_EDIT_CARD_NAME, params(cardName), new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_EDIT_CARD_NAME, params(cardName), new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
-                if (e == null) {
+            public void done(String object) {
+                if (object != null) {
                     onReturn(object);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, EditCardActivity.this);
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private void onReturn(String result) {

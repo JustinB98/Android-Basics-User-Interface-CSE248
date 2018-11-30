@@ -123,10 +123,12 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
 
     private void onReceiveCards(List<Card> cards) {
         this.cards = cards;
-        if (!cards.isEmpty()) {
-            setUpAdapter();
-        } else {
-            setToNoCardsFoundView();
+        if (cards != null) {
+            if (!cards.isEmpty()) {
+                setUpAdapter();
+            } else {
+                setToNoCardsFoundView();
+            }
         }
     }
 

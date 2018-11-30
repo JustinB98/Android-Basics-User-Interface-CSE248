@@ -15,17 +15,13 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Transaction;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -150,24 +146,22 @@ public class EditTransactionActivity extends AppCompatActivity {
 
     private void sendToDatabase(final Transaction t) {
         HashMap<String, Object> params = getParams(t);
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_EDIT_MANUAL_CARD, params, new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_EDIT_MANUAL_CARD, params, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
+            public void done(String object) {
                 Log.i(LOG_TAG, "returned with " + object);
-                if (e == null) {
+                if (object != null) {
                     running = false;
                     progressBar.setVisibility(View.GONE);
                     if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
                         Toast.makeText(EditTransactionActivity.this, R.string.transaction_edited_successfully, Toast.LENGTH_SHORT).show();
                         finish();
                     }
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, EditTransactionActivity.this);
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
+
 
     private HashMap<String, Object> getParams(Transaction t) {
         HashMap<String, Object> params = new HashMap<>(5);

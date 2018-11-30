@@ -2,21 +2,16 @@ package behrman.justin.financialmanager.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -60,19 +55,16 @@ public class AddManualCardActivity extends AppCompatActivity {
     private void saveCard(final String cardName) {
         HashMap<String, Object> params = new HashMap<>(1);
         params.put(StringConstants.CARD_NAME_KEY, cardName);
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_ADD_MANUAL_CARD, params, new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_ADD_MANUAL_CARD, params, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
+            public void done(String object) {
                 progressBar.setVisibility(View.GONE);
                 addCardBtn.setEnabled(true);
-                if (e == null) {
+                if (object != null) { // if null, the call function handler handled it
                     afterReturn(object, cardName);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, AddManualCardActivity.this);
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private void afterReturn(String result, String cardName) {
@@ -89,5 +81,4 @@ public class AddManualCardActivity extends AppCompatActivity {
         addCardBtn = findViewById(R.id.add_card_btn);
         progressBar = findViewById(R.id.progress_bar);
     }
-
 }

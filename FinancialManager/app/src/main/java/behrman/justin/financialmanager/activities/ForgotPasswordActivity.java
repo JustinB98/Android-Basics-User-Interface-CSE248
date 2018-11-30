@@ -9,14 +9,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -60,20 +56,17 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private void sendRequest(String email) {
         HashMap<String, Object> params = new HashMap<>(1);
         params.put(StringConstants.PARSE_CLOUD_PARAMETER_USERNAME, email);
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_RESET_PASSWORD, params, new FunctionCallback<String>() {
+        ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_RESET_PASSWORD, params, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
-            public void done(String object, ParseException e) {
-                Log.i(LOG_TAG, "got " + object + " with e: " + e);
+            public void done(String object) {
+                Log.i(LOG_TAG, "got " + object);
                 progressBar.setVisibility(View.GONE);
                 sendRequestBtn.setEnabled(true);
-                if (e == null) {
+                if (object != null) {
                     onReturn(object);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, ForgotPasswordActivity.this);
                 }
             }
-        });
+        }, this, LOG_TAG);
     }
 
     private void onReturn(String result) {

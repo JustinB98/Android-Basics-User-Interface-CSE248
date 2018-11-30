@@ -8,24 +8,21 @@ import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.parse.FunctionCallback;
-import com.parse.ParseCloud;
-import com.parse.ParseException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardsAndTransactionsAdapter;
+import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardsWithTransactionsParser;
-import behrman.justin.financialmanager.utils.ParseExceptionUtils;
+import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ParseUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class MonthlyCalculationResultsActivity extends AppCompatActivity {
+public class MonthlyCalculationResultsActivity extends AppCompatActivity implements Retriable {
 
     public final static String LOG_TAG = MonthlyCalculationResultsActivity.class.getSimpleName() + "debug";
 
@@ -37,10 +34,13 @@ public class MonthlyCalculationResultsActivity extends AppCompatActivity {
     private int month, year;
     private List<Card> cards;
 
+    private View root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_monthly_calculation_results);
+        root = getLayoutInflater().inflate(R.layout.activity_monthly_calculation_results, null);
+        setContentView(root);
         getExtras();
         extractView();
         setToLoadView();
@@ -48,19 +48,15 @@ public class MonthlyCalculationResultsActivity extends AppCompatActivity {
     }
 
     private void update() {
-        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_CALCULATE_MONTHLY, params(), new FunctionCallback<HashMap<String, Object>>() {
+        ParseFunctionsUtils.callFunctionInBackgroundShowErrorScreen(StringConstants.PARSE_CLOUD_FUNCTION_CALCULATE_MONTHLY, params(), new ParseFunctionsUtils.DataCallback<HashMap<String, Object>>() {
             @Override
-            public void done(HashMap<String, Object> object, ParseException e) {
-                Log.i(LOG_TAG, "returned with: " + object + ", e: " + e);
-                if (e == null) {
+            public void done(HashMap<String, Object> object) {
+                if (object != null) {
                     Log.i(LOG_TAG, "object: " + object);
                     parseData(object);
-                } else {
-                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
-                    ParseExceptionUtils.displayErrorMessage(e, MonthlyCalculationResultsActivity.this);
                 }
             }
-        });
+        }, this, this, LOG_TAG);
     }
 
     private void parseData(HashMap<String, Object> response) {
@@ -124,4 +120,9 @@ public class MonthlyCalculationResultsActivity extends AppCompatActivity {
         container = findViewById(R.id.view_container);
     }
 
+    @Override
+    public void retry() {
+        setContentView(root);
+        update();
+    }
 }
