@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:hint="Year"
+                android:hint="@string/year_text"
                 android:inputType="number"
                 android:maxLength="4"
                 android:paddingStart="8dp"
@@ -41,7 +41,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="go" />
+                android:text="@string/monthly_calculations_btn" />
         </LinearLayout>
 
         <ListView

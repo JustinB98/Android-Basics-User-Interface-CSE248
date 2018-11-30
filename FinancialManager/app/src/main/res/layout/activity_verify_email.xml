@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="Please Verify your Email. If you need to, you can change your email here"
+        android:text="@string/verify_email_prompt"
         android:textAlignment="center"
         android:textSize="28sp"
         android:textStyle="bold" />
@@ -23,11 +23,16 @@
         android:orientation="vertical"
         android:padding="4dp">
 
-        <EditText
-            android:id="@+id/email_view"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/email_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/verify_email_hint" />
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,14 +44,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="I verified my email" />
+                android:text="@string/verified_email_btn" />
 
             <Button
                 android:id="@+id/resend_email_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Resend Email" />
+                android:text="@string/verified_resend_email" />
         </LinearLayout>
 
     </LinearLayout>

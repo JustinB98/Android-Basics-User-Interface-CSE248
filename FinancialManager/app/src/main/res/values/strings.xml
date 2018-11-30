@@ -71,8 +71,8 @@
     <!-- START Login Screen -->
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="username_hint">Enter email</string>
-    <string name="password_hint">Enter password</string>
+    <string name="username_hint">Email</string>
+    <string name="password_hint">Password</string>
     <string name="login_btn_text">Login</string>
     <string name="create_account_text">Create an account</string>
     <string name="powered_by_plaid">Powered By Plaid</string>
@@ -109,6 +109,10 @@
     <string name="email_empty">Email can\'t be empty</string>
     <string name="resent_verification_email">Resent Verification Email</string>
     <string name="email_still_not_verified">It seems you still aren\'t verified</string>
+    <string name="verify_email_prompt">Please Verify your Email. If you need to, you can change your email here</string>
+    <string name="verify_email_hint">Email</string>
+    <string name="verified_email_btn">I verified my email</string>
+    <string name="verified_resend_email">Resend Email</string>
     <!-- END Verify Email-->
 
     <!-- START Menu Screen -->
@@ -163,6 +167,8 @@
     <string name="year_is_empty_text">Year can\'t be empty</string>
     <string name="no_cards_selected_text">Please selected at least one card</string>
     <string name="transactions_still_loading">Getting values, please wait…</string>
+    <string name="monthly_calculations_btn">Go</string>
+    <string name="year_text">Year</string>
     <!-- END Monthly Calculations -->
 
     <!-- START Toast Messages -->
