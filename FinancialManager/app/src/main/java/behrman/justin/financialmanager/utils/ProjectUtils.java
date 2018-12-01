@@ -3,8 +3,10 @@ package behrman.justin.financialmanager.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
 
 public class ProjectUtils {
@@ -243,6 +246,18 @@ public class ProjectUtils {
 
     public static double parseOrDefault(EditText editText, double defaultValue) {
         return parseOrDefault(editText.getText().toString(), defaultValue);
+    }
+
+
+    public static int getCardColor(Context context, Card card) {
+        switch (card.getCardType()) {
+            case MANUAL:
+                return ResourcesCompat.getColor(context.getResources(), R.color.manual_card_color, context.getTheme());
+            case AUTO:
+                return ResourcesCompat.getColor(context.getResources(), R.color.auto_card_color, context.getTheme());
+            default:
+                return Color.BLACK;
+        }
     }
 
 }

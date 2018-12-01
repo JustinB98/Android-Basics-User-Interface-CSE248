@@ -18,15 +18,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-        android:gravity="left"
-        tools:text="CARD NAME" />
+        android:textSize="20sp"
+        android:fontFamily="@string/card_name_family"
+        android:gravity="start"
+        tools:text="REALLY LONG CARD NAME THAT IS TOO LONG FOR THIS" />
 
     <TextView
         android:id="@+id/card_type_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:gravity="right"
+        android:fontFamily="@string/card_type_family"
+        android:gravity="end"
         tools:text="MANUAL" />
 
 </LinearLayout>

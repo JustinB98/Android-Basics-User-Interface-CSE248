@@ -1,6 +1,8 @@
 package behrman.justin.financialmanager.adapters;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +80,11 @@ public class CardsAndTransactionsAdapter extends BaseExpandableListAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.header_list_item, parent, false);
         }
         TextView cardView = convertView.findViewById(R.id.card_view);
-        cardView.setText(header.getCardName() + " - " + header.getCardType());
+        // cardView.setText(header.getCardName() + " - " + header.getCardType());
+        int color = ProjectUtils.getCardColor(context, header);
+        // cardView.setText(Html.fromHtml("<font color=\"" + color + "\" face=\"sans-serif-medium\">" + header.getCardName() + "</font> - " + header.getCardType()));
+        cardView.setText(Html.fromHtml("<font color=\"" + color + "\" face=\"sans-serif-medium\">" + header.getCardName() + "</font>"));
+        // setTextViewStyle(cardView, header);
         TextView totalView = convertView.findViewById(R.id.total_view);
         totalView.setText(ProjectUtils.formatNumber(total).replace("$", ""));
         /*
@@ -88,6 +94,31 @@ public class CardsAndTransactionsAdapter extends BaseExpandableListAdapter {
         cardTypeView.setText(header.getCardType().toString());
         */
         return convertView;
+    }
+
+    private void setTextViewStyle(TextView cardView, Card card) {
+        int color = ProjectUtils.getCardColor(context, card);
+        String cardNameFont = context.getString(R.string.card_name_family);
+        String cardTypeFont = context.getString(R.string.card_type_family);
+        Spanned cardNameStr = getParsedHtml(color, cardNameFont, card.getCardName());
+        Spanned cardTypeStr = getParsedHtml(cardTypeFont, card.getCardType().toString());
+        cardView.setText(cardNameStr + " - " + cardTypeStr);
+    }
+
+    private Spanned getParsedHtml(int color, String fontFamily, String value) {
+        // return Html.fromHtml("<font face=\'sans-serif-medium\'>hefsdafsdafsdafsdy</font> sdfafsdsomething");
+        // return Html.fromHtml("<font color=\"" + color + "\" face=\"" + fontFamily + "\">" + value + "</font>");
+        return Html.fromHtml("<font color=\"" + color + "\" face=\"" + fontFamily + "\">" + value + "</font>");
+    }
+
+    private Spanned getParsedHtml(String fontFamily, String value) {
+        return Html.fromHtml("<font " + getFontFamilyAttribute(fontFamily) +">" + value + "</font>");
+    }
+
+    private String getFontFamilyAttribute(String fontFamily) {
+        // <p style="font-family: verdana">
+        // return "style=\"font-family:" + fontFamily + "\"";
+        return "face=\"" + fontFamily + "\"";
     }
 
     @Override

@@ -16,6 +16,7 @@ import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 
 public class SelectableCardAdapter extends ArrayAdapter<Card> {
 
@@ -32,7 +33,7 @@ public class SelectableCardAdapter extends ArrayAdapter<Card> {
     @Override
     public View getView(int position, @Nullable View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_monthly_calculations, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_selectable_card, parent, false);
         }
         // you have to remove the listeners so they don't get called again
         removeListeners(convertView);
@@ -56,6 +57,7 @@ public class SelectableCardAdapter extends ArrayAdapter<Card> {
         // Log.i(LOG_TAG, "card: " + currentCard + ", item checked: " + listView.isItemChecked(pos));
         TextView cardNameView = convertView.findViewById(R.id.card_name_view);
         cardNameView.setText(currentCard.getCardName());
+        cardNameView.setTextColor(ProjectUtils.getCardColor(getContext(), currentCard));
         TextView cardTypeView = convertView.findViewById(R.id.card_type_view);
         cardTypeView.setText(currentCard.getCardType().toString());
         CheckBox checkBox = convertView.findViewById(R.id.checkbox);

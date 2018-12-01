@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="card_type_family">serif</string>
+    <string name="card_name_family">sans-serif-condensed</string>
+</resources>

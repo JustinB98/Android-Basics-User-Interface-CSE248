@@ -13,6 +13,7 @@ import java.util.List;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 
 public class CardSelecterAdapter extends ArrayAdapter<Card> {
 
@@ -34,6 +35,7 @@ public class CardSelecterAdapter extends ArrayAdapter<Card> {
         Card currentCard = getItem(pos);
         TextView cardNameView = convertView.findViewById(R.id.card_name_view);
         cardNameView.setText(currentCard.getCardName());
+        cardNameView.setTextColor(ProjectUtils.getCardColor(getContext(), currentCard));
         TextView cardTypeView = convertView.findViewById(R.id.card_type_view);
         cardTypeView.setText(currentCard.getCardType().toString());
     }

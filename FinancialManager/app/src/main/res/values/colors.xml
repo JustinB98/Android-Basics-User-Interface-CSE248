@@ -7,4 +7,6 @@
     <color name="red">#FF0000</color>
     <color name="rectangle_stroke">#D6F5D6</color>
     <color name="light_grey">#D3D3D3</color>
+    <color name="auto_card_color">#FF0000</color>
+    <color name="manual_card_color">#0000FF</color>
 </resources>
