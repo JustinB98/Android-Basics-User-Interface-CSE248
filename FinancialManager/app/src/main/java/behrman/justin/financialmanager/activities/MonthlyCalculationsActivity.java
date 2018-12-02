@@ -37,6 +37,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
     private Spinner monthSpinner;
     private ListView listView;
     private TextView noCardsFoundView;
+    private View container;
 
     private List<Card> cards;
 
@@ -150,28 +151,19 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
 
     private void setToNoCardsFoundView() {
         progressBar.setVisibility(View.GONE);
-        actionBtn.setVisibility(View.GONE);
-        yearField.setVisibility(View.GONE);
-        monthSpinner.setVisibility(View.GONE);
-        listView.setVisibility(View.GONE);
+        container.setVisibility(View.GONE);
         noCardsFoundView.setVisibility(View.VISIBLE);
     }
 
     private void setToLoadView() {
         progressBar.setVisibility(View.VISIBLE);
-        actionBtn.setVisibility(View.GONE);
-        yearField.setVisibility(View.GONE);
-        monthSpinner.setVisibility(View.GONE);
-        listView.setVisibility(View.GONE);
+        container.setVisibility(View.GONE);
         noCardsFoundView.setVisibility(View.GONE);
     }
 
     private void setToReadyView() {
         progressBar.setVisibility(View.GONE);
-        actionBtn.setVisibility(View.VISIBLE);
-        yearField.setVisibility(View.VISIBLE);
-        monthSpinner.setVisibility(View.VISIBLE);
-        listView.setVisibility(View.VISIBLE);
+        container.setVisibility(View.VISIBLE);
         noCardsFoundView.setVisibility(View.GONE);
     }
 
@@ -182,6 +174,7 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
         monthSpinner = findViewById(R.id.month_spinner);
         listView = findViewById(R.id.list_view);
         noCardsFoundView = findViewById(R.id.no_cards_found_view);
+        container = findViewById(R.id.container);
     }
 
     @Override

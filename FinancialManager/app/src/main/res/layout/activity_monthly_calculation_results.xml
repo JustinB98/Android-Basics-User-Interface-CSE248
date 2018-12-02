@@ -36,6 +36,12 @@
                 tools:text="999999999999.99 USD" />
         </LinearLayout>
 
+        <View
+            style="@style/horizontal_line"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp" />
+
         <ExpandableListView
             android:id="@+id/list_view"
             android:layout_width="match_parent"

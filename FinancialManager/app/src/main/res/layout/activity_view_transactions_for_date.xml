@@ -35,6 +35,11 @@
 
         </LinearLayout>
 
+        <View
+            style="@style/horizontal_line"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
+
         <ListView
             android:id="@+id/transactions_list_view"
             android:layout_width="match_parent"

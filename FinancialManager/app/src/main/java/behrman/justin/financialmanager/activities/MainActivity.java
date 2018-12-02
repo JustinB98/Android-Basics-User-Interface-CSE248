@@ -108,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
         forgotPasswordView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchToForgotPasswordActivity();
+                if (!loggingIn) {
+                    switchToForgotPasswordActivity();
+                }
             }
         });
     }

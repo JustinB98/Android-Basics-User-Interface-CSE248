@@ -111,9 +111,14 @@
                 android:id="@+id/query_transactions_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/query_transactions_btn_text"/>
+                android:text="@string/query_transactions_btn_text" />
 
         </LinearLayout>
+
+        <View
+            style="@style/vertical_line"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
 
         <ListView
             android:id="@+id/list_view"
