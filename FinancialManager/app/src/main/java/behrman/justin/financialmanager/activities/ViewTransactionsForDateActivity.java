@@ -2,6 +2,7 @@ package behrman.justin.financialmanager.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +34,15 @@ public class ViewTransactionsForDateActivity extends AppCompatActivity {
         initPassedInValues();
         initTotal();
         setUp();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setUp() {

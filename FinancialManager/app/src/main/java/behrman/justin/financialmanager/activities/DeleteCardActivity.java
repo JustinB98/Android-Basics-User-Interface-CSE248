@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +41,15 @@ public class DeleteCardActivity extends AppCompatActivity {
         removeManualCardViewIfNeeded();
         initClick();
         setForView();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home && deleteCardBtn.isEnabled()) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void extractViews() {

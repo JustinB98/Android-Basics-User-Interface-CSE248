@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseBooleanArray;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
@@ -47,6 +48,15 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE); // IMPORTANT DON'T REMOVE
         initClick();
         initGetCards();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initGetCards() {

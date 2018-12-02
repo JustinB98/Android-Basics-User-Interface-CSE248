@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import behrman.justin.financialmanager.R;
@@ -23,6 +24,15 @@ public class BoringActivity extends AppCompatActivity {
         int resId = getIntent().getIntExtra(StringConstants.RES_ID_KEY, 0);
         setContentView(resId);
         setActionBarTitle();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setActionBarTitle() {
