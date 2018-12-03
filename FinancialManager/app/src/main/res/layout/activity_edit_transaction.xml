@@ -10,39 +10,52 @@
         android:id="@+id/transaction_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center" >
+        android:padding="16dp">
 
-        <EditText
-            android:id="@+id/place_input"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/place" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/place_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/place" />
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/amount_input"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:hint="@string/amount"
-                android:inputType="numberDecimal"/>
+                android:layout_weight="2">
+
+                <EditText
+                    android:id="@+id/amount_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/amount"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
             <Spinner
                 android:id="@+id/currency_spinner"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:entries="@array/currency_codes"/>
+                android:layout_weight="1"
+                android:entries="@array/currency_codes" />
         </LinearLayout>
 
         <CalendarView
             android:id="@+id/calendar_input"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <Button
             android:id="@+id/add_manual_transaction_btn"
@@ -56,8 +69,8 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:visibility="gone" />
 
 </RelativeLayout>
