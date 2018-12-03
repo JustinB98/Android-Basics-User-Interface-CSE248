@@ -2,6 +2,7 @@ package behrman.justin.financialmanager.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
     private CardType typeToShow;
 
     private View root;
+    private SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,20 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
         typeToShow = (CardType) getIntent().getSerializableExtra(StringConstants.CARD_TYPE_KEY);
         extractViews();
         setListViewItemListener();
+        initSwipeListener();
         update();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        swipeRefresh.setRefreshing(true);
+    }
+
+    private void initSwipeListener() {
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("errorlog", "refreshing");
+                update();
+            }
+        });
     }
 
     @Override
@@ -63,6 +77,7 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
         progressBar = findViewById(R.id.progress_bar);
         listView = findViewById(R.id.list_view);
         noCardsFoundView = findViewById(R.id.no_cards_found_view);
+        swipeRefresh = findViewById(R.id.swipe_refresh);
     }
 
     private void setListViewItemListener() {
@@ -118,6 +133,7 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
     }
 
     private void setListViewAdapter(List<Card> cards) {
+        swipeRefresh.setRefreshing(false);
         if (cards != null) {
             if (cards.isEmpty()) {
                 noCardsFoundView.setVisibility(View.VISIBLE);
