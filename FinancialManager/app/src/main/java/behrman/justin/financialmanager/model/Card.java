@@ -1,6 +1,7 @@
 package behrman.justin.financialmanager.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Card implements Serializable {
 
@@ -26,6 +27,20 @@ public class Card implements Serializable {
 
     public void setCardType(CardType mCardType) {
         this.mCardType = mCardType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return Objects.equals(mCardName, card.mCardName) &&
+                mCardType == card.mCardType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mCardName, mCardType);
     }
 
     @Override

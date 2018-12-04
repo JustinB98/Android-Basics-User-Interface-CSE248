@@ -17,6 +17,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -38,7 +39,6 @@ public class PlaidActivity extends AppCompatActivity {
         // getSupportActionBar().hide();
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         getSupportActionBar().setTitle(Html.fromHtml("<font color=\"black\">" + getString(R.string.add_auto_card_title) + "</font>"));
-        Log.i("errorlog", getSupportActionBar().getTitle() + "");
         // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // setSupportActionBar(toolbar);
 
@@ -165,6 +165,7 @@ public class PlaidActivity extends AppCompatActivity {
             @Override
             public void done(String object) {
                     if (object != null && ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
+                        CardWrapper.getInstance().addCard(new Card(suggestedName, CardType.AUTO));
                         finish(); // finish plaid activity so when the edit name activity ends, the user returns to the main menu
                         switchToChangeName(suggestedName);
                     }

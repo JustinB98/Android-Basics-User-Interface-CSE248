@@ -27,7 +27,6 @@ public final class ParseFunctionsUtils {
 
     public static <T> void callFunctionInBackground(String functionName, HashMap<String, Object> params, final DataCallback<T> callback, final boolean showErrorScreen,
                                              final Retriable retriable, final AppCompatActivity activity, final String tag) {
-
         ParseCloud.callFunctionInBackground(functionName, params, new FunctionCallback<T>() {
             @Override
             public void done(T object, ParseException e) {

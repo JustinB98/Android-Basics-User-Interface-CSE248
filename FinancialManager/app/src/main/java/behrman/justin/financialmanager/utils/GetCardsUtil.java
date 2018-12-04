@@ -1,7 +1,12 @@
 package behrman.justin.financialmanager.utils;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -21,6 +26,21 @@ public class GetCardsUtil {
 
     public static void findAllCards(CardReceiever onReceive, AppCompatActivity activity, Retriable retriable) {
         findCards(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_CARDS, onReceive, activity, retriable);
+    }
+
+    public static void findAllCards(final CardReceiever onReceive, final Context context) {
+        ParseCloud.callFunctionInBackground(StringConstants.PARSE_CLOUD_FUNCTION_GET_ALL_CARDS, EMPTY_MAP, new FunctionCallback<ArrayList<ParseObject>>() {
+            @Override
+            public void done(ArrayList<ParseObject> object, ParseException e) {
+                if (e == null) {
+                    onReceive.receiveCards(fillCards(object));
+                } else {
+                    onReceive.receiveCards(null);
+                    Log.i(LOG_TAG, "e: " + e.toString() + ", code: " + e.getCode());
+                    ParseExceptionUtils.displayErrorMessage(e, context);
+                }
+            }
+        });
     }
 
     public static void findAllManualCards(CardReceiever onReceive, AppCompatActivity activity, Retriable retriable) {

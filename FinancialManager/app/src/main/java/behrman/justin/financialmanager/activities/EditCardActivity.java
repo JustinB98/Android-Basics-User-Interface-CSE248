@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -67,15 +68,17 @@ public class EditCardActivity extends AppCompatActivity {
             @Override
             public void done(String object) {
                 if (object != null) {
-                    onReturn(object);
+                    onReturn(object, cardName);
                 }
             }
         }, this, LOG_TAG);
     }
 
-    private void onReturn(String result) {
+    private void onReturn(String result, String cardName) {
         if (ProjectUtils.deepEquals(result, StringConstants.SUCCESS)) {
             Toast.makeText(EditCardActivity.this, R.string.edited_card_successfully, Toast.LENGTH_SHORT).show();
+            Card newCard = new Card(cardName, originalCard.getCardType());
+            CardWrapper.getInstance().updateCard(originalCard, newCard);
             finish();
         } else if (ProjectUtils.deepEquals(result, StringConstants.EXISTS)) {
             Toast.makeText(EditCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();

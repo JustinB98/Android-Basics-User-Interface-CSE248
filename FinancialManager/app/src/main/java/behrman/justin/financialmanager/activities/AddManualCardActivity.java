@@ -12,6 +12,9 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
+import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -80,6 +83,7 @@ public class AddManualCardActivity extends AppCompatActivity {
     private void afterReturn(String result, String cardName) {
         if (ProjectUtils.deepEquals(result, StringConstants.SUCCESS)) {
             Toast.makeText(AddManualCardActivity.this, getString(R.string.added_card, cardName), Toast.LENGTH_SHORT).show();
+            CardWrapper.getInstance().addCard(new Card(cardName, CardType.MANUAL));
             finish();
         } else if (ProjectUtils.deepEquals(result, StringConstants.EXISTS)) {
             Toast.makeText(AddManualCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();

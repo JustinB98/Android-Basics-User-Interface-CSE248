@@ -13,18 +13,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardSelecterAdapter;
-import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.interfaces.CardTypeClassConverter;
-import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
-import behrman.justin.financialmanager.utils.GetCardsUtil;
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class SelectCardActivity extends AppCompatActivity implements Retriable {
+public class SelectCardActivity extends AppCompatActivity implements Observer {
 
     private String LOG_TAG = SelectCardActivity.class.getSimpleName() + "debug";
 
@@ -50,17 +50,25 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
         extractViews();
         setListViewItemListener();
         initSwipeListener();
-        update();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        swipeRefresh.setRefreshing(true);
+        // swipeRefresh.setRefreshing(true);
+        initCardWrapper();
+    }
+
+    private void initCardWrapper() {
+        CardWrapper.getInstance().addObserver(this);
+        if (!CardWrapper.getInstance().isLoading()) {
+            update();
+        } else {
+            setToLoadView();
+        }
     }
 
     private void initSwipeListener() {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.i("errorlog", "refreshing");
-                update();
+                CardWrapper.getInstance().refresh(SelectCardActivity.this);
             }
         });
     }
@@ -100,23 +108,19 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
         startActivity(intent);
     }
 
-    // just in case i decide implement a refresh feature in this activity
     private void update() {
-        Log.i(LOG_TAG, "starting update");
-        setToLoadView();
-        // List<Card> cards = getCards();
-        CardReceiever receiver = new CardReceiever() {
-            @Override
-            public void receiveCards(List<Card> cards) {
-                setListViewAdapter(cards);
-            }
-        };
-        if (typeToShow == CardType.AUTO) {
-            GetCardsUtil.findAllAutoCards(receiver, this, this);
-        } else if (typeToShow == CardType.MANUAL) {
-            GetCardsUtil.findAllManualCards(receiver, this, this);
+        swipeRefresh.setRefreshing(false);
+        List<Card> listToShow = getListToShow();
+        setListViewAdapter(listToShow);
+    }
+
+    private List<Card> getListToShow() {
+        if (typeToShow == CardType.MANUAL) {
+            return CardWrapper.getInstance().getManualCards();
+        } else if (typeToShow == CardType.AUTO) {
+            return CardWrapper.getInstance().getAutoCards();
         } else {
-            GetCardsUtil.findAllCards(receiver, this, this);
+            return CardWrapper.getInstance().getAllCards();
         }
     }
 
@@ -133,7 +137,6 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
     }
 
     private void setListViewAdapter(List<Card> cards) {
-        swipeRefresh.setRefreshing(false);
         if (cards != null) {
             if (cards.isEmpty()) {
                 noCardsFoundView.setVisibility(View.VISIBLE);
@@ -154,9 +157,11 @@ public class SelectCardActivity extends AppCompatActivity implements Retriable {
     }
 
     @Override
-    public void retry() {
-        setContentView(root);
-        update();
+    public void update(Observable o, Object arg) {
+        if (CardWrapper.getInstance().hasError()) {
+            Log.i(LOG_TAG, "there was an error");
+        } else {
+            update();
+        }
     }
-
 }

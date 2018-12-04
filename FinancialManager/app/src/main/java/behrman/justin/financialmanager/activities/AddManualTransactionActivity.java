@@ -178,7 +178,6 @@ public class AddManualTransactionActivity extends AppCompatActivity {
 
     private void saveTransaction(Transaction transaction) {
         HashMap<String, Object> params = getParams(transaction);
-        Log.i(LOG_TAG, "calling function with " + params);
         ParseFunctionsUtils.callFunctionInBackgroundDisplayError(StringConstants.PARSE_CLOUD_FUNCTION_ADD_MANUAL_TRANSACTION, params, new ParseFunctionsUtils.DataCallback<String>() {
             @Override
             public void done(String object) {

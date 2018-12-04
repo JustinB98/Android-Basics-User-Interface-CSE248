@@ -136,7 +136,7 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
         // mark it as some value that amounts don't matter
         double minAmount = ProjectUtils.parseOrDefault(minAmountField, -1.0);
         double maxAmount = ProjectUtils.parseOrDefault(maxAmountField, -1.0);
-        if (minAmount > maxAmount) {
+        if (minAmount > maxAmount && minAmount == -1) { // if min > max and min has a value, then tell user input is invalid
             Toast.makeText(this, R.string.min_amount_larger_than_max_amount, Toast.LENGTH_SHORT).show();
             return false;
         } else {

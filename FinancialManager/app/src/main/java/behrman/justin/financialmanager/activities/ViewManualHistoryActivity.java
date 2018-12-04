@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.HashMap;
 
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ManualCardTransactionParser;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
@@ -14,6 +15,8 @@ import behrman.justin.financialmanager.utils.StringConstants;
 public class ViewManualHistoryActivity extends ViewHistoryActivity {
 
     private final static String LOG_TAG = ViewManualHistoryActivity.class.getSimpleName() + "debug";
+
+    private boolean failed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +36,14 @@ public class ViewManualHistoryActivity extends ViewHistoryActivity {
                 Log.i(LOG_TAG, "object: " + (object == null ? "null" : object.toString()));
                 if (object != null) {
                     // ManualCardTransactionParser cardTransactions = new ManualCardTransactionParser(object);
-                    DataCollection data = new ManualCardTransactionParser().parse(object);
-                    // Log.i(LOG_TAG, "cardTransactions: " + cardTransactions);
-                    ViewManualHistoryActivity.super.setTransactionData(data);
+                    try {
+                        DataCollection data = new ManualCardTransactionParser().parse(object);
+                        // Log.i(LOG_TAG, "cardTransactions: " + cardTransactions);
+                        ViewManualHistoryActivity.super.setTransactionData(data);
+                    } catch (NullPointerException e) {
+                        CardWrapper.getInstance().refresh(ViewManualHistoryActivity.this);
+                        finish();
+                    }
                 }
             }
         }, this, LOG_TAG);

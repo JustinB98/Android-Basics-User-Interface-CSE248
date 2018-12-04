@@ -26,8 +26,9 @@ import java.util.ArrayList;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.cardConverters.CardTypeClassConverterViewHistoryImpl;
 import behrman.justin.financialmanager.cardConverters.CardTypeIndependentConverterImpl;
-import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.interfaces.CardTypeClassConverter;
+import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.utils.ParseExceptionUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -49,6 +50,7 @@ public class MenuActivity extends AppCompatActivity implements Serializable {
         super.onCreate(savedInstanceState);
         rootView = (ViewGroup) getLayoutInflater().inflate(R.layout.activity_menu, null, false);
         setContentView(rootView);
+        CardWrapper.getInstance().refresh(this);
         extractViews();
         initClickListeners();
         initSizes();
