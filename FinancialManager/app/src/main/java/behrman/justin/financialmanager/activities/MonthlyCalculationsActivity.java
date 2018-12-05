@@ -2,7 +2,9 @@ package behrman.justin.financialmanager.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,17 +19,19 @@ import android.widget.Toast;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.SelectableCardAdapter;
-import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.utils.GetCardsUtil;
+import behrman.justin.financialmanager.model.CardWrapper;
+import behrman.justin.financialmanager.model.RetryHandler;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class MonthlyCalculationsActivity extends AppCompatActivity implements Retriable {
+public class MonthlyCalculationsActivity extends AppCompatActivity implements Observer, Retriable {
 
     public final static String LOG_TAG = MonthlyCalculationsActivity.class.getSimpleName() + "debug";
 
@@ -43,6 +47,8 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
 
     private View root;
 
+    private SwipeRefreshLayout swipeRefresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +58,27 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE); // APPARENTLY IMPORTANT DON'T REMOVE
         setViewData();
         initClickListener();
-        update();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initSwipeListener();
+        initCardWrapper();
+    }
+
+    private void initCardWrapper() {
+        CardWrapper.getInstance().addObserver(this);
+        if (!CardWrapper.getInstance().isLoading()) {
+            update();
+        } else {
+            setToLoadView();
+        }
+    }
+
+    private void initSwipeListener() {
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                CardWrapper.getInstance().refresh(MonthlyCalculationsActivity.this);
+            }
+        });
     }
 
     @Override
@@ -122,14 +147,8 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
     }
 
     private void update() {
-        setToLoadView();
-        CardReceiever cardReceiever = new CardReceiever() {
-            @Override
-            public void receiveCards(List<Card> cards) {
-                onReceiveCards(cards);
-            }
-        };
-        GetCardsUtil.findAllCards(cardReceiever, this, this);
+        swipeRefresh.setRefreshing(false);
+        onReceiveCards(CardWrapper.getInstance().getAllCards());
     }
 
     private void onReceiveCards(List<Card> cards) {
@@ -153,18 +172,21 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
         progressBar.setVisibility(View.GONE);
         container.setVisibility(View.GONE);
         noCardsFoundView.setVisibility(View.VISIBLE);
+        swipeRefresh.setVisibility(View.VISIBLE);
     }
 
     private void setToLoadView() {
         progressBar.setVisibility(View.VISIBLE);
         container.setVisibility(View.GONE);
         noCardsFoundView.setVisibility(View.GONE);
+        swipeRefresh.setVisibility(View.GONE);
     }
 
     private void setToReadyView() {
         progressBar.setVisibility(View.GONE);
         container.setVisibility(View.VISIBLE);
         noCardsFoundView.setVisibility(View.GONE);
+        swipeRefresh.setVisibility(View.VISIBLE);
     }
 
     private void extractViews() {
@@ -175,12 +197,23 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Re
         listView = findViewById(R.id.list_view);
         noCardsFoundView = findViewById(R.id.no_cards_found_view);
         container = findViewById(R.id.container);
+        swipeRefresh = findViewById(R.id.swipe_refresh);
     }
 
     @Override
     public void retry() {
         setContentView(root);
         update();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (CardWrapper.getInstance().hasError()) {
+            Log.i(LOG_TAG, "there was an error");
+            RetryHandler.setToRetryScreen(this, this);
+        } else {
+            update();
+        }
     }
 
 }

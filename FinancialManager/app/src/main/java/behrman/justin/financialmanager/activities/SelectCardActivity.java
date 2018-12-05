@@ -19,12 +19,14 @@ import java.util.Observer;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.CardSelecterAdapter;
 import behrman.justin.financialmanager.interfaces.CardTypeClassConverter;
+import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
 import behrman.justin.financialmanager.model.CardWrapper;
+import behrman.justin.financialmanager.model.RetryHandler;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class SelectCardActivity extends AppCompatActivity implements Observer {
+public class SelectCardActivity extends AppCompatActivity implements Observer, Retriable {
 
     private String LOG_TAG = SelectCardActivity.class.getSimpleName() + "debug";
 
@@ -38,6 +40,7 @@ public class SelectCardActivity extends AppCompatActivity implements Observer {
     private CardType typeToShow;
 
     private View root;
+
     private SwipeRefreshLayout swipeRefresh;
 
     @Override
@@ -49,9 +52,9 @@ public class SelectCardActivity extends AppCompatActivity implements Observer {
         typeToShow = (CardType) getIntent().getSerializableExtra(StringConstants.CARD_TYPE_KEY);
         extractViews();
         setListViewItemListener();
-        initSwipeListener();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // swipeRefresh.setRefreshing(true);
+        initRefreshListener();
         initCardWrapper();
     }
 
@@ -64,7 +67,7 @@ public class SelectCardActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    private void initSwipeListener() {
+    private void initRefreshListener() {
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -128,12 +131,14 @@ public class SelectCardActivity extends AppCompatActivity implements Observer {
         listView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         noCardsFoundView.setVisibility(View.GONE);
+        swipeRefresh.setVisibility(View.GONE);
     }
 
     private void setToListView() {
         listView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
         noCardsFoundView.setVisibility(View.GONE);
+        swipeRefresh.setVisibility(View.VISIBLE);
     }
 
     private void setListViewAdapter(List<Card> cards) {
@@ -142,6 +147,7 @@ public class SelectCardActivity extends AppCompatActivity implements Observer {
                 noCardsFoundView.setVisibility(View.VISIBLE);
                 listView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
+                swipeRefresh.setVisibility(View.VISIBLE);
             } else {
                 CardSelecterAdapter adapter = new CardSelecterAdapter(this, cards);
                 listView.setAdapter(adapter);
@@ -151,15 +157,22 @@ public class SelectCardActivity extends AppCompatActivity implements Observer {
     }
 
     @Override
+    public void retry() {
+        setContentView(root);
+        setToLoadView();
+        CardWrapper.getInstance().refresh(this);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
-        update();
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if (CardWrapper.getInstance().hasError()) {
             Log.i(LOG_TAG, "there was an error");
+            RetryHandler.setToRetryScreen(this, this);
         } else {
             update();
         }

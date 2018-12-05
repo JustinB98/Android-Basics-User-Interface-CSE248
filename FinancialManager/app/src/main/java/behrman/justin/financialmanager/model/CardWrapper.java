@@ -48,6 +48,7 @@ public class CardWrapper extends Observable {
     }
 
     private void setCards(List<Card> cards) {
+        loading = false;
         if (cards != null) {
             setCards0(cards);
         } else {
@@ -59,7 +60,6 @@ public class CardWrapper extends Observable {
     private void notify0() {
         setChanged();
         notifyObservers();
-        loading = false;
     }
 
     private void setCards0(List<Card> cards) {

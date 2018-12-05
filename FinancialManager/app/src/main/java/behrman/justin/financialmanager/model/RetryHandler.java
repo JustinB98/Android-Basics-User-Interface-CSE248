@@ -18,6 +18,13 @@ public class RetryHandler {
         setViews(activity, code, retriable);
     }
 
+    public static void setToRetryScreen(Retriable retriable, AppCompatActivity activity) {
+        activity.setContentView(R.layout.retry);
+        TextView codeView = activity.findViewById(R.id.error_code_view);
+        codeView.setVisibility(View.GONE);
+        setViews(activity, 0, retriable); // code can be anything
+    }
+
     private static void setViews(AppCompatActivity activity, int code, Retriable retriable) {
         Button btn = activity.findViewById(R.id.retry_btn);
         btn.setOnClickListener(getOnClickListener(retriable));

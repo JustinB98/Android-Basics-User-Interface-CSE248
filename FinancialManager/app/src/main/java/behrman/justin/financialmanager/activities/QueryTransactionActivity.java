@@ -2,7 +2,9 @@ package behrman.justin.financialmanager.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,19 +17,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.SelectableCardAdapter;
-import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.interfaces.Retriable;
 import behrman.justin.financialmanager.model.Card;
-import behrman.justin.financialmanager.utils.GetCardsUtil;
+import behrman.justin.financialmanager.model.CardWrapper;
+import behrman.justin.financialmanager.model.RetryHandler;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
-public class QueryTransactionActivity extends AppCompatActivity implements Retriable {
+public class QueryTransactionActivity extends AppCompatActivity implements Observer, Retriable {
+
+    public final static String LOG_TAG = QueryTransactionActivity.class.getSimpleName() + "debug";
 
     private EditText placeField, minAmountField, maxAmountField, minYearField, maxYearField;
     private Spinner minMonthSpinner, maxMonthSpinner;
@@ -39,6 +46,8 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
 
     private View root;
 
+    private SwipeRefreshLayout swipeRefresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +56,27 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
         extractViews();
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE); // IMPORTANT DON'T REMOVE
         initClick();
-        initGetCards();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initRefreshListener();
+        initCardWrapper();
+    }
+
+    private void initCardWrapper() {
+        CardWrapper.getInstance().addObserver(this);
+        if (!CardWrapper.getInstance().isLoading()) {
+            update();
+        } else {
+            setToLoading();
+        }
+    }
+
+    private void initRefreshListener() {
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                CardWrapper.getInstance().refresh(QueryTransactionActivity.this);
+            }
+        });
     }
 
     @Override
@@ -59,23 +87,13 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
         return super.onOptionsItemSelected(item);
     }
 
-    private void initGetCards() {
-        setToLoading();
-        GetCardsUtil.findAllCards(new CardReceiever() {
-            @Override
-            public void receiveCards(List<Card> cards) {
-                onReceiveCards(cards);
-            }
-        }, QueryTransactionActivity.this, this);
-    }
-
-    private void onReceiveCards(List<Card> cards) {
-        if (cards != null) {
-            if (!cards.isEmpty()) {
-                setUpAdapter(cards);
-            } else {
-                setToNoCardsView();
-            }
+    private void update() {
+        swipeRefresh.setRefreshing(false);
+        ArrayList<Card> cards = CardWrapper.getInstance().getAllCards();
+        if (cards.isEmpty()) {
+            setToNoCardsView();
+        } else {
+            setUpAdapter(CardWrapper.getInstance().getAllCards());
         }
     }
 
@@ -83,12 +101,17 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
         container.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
         noCardsFoundView.setVisibility(View.VISIBLE);
+        swipeRefresh.setVisibility(View.VISIBLE);
     }
 
     private void setUpAdapter(List<Card> cards) {
-        SelectableCardAdapter adapter = new SelectableCardAdapter(QueryTransactionActivity.this, cards, listView);
-        listView.setAdapter(adapter);
-        setToView();
+        if (!cards.isEmpty()) {
+            setToView();
+            SelectableCardAdapter adapter = new SelectableCardAdapter(QueryTransactionActivity.this, cards, listView);
+            listView.setAdapter(adapter);
+        } else {
+            setToNoCardsView();
+        }
     }
 
     private void initClick() {
@@ -187,12 +210,14 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
         container.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         noCardsFoundView.setVisibility(View.GONE);
+        swipeRefresh.setVisibility(View.GONE);
     }
 
     private void setToView() {
         container.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
         noCardsFoundView.setVisibility(View.GONE);
+        swipeRefresh.setVisibility(View.VISIBLE);
     }
 
     private void extractViews() {
@@ -208,12 +233,23 @@ public class QueryTransactionActivity extends AppCompatActivity implements Retri
         container = findViewById(R.id.container);
         queryTransactionsBtn = findViewById(R.id.query_transactions_btn);
         noCardsFoundView = findViewById(R.id.no_cards_found_view);
+        swipeRefresh = findViewById(R.id.swipe_refresh);
     }
 
     @Override
     public void retry() {
         setContentView(root);
-        initGetCards();
+        update();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (CardWrapper.getInstance().hasError()) {
+            Log.i(LOG_TAG, "there was an error");
+            RetryHandler.setToRetryScreen(this, this);
+        } else {
+            update();
+        }
     }
 
 }

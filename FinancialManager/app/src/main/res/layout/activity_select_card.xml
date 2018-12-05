@@ -35,6 +35,7 @@
         android:layout_centerVertical="true"
         android:text="@string/no_cards_found"
         android:textAlignment="center"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:visibility="visible" />
 
 </RelativeLayout>
