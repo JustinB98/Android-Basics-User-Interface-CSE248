@@ -100,6 +100,7 @@ public final class StringConstants {
     public final static String SUCCESS = "success";
     public final static String INVALID = "invalid";
     public final static String EXISTS = "exists";
+    public final static String ERROR = "error";
     // ---------------------- END LITERALS ----------------------
 
     // ---------------------- START MONTHLY CALCULATIONS KEYS ----------------------

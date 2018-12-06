@@ -18,6 +18,7 @@ import java.util.HashMap;
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
 import behrman.justin.financialmanager.model.CardType;
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
@@ -99,9 +100,15 @@ public class DeleteCardActivity extends AppCompatActivity {
             public void done(String object) {
                 Log.i(LOG_TAG, "returned with object: " + object);
                 setForView();
-                if (object != null && ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
-                    Toast.makeText(DeleteCardActivity.this, R.string.deleted_card, Toast.LENGTH_SHORT).show();
-                    finish();
+                if (object != null) {
+                    if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
+                        Toast.makeText(DeleteCardActivity.this, R.string.deleted_card, Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else if (ProjectUtils.deepEquals(object, StringConstants.ERROR)) {
+                        Toast.makeText(DeleteCardActivity.this, R.string.card_changed_refreshing, Toast.LENGTH_SHORT).show();
+                        CardWrapper.getInstance().refresh(DeleteCardActivity.this);
+                        finish();
+                    }
                 }
 
             }

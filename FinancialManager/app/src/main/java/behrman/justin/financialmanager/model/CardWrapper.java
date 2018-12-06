@@ -37,14 +37,16 @@ public class CardWrapper extends Observable {
     }
 
     public void refresh(Context context) {
-        loading = true;
-        error = false;
-        GetCardsUtil.findAllCards(new CardReceiever() {
-            @Override
-            public void receiveCards(List<Card> cards) {
-                setCards(cards);
-            }
-        }, context);
+        if (!loading) { // don't want two network calls when one is already going on
+            loading = true;
+            error = false;
+            GetCardsUtil.findAllCards(new CardReceiever() {
+                @Override
+                public void receiveCards(List<Card> cards) {
+                    setCards(cards);
+                }
+            }, context);
+        }
     }
 
     private void setCards(List<Card> cards) {

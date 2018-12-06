@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.Card;
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.model.Transaction;
 import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -187,6 +188,10 @@ public class AddManualTransactionActivity extends AppCompatActivity {
                 if (object != null) {
                     if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
                         Toast.makeText(AddManualTransactionActivity.this, R.string.added_transaction_successfully, Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else if (ProjectUtils.deepEquals(object, StringConstants.ERROR)) {
+                        Toast.makeText(AddManualTransactionActivity.this, R.string.card_changed_refreshing, Toast.LENGTH_SHORT).show();
+                        CardWrapper.getInstance().refresh(AddManualTransactionActivity.this);
                         finish();
                     }
                 }

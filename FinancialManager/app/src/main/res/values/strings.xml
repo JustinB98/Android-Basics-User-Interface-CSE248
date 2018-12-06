@@ -41,7 +41,6 @@
         <item>Nov</item>
         <item>Dec</item>
     </string-array>
-
     <!-- END Arrays -->
 
     <!-- START Titles -->
@@ -186,6 +185,7 @@
     <string name="deleted_card">Deleted card…</string>
     <string name="empty_card_name">Card Name can\'t be empty!</string>
     <string name="sent_password_reset_request">Sent a Request for a Password Reset</string>
+    <string name="card_changed_refreshing">Card changed… refreshing cards</string>
     <!-- END Toast Messages -->
 
     <!-- START Menu Items -->

@@ -67,4 +67,8 @@ public class ParseUtils {
         return ProjectUtils.convertToDate(dateStr);
     }
 
+    public static boolean responseHasError(HashMap<String, Object> responseMap) {
+        Object errorObj = responseMap.get(StringConstants.ERROR);
+        return errorObj != null; // if null, then no error
+    }
 }

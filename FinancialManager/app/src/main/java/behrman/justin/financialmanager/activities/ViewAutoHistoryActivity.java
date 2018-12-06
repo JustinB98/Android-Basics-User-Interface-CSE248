@@ -3,15 +3,19 @@ package behrman.justin.financialmanager.activities;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
 import java.util.HashMap;
 
+import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.model.AutoCardTransactionsParser;
+import behrman.justin.financialmanager.model.CardWrapper;
 import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
 import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
+import behrman.justin.financialmanager.utils.ParseUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewAutoHistoryActivity extends ViewHistoryActivity {
@@ -43,9 +47,15 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
             @Override
             public void done(HashMap<String, Object> response) {
                 if (response != null) {
-                    DataCollection data = new AutoCardTransactionsParser().parse(response);
-                    Log.i(LOG_TAG, "transactions: " + data);
-                    ViewAutoHistoryActivity.super.setTransactionData(data);
+                    if (!ParseUtils.responseHasError(response)) {
+                        DataCollection data = new AutoCardTransactionsParser().parse(response);
+                        Log.i(LOG_TAG, "transactions: " + data);
+                        ViewAutoHistoryActivity.super.setTransactionData(data);
+                    } else {
+                        Toast.makeText(ViewAutoHistoryActivity.this, R.string.card_changed_refreshing, Toast.LENGTH_SHORT).show();
+                        CardWrapper.getInstance().refresh(ViewAutoHistoryActivity.this);
+                        finish();
+                    }
                 }
             }
         }, this, LOG_TAG);

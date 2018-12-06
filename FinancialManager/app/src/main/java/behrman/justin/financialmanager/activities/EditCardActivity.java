@@ -82,6 +82,10 @@ public class EditCardActivity extends AppCompatActivity {
             finish();
         } else if (ProjectUtils.deepEquals(result, StringConstants.EXISTS)) {
             Toast.makeText(EditCardActivity.this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
+        } else if (ProjectUtils.deepEquals(result, StringConstants.ERROR)) {
+            Toast.makeText(this, R.string.card_changed_refreshing, Toast.LENGTH_SHORT).show();
+            CardWrapper.getInstance().refresh(this);
+            finish();
         }
     }
 
