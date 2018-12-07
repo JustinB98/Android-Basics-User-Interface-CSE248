@@ -243,6 +243,12 @@ public class QueryTransactionActivity extends AppCompatActivity implements Obser
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        CardWrapper.getInstance().deleteObserver(this);
+    }
+
+    @Override
     public void update(Observable o, Object arg) {
         if (CardWrapper.getInstance().hasError()) {
             Log.i(LOG_TAG, "there was an error");

@@ -221,6 +221,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     }
 
     private void switchToListView() {
+        loading.removeListener();
         setLoadingVisibility();
         checkIfRefreshNeeded();
         listViewSubActivity.setToView();
@@ -242,6 +243,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     }
 
     private void switchToCalendarView() {
+        loading.removeListener();
         setLoadingVisibility();
         checkIfRefreshNeeded();
         calendarSubActivity.setToView();

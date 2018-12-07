@@ -201,6 +201,12 @@ public class MonthlyCalculationsActivity extends AppCompatActivity implements Ob
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        CardWrapper.getInstance().deleteObserver(this);
+    }
+
+    @Override
     public void retry() {
         setContentView(root);
         update();
