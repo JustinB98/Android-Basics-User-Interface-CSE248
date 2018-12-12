@@ -102,6 +102,7 @@ public class DeleteCardActivity extends AppCompatActivity {
                 setForView();
                 if (object != null) {
                     if (ProjectUtils.deepEquals(object, StringConstants.SUCCESS)) {
+                        CardWrapper.getInstance().removeCard(originalCard);
                         Toast.makeText(DeleteCardActivity.this, R.string.deleted_card, Toast.LENGTH_SHORT).show();
                         finish();
                     } else if (ProjectUtils.deepEquals(object, StringConstants.ERROR)) {

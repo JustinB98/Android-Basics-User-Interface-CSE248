@@ -1,6 +1,7 @@
 package behrman.justin.financialmanager.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,8 @@ import behrman.justin.financialmanager.interfaces.CardReceiever;
 import behrman.justin.financialmanager.utils.GetCardsUtil;
 
 public class CardWrapper extends Observable {
+
+    public final static String LOG_TAG = CardWrapper.class.getSimpleName() + "debug";
 
     private ArrayList<Card> allCards;
     private ArrayList<Card> manualCards;
@@ -140,5 +143,30 @@ public class CardWrapper extends Observable {
         }
         return -1;
     }
+
+    public void removeCard(Card card) {
+        if (card.getCardType() == CardType.MANUAL) {
+            removeManualCard(card);
+        } else if (card.getCardType() == CardType.AUTO) {
+            removeAutoCard(card);
+        } else {
+            Log.i(LOG_TAG, "unknown card type: " + card.getCardType());
+        }
+    }
+
+    public void removeManualCard(Card card) {
+        int manualIndex = getIndex(manualCards, card);
+        int allIndex = getIndex(allCards, card);
+        manualCards.remove(manualIndex);
+        allCards.remove(allIndex);
+    }
+
+    public void removeAutoCard(Card card) {
+        int autoIndex = getIndex(autoCards, card);
+        int allIndex = getIndex(allCards, card);
+        autoCards.remove(autoIndex);
+        allCards.remove(allIndex);
+    }
+
 
 }

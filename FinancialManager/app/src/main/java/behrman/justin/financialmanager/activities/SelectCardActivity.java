@@ -165,7 +165,15 @@ public class SelectCardActivity extends AppCompatActivity implements Observer, R
 
     @Override
     protected void onStart() {
+        CardWrapper.getInstance().addObserver(this);
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CardWrapper.getInstance().addObserver(this);
+        update();
     }
 
     @Override
