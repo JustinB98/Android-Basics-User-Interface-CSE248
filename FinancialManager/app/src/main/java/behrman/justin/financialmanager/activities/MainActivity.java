@@ -217,7 +217,19 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         ParseUser currentUser = ParseUser.getCurrentUser();
         updateUIIfNeeded(currentUser);
-        passwordField.setText("");
+        clearPasswordField();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        clearPasswordField();
+    }
+
+    private void clearPasswordField() {
+        if (passwordField != null) {
+            passwordField.setText("");
+        }
     }
 
     private void goToMainMenu() {
