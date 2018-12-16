@@ -101,6 +101,8 @@ public final class StringConstants {
     public final static String INVALID = "invalid";
     public final static String EXISTS = "exists";
     public final static String ERROR = "error";
+    public final static String RENEW = "renew";
+    public final static String UNDEFINED = "undefined";
     // ---------------------- END LITERALS ----------------------
 
     // ---------------------- START MONTHLY CALCULATIONS KEYS ----------------------

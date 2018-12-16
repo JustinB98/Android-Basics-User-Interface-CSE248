@@ -3,7 +3,9 @@ package behrman.justin.financialmanager.model;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +17,8 @@ import java.util.HashMap;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.AddManualTransactionActivity;
-import behrman.justin.financialmanager.interfaces.TransactionCommunicator;
+import behrman.justin.financialmanager.interfaces.DateCallback;
+import behrman.justin.financialmanager.popups.SelectDatePopup;
 import behrman.justin.financialmanager.subactivities.ViewHistoryCalendarViewSubActivity;
 import behrman.justin.financialmanager.subactivities.ViewHistoryListViewSubActivity;
 import behrman.justin.financialmanager.utils.ProjectUtils;
@@ -50,10 +53,10 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+        communicator = new TransactionCommunicator();
         getPassedInValues();
         // getSupportActionBar().setTitle(getString(R.string.view_history_title, cardName));
         getSupportActionBar().setTitle(cardName);
-        initCommunicator();
         initSubActivities();
         calendarSubActivity.setToView();
         initLoadingBar();
@@ -62,6 +65,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         activityCreated = true;
         initLoadingScreen();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        currentScreen = CurrentScreen.CALENDAR;
     }
 
     @Override
@@ -104,56 +108,11 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
         listViewSubActivity = new ViewHistoryListViewSubActivity(this, communicator);
     }
 
-    private void initCommunicator() {
-        communicator = new TransactionCommunicator() {
-            @Override
-            public HashMap<Date, ArrayList<Transaction>> getTransactions() {
-                return transactionData.getDataMap();
-            }
-
-            public ArrayList<Transaction> getTransactionAsList() {
-                return transactionData.getDataList();
-            }
-
-            @Override
-            public void requestNewTransactions(int year, int month) {
-                loading.setValue(true);
-                setLoadingVisibility();
-                Log.i(LOG_TAG, "getting transactions for: " + month + ", " + year);
-                ViewHistoryActivity.this.getTransactions(year, month);
-            }
-
-            @Override
-            public boolean isManualCard() {
-                return isManualCard;
-            }
-
-            @Override
-            public BooleanProperty loadingProperty() {
-                return loading;
-            }
-
-            @Override
-            public void refresh() {
-                ViewHistoryActivity.this.refresh();
-            }
-
-            @Override
-            public void setToLoadingScreen() {
-                setToLoading();
-            }
-
-            @Override
-            public double getTotal() {
-                return transactionData.getTotal();
-            }
-
-            @Override
-            public void regetTransactions() {
-                requestNewTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
-            }
-
-        };
+    public void requestNewTransactions(int year, int month) {
+        loading.setValue(true);
+        setLoadingVisibility();
+        Log.i(LOG_TAG, "getting transactions for: " + month + ", " + year);
+        ViewHistoryActivity.this.getTransactions(year, month);
     }
 
     public void refresh() {
@@ -197,6 +156,7 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             getMenuInflater().inflate(R.menu.add_item_menu, menu);
         }
         getMenuInflater().inflate(resId, menu);
+        getMenuInflater().inflate(R.menu.select_date_menu, menu);
     }
 
     public void menuAction(MenuItem item) {
@@ -210,6 +170,42 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
             case R.id.add_item:
                 switchToAddTransactionActivity();
                 break;
+            case R.id.select_date_item:
+                showSelectDateBox();
+                break;
+        }
+    }
+
+    private void showSelectDateBox() {
+        DisplayMetrics dm = getWindowSize();
+        SelectDatePopup popup = new SelectDatePopup(this, new DateCallback() {
+            @Override
+            public void callback(int month, int year) {
+                requestNewTransactions(year, month);
+                calendarSubActivity.setSelectedDate(month, year);
+                setToRightView();
+            }
+        }, (int) (dm.widthPixels * .8), (int) (dm.heightPixels * .6));
+        // popup.showAtLocation(getContentScene().getSceneRoot(), Gravity.CENTER, 10, 10);
+        popup.showAtLocation(getCurrentParentView(), Gravity.CENTER, 0, 0);
+        //popup.update(50, 50, 300, 80);
+    }
+
+    //https://www.youtube.com/watch?v=fn5OlqQuOCk
+    private DisplayMetrics getWindowSize() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        return dm;
+    }
+
+    private View getCurrentParentView() {
+        if (currentScreen == CurrentScreen.CALENDAR) {
+            return calendarSubActivity.getView();
+        } else if (currentScreen == CurrentScreen.LISTVIEW) {
+            return listViewSubActivity.getView();
+        } else {
+            Log.i(LOG_TAG, "unknown state: " + currentScreen);
+            return null;
         }
     }
 
@@ -281,5 +277,44 @@ public abstract class ViewHistoryActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    public class TransactionCommunicator {
+
+        public HashMap<Date, ArrayList<Transaction>> getTransactions() {
+            return transactionData.getDataMap();
+        }
+
+        public ArrayList<Transaction> getTransactionAsList() {
+            return transactionData.getDataList();
+        }
+
+        public void requestNewTransactions(int year, int month) {
+            ViewHistoryActivity.this.requestNewTransactions(year, month);
+        }
+
+        public boolean isManualCard() {
+            return isManualCard;
+        }
+
+        public BooleanProperty loadingProperty() {
+            return loading;
+        }
+
+        public void refresh() {
+            ViewHistoryActivity.this.refresh();
+        }
+
+        public void setToLoadingScreen() {
+            setToLoading();
+        }
+
+        public double getTotal() {
+            return transactionData.getTotal();
+        }
+
+        public void regetTransactions() {
+            requestNewTransactions(calendarSubActivity.getSavedYear(), calendarSubActivity.getSavedMonth());
+        }
     }
 }

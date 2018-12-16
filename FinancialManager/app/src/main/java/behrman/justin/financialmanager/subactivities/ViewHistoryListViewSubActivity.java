@@ -11,10 +11,9 @@ import java.util.ArrayList;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.adapters.TransactionForMonthAdapter;
-import behrman.justin.financialmanager.model.BooleanProperty;
 import behrman.justin.financialmanager.interfaces.OnTotalChange;
+import behrman.justin.financialmanager.model.BooleanProperty;
 import behrman.justin.financialmanager.model.Transaction;
-import behrman.justin.financialmanager.interfaces.TransactionCommunicator;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 
@@ -25,13 +24,13 @@ public class ViewHistoryListViewSubActivity {
     private TextView noTransactionsView;
     private AppCompatActivity activity;
     private View root;
-    private TransactionCommunicator communicator;
+    private ViewHistoryActivity.TransactionCommunicator communicator;
     private View container;
     private TextView totalView;
 
     private double total;
 
-    public ViewHistoryListViewSubActivity(AppCompatActivity activity, TransactionCommunicator communicator) {
+    public ViewHistoryListViewSubActivity(AppCompatActivity activity, ViewHistoryActivity.TransactionCommunicator communicator) {
         root = LayoutInflater.from(activity).inflate(R.layout.view_all_transactions_for_month, null);
         this.activity = activity;
         this.communicator = communicator;
@@ -100,4 +99,9 @@ public class ViewHistoryListViewSubActivity {
         container.setVisibility(View.VISIBLE);
         noTransactionsView.setVisibility(View.GONE);
     }
+
+    public View getView() {
+        return root;
+    }
+
 }

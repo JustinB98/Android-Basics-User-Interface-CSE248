@@ -16,6 +16,7 @@ import behrman.justin.financialmanager.model.DataCollection;
 import behrman.justin.financialmanager.model.ViewHistoryActivity;
 import behrman.justin.financialmanager.utils.ParseFunctionsUtils;
 import behrman.justin.financialmanager.utils.ParseUtils;
+import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
 public class ViewAutoHistoryActivity extends ViewHistoryActivity {
@@ -47,18 +48,31 @@ public class ViewAutoHistoryActivity extends ViewHistoryActivity {
             @Override
             public void done(HashMap<String, Object> response) {
                 if (response != null) {
-                    if (!ParseUtils.responseHasError(response)) {
-                        DataCollection data = new AutoCardTransactionsParser().parse(response);
-                        Log.i(LOG_TAG, "transactions: " + data);
-                        ViewAutoHistoryActivity.super.setTransactionData(data);
-                    } else {
-                        Toast.makeText(ViewAutoHistoryActivity.this, R.string.card_changed_refreshing, Toast.LENGTH_SHORT).show();
-                        CardWrapper.getInstance().refresh(ViewAutoHistoryActivity.this);
-                        finish();
-                    }
+                    afterFind(response);
                 }
             }
         }, this, LOG_TAG);
+    }
+
+    private void afterFind(HashMap<String, Object> response) {
+        if (!ParseUtils.responseHasError(response)) {
+            DataCollection data = new AutoCardTransactionsParser().parse(response);
+            Log.i(LOG_TAG, "transactions: " + data);
+            ViewAutoHistoryActivity.super.setTransactionData(data);
+        } else {
+            String error = (String) response.get(StringConstants.ERROR);
+            handleError(error);
+            finish();
+        }
+    }
+
+    private void handleError(String error) {
+        if (ProjectUtils.deepEquals(StringConstants.UNDEFINED, error)) {
+            Toast.makeText(ViewAutoHistoryActivity.this, R.string.card_changed_refreshing, Toast.LENGTH_SHORT).show();
+            CardWrapper.getInstance().refresh(ViewAutoHistoryActivity.this);
+        } else if (ProjectUtils.deepEquals(StringConstants.RENEW, error)) {
+            Toast.makeText(ViewAutoHistoryActivity.this, R.string.renew_auto_card_prompt, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private HashMap<String, Object> generateRequestHashMap(String userId, int year, int month) {

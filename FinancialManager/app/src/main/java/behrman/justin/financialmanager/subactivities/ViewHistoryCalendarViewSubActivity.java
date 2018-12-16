@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 import behrman.justin.financialmanager.R;
 import behrman.justin.financialmanager.activities.ViewTransactionsForDateActivity;
-import behrman.justin.financialmanager.interfaces.TransactionCommunicator;
 import behrman.justin.financialmanager.model.Transaction;
+import behrman.justin.financialmanager.model.ViewHistoryActivity;
 import behrman.justin.financialmanager.utils.ProjectUtils;
 import behrman.justin.financialmanager.utils.StringConstants;
 
@@ -27,7 +27,7 @@ public class ViewHistoryCalendarViewSubActivity {
     private final static String LOG_TAG = ViewHistoryCalendarViewSubActivity.class.getSimpleName() + "debug";
 
     private AppCompatActivity activity;
-    private TransactionCommunicator communicator;
+    private ViewHistoryActivity.TransactionCommunicator communicator;
     private View root;
 
     private MaterialCalendarView calendarView;
@@ -38,7 +38,7 @@ public class ViewHistoryCalendarViewSubActivity {
     private int savedMonth = ProjectUtils.getCurrentMonth();
     private int savedYear = ProjectUtils.getCurrentYear();
 
-    public ViewHistoryCalendarViewSubActivity(AppCompatActivity activity, TransactionCommunicator communicator) {
+    public ViewHistoryCalendarViewSubActivity(AppCompatActivity activity, ViewHistoryActivity.TransactionCommunicator communicator) {
         root = LayoutInflater.from(activity).inflate(R.layout.activity_view_history, null);
         this.activity = activity;
         this.communicator = communicator;
@@ -87,7 +87,7 @@ public class ViewHistoryCalendarViewSubActivity {
     private void changeView(ArrayList<Transaction> transactions) {
         if (transactions == null) {
             String fullDate = ProjectUtils.getFullDate(activity, calendarView.getSelectedDate().getDate());
-            Toast.makeText(activity, activity.getString(R.string.no_transactions_for_date, fullDate), Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, activity.getString(R.string.no_transactions_for_date, fullDate), Toast.LENGTH_SHORT).show();
         } else {
             switchToShowTransactionsActivity(transactions);
         }
@@ -151,6 +151,14 @@ public class ViewHistoryCalendarViewSubActivity {
 
     public int getSavedYear() {
         return savedYear;
+    }
+
+    public View getView() {
+        return root;
+    }
+
+    public void setSelectedDate(int month, int year) {
+        calendarView.setCurrentDate(CalendarDay.from(year, month - 1, 1));
     }
 
 }
