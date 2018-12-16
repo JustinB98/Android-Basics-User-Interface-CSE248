@@ -25,9 +25,11 @@ public class SelectDatePopup extends PopupWindow {
 
     private DateCallback callback;
 
+    private final int MIN_YEAR = 1970; // maybe I want to change it later
+
     public SelectDatePopup(Context context, DateCallback callback, int width, int height) {
         super(context);
-        setFocusable(true);
+        setFocusable(true); // makes it so that if the background activity is pressed, then the pop up dismisses
         setWidth(width);
         setHeight(height);
         initBackground(context);
@@ -74,6 +76,7 @@ public class SelectDatePopup extends PopupWindow {
             public void onClick(View v) {
                 int month = monthSpinner.getSelectedItemPosition() + 1;
                 int year = ProjectUtils.parseOrDefault(yearField, -1);
+                year = constrainMin(year, MIN_YEAR);
                 callback.callback(month, year);
                 dismiss();
             }
@@ -111,7 +114,15 @@ public class SelectDatePopup extends PopupWindow {
     private void setYearFieldText(Function<Integer, Integer> function) {
         int year = ProjectUtils.parseOrDefault(yearField, -1);
         int result = function.apply(year);
+        result = constrainMin(result, 0);
         yearField.setText(result + "");
+    }
+
+    private int constrainMin(int value, int min) {
+        if (value < min) {
+            return min;
+        }
+        return value;
     }
 
     private void extractViews() {
